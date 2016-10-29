@@ -1,0 +1,26 @@
+  一、为什么要使用AIDL，他的优势有哪些呢?
+
+AIDL服务更像是 一个Server，可以为多个应用提供服务。
+由于使用了IDL这样类似COM组件或者说中间语言的设计，可以让后续的开发者无需了解内部，
+根据暴漏的接口实现相关的操作，AIDL可以工作在独立的进程中。
+
+ 二、学习AIDL服务需要有哪些前置知识?
+
+ 作为Android上服务的扩展，首先你要了解Android Service模型，
+ Android Serivice我们可以分为两种模式，三个类型，
+ 1.最简单的Service就是无需处理onBind方法，一般使用广播通讯，效率比较低。
+ 2.使用Binder模式处理Service和其他组件比如Activity通讯，Android开发网提示对于了解了Binder模式的服务后，
+ 开发AIDL远程服务就轻松容易的多。
+  
+  
+  以上过程中，如果ADT插件没有自动生成ICWJStub类在工程的gen目录下时，
+  可以手动在sdk根目录下platform-tools目录下，手动实用AIDL.exe来生成，这样可以看清楚AIDL文件到底是哪里存在格式上的错误。
+  有关AIDL中传递参数，实用复杂类型，还有导出成为独立的进程，Android123在明天给出另一个示例。
+  
+  
+步骤：
+1.首先在工程目录下创建一个ITest.aidl文件。
+如果格式AIDL格式没有问题，在Eclipse中ADT插件会在工程的gen目录下会自动生成一个Java实现文件。
+2.新建TestService类。
+3.在AndroidManifest.xml文件中定义Service。
+4.在Activity中的调用。
