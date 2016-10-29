@@ -1,0 +1,102 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    tools:context=".GalleryTwoActivity" >
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/one_btn_for_jackson"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="10dip"
+                android:text="@string/one_btn_jackson" />
+
+            <Button
+                android:id="@+id/two_btn_for_edittext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/one_btn_for_jackson"
+                android:layout_marginTop="10dip"
+                android:text="@string/two_btn_edittext" />
+
+            <Button
+                android:id="@+id/three_btn_for_turn_animation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/two_btn_for_edittext"
+                android:layout_marginTop="10dip"
+                android:text="@string/three_btn_turn_animation" />
+
+            <Button
+                android:id="@+id/four_btn_for_gallery_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/three_btn_for_turn_animation"
+                android:layout_marginTop="10dip"
+                android:text="@string/four_btn_gallery_one" />
+
+            <Button
+                android:id="@+id/five_btn_for_gallery_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/four_btn_for_gallery_one"
+                android:layout_marginTop="10dip"
+                android:text="@string/five_btn_gallery_two" />
+
+            <Button
+                android:id="@+id/six_btn_for_popupwindow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/five_btn_for_gallery_two"
+                android:layout_marginTop="10dip"
+                android:text="@string/six_btn_popupwindow" />
+
+            <Button
+                android:id="@+id/seven_btn_for_magnifier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/six_btn_for_popupwindow"
+                android:layout_marginTop="10dip"
+                android:text="@string/seven_btn_magnifier" />
+
+            <Button
+                android:id="@+id/eight_btn_for_lock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/seven_btn_for_magnifier"
+                android:layout_marginTop="10dip"
+                android:text="@string/eight_btn_lock" />
+
+            <Button
+                android:id="@+id/nine_btn_for_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/eight_btn_for_lock"
+                android:layout_marginTop="10dip"
+                android:onClick=""
+                android:text="@string/nine_btn_dialog" />
+
+            <Button
+                android:id="@+id/ten_btn_for_gif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nine_btn_for_dialog"
+                android:layout_marginTop="10dip"
+                android:onClick=""
+                android:text="@string/ten_btn_gif" />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

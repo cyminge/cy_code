@@ -1,0 +1,64 @@
+package com.veclink.tracer.export;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.os.Looper;
+import android.view.WindowManager;
+
+import com.veclink.tracer.R;
+
+public class AfterCrashExample extends AfterCrashRunnable {
+	
+	public AfterCrashExample(Context context) {
+		super(context);
+	}
+
+	@Override
+	public void run() {
+		Looper.prepare();
+		AlertDialog dialog;
+		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+		builder.setTitle(mContext.getResources().getString(R.string.crash_tracer_tip));
+		builder.setCancelable(false);
+		builder.setMessage(mContext.getString(R.string.tip_app_crash));
+		builder.setNeutralButton(mContext.getString(R.string.str_ok),
+				new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog,
+							int which) {
+						// ((Activity) mContext).finish();
+
+//						Intent intent = new Intent(mContext, LoadingActivity.class);
+//						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//						mContext.startActivity(intent);
+
+						dialog.dismiss();
+						confirmed = true;
+						finishApplication();
+					}
+				});
+
+		dialog = builder.create();
+		dialog.getWindow().setType((WindowManager.LayoutParams.TYPE_SYSTEM_ALERT));
+		dialog.show();
+
+		// new AlertDialog.Builder(mContext)
+		// .setTitle("提示")
+		// .setCancelable(false)
+		// .setMessage(mContext.getString(R.string.tip_app_crash))
+		// .setNeutralButton(mContext.getString(R.string.str_ok),
+		// new OnClickListener() {
+		// @Override
+		// public void onClick(DialogInterface dialog,
+		// int which) {
+		// // ((Activity) mContext).finish();
+		// confirmed = true;
+		// finishApplication();
+		// }
+		// }).create().show();
+		Looper.loop();
+	}
+}

@@ -1,0 +1,3 @@
+#是否打印LOG
+DEBUG=true
+VERBOSE=true

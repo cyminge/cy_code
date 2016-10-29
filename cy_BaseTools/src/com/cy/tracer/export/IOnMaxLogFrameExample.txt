@@ -1,0 +1,54 @@
+
+	
+
+
+	private static int reportToServer(final String jsonString) {
+		if (!isUpLoad) {
+			return 1;
+		}
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				final StringBuilder urlString = new StringBuilder(HostProperties.getHost(HostProperties.REPORT_HOST));
+
+				String userInfo = "&userinfo="+LoginAccountInfo.getUser_id()+"|"+LoginAccountInfo.getShort_user_id()
+						+"|"+LoginAccountInfo.getUser_name_en()+"|"+LoginAccountInfo.getMobile()
+						+"|"+LoginAccountInfo.getEmail()+"|"+LoginAccountInfo.getQQ();
+				String requestString = "type=app_log" + userInfo + "&content=" + jsonString;
+
+				Tracer.d("Tracer", "reportToServer" + requestString);
+
+				urlString.append("?c=" + Base64.encodeToString(requestString.getBytes(), Base64.NO_PADDING | Base64.NO_WRAP));
+
+				URL url = null;
+				try {
+					url = new URL(urlString.toString());
+					HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+					httpURLConnection.setDoInput(true);
+					httpURLConnection.setUseCaches(false);
+					httpURLConnection.setRequestMethod("GET");
+					httpURLConnection.setConnectTimeout(12 * 1000);
+
+					int reportResult = httpURLConnection.getResponseCode();
+
+					EventBus.getDefault().post(new ReportDoneEvent());
+
+					if (200 == httpURLConnection.getResponseCode()) {
+						Tracer.d("Tracer", "report done");
+					} else {
+						Tracer.d("Tracer", "report failed " + reportResult);
+					}
+
+				} catch (MalformedURLException e) {
+					Tracer.debugException(e);
+				} catch (ProtocolException e) {
+					Tracer.debugException(e);
+				} catch (IOException e) {
+					Tracer.debugException(e);
+				}
+			}
+		}).start();
+
+		return 0;
+	}

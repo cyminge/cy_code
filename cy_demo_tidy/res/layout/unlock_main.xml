@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    tools:context=".GalleryTwoActivity"
+    >
+    <!-- android:background="#FFFFFFFF"  -->
+
+   <Button 
+       android:id="@+id/connect_bluetooth"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerInParent="true"
+       android:background="@drawable/btn_bluetooth_connect_circle_bg"
+       android:onClick="onClick"
+       android:visibility="gone"
+       />
+
+      <com.cy.animation.lock.UnlockSlideTab
+        android:id="@+id/conn_anim_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        />
+
+</RelativeLayout>

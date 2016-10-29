@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 已有资源 -->
+    <string name="xml_register_user_id">用户ID/手机号</string>
+    <string name="xml_register_psw">密码</string>
+    <string name="xml_register_auto_login">自动登录</string>
+    <string name="xml_register_login">登录</string>
+    <string name="main_reg_register">注册</string>
+    <string name="main_reg_phone_register">手机注册</string>
+    <string name="main_reg_probation_tips">欢迎公司或团体注册Oinom,注册成功后可免费享受5人群聊.</string>
+    <string name="main_reg_company_example">例如：深圳市纬科联股份有限公司</string>
+    <string name="main_reg_group_example">例如：产品部、##旅游团等，需包含部/团/组字样</string>
+    <string name="main_reg_family_example">例如：幸福之家、小兔兔家等，需包含【家】字样</string>
+    <string name="main_reg_company_fullname">请输入公司全称</string>
+    <string name="main_reg_group_fullname">请输入团体名称</string>
+    <string name="main_reg_family_fullname">请输入家庭名称</string>
+    <string name="main_reg_agree">我已阅读并同意</string>
+    <string name="main_reg_agree_click">《使用协议》</string>
+    <string name="main_reg_agree_str">使用协议</string>
+    <string name="main_reg_input_security_code">请输入验证码</string>
+    <string name="main_reg_send">获取验证码</string>
+    <string name="main_reg_manager_tips">普通帐户，暂不支持群组管理、成员管理、位置查看等功能，升级帐户后可开放更多功能。</string>
+    <string name="main_reg_manager_contact_us">立即升级帐户</string>
+    <string name="main_reg_manager_contact_us_way">或联系商务+86 13249086792/jiangmeili@movnow.com</string>
+    <string name="main_groups">群组</string>
+    <string name="xml_call">呼叫</string>
+    <string name="xml_calling">正在通话</string>
+    <string name="str_hint_none_contacts">无在线成员</string>
+    <string name="xml_start_group_chat">发起群聊</string>
+    <string name="xml_look_members">查看成员</string>
+    <string name="str_talk_status_ready"> 按下按钮进行对讲  &#8230;</string>
+    <string name="str_talk_status_talking"> 请说话 &#8230;</string>
+    <string name="str_talk_status_start_talk"> 准备中 &#8230;</string>
+    <string name="xml_clear_recode">清空历史记录</string>
+    <string name="xml_clear_record">清除选中记录</string>
+    <string name="pull_to_refresh_refreshing_label">正在刷新 ...</string>
+    <string name="pull_to_refresh_tap_label">点击这里刷新 </string>
+    <string name="str_call_dialing">正在呼叫 %1$s &#8230;</string>
+    <string name="str_call_incoming">%1$s 来电中 &#8230;</string>
+    <string name="xml_menu_my_account">我的账户</string>
+    <string name="xml_user_id">我的ID:</string>
+    <string name="xml_user_phone_number">手机号:</string>
+    <string name="xml_modify_psw">修改密码</string>
+    <string name="xml_login_ora_psw">原密码</string>
+    <string name="xml_login_new_psw">新密码</string>
+    <string name="xml_login_new_psw_again">再次输入新密码</string>
+    <string name="settings_input_ora_psw">请输入6至12位数字或字母的原密码</string>
+    <string name="settings_psw_not_same">您两次输入的新密码不一致，请重新输入!</string>
+    <string name="xml_menu_modify_status">修改状态</string>
+    <string name="xml_menu_volume">音量</string>
+    <string name="xml_menu_volume_amplifier">声音放大器</string>
+    <string name="xml_menu_amplifier_amplify_volume">启动放大器可将外放音量增大</string>
+    <string name="xml_menu_auto_answer">自动应答</string>
+    <string name="xml_menu_start_to_auto_answer">启动时,有对讲来电系统将自动为您接听</string>
+    <string name="xml_menu_report_location">位置上报</string>
+    <string name="xml_look_location">查看位置</string>
+    <string name="map_choose_members">选择员工</string>
+    <string name="map_choose_start">选择(</string>
+    <string name="map_choose_end">人)</string>
+    <string name="main_reg_user_name">姓名</string>
+    <string name="xml_map_member_name">姓        名:</string>
+    <string name="xml_map_locate_time">定位时间:</string>
+    <string name="settings_about_oinom">关于Oinom</string>
+    <string name="xml_menu_about_me">关于oinom</string>
+    <string name="upgrade_check_new_version">检查新版本</string>
+    <string name="settings_feedback">意见反馈</string>
+    <string name="settings_function_intro">功能介绍</string>
+    <string name="upgrade_current_version_is">当前版本为&#160;&#160;</string>
+    <string name="upgrade_check_new_version_now">正在检查更新中...</string>
+    <string name="upgrade_check_and_update">检查更新</string>
+    <string name="settings_account_manager">账号管理</string>
+    <string name="xml_logout">退出登录</string>
+    <string name="main_input_id_to_login">请输入ID或手机号登录</string>
+    <string name="main_input_psw">请输入登录密码</string>
+    <string name="main_account_or_psw_errror">登录帐户或密码错误,请重新输入!</string>
+    <string name="str_network_disconnected">服务器连接失败，请检查网络</string>
+    <string name="main_network_error">服务器连接失败,请检查网络!</string>
+    <string name="main_reg_is_payer_tips">贵公司已升级正式版，如果您是该公司员工请直接登录，如登录不成功请联系贵公司管理员。</string>
+    <string name="main_reg_show_number_tips">您正在注册加入%1$s,该公司已有%2$s个成员.</string>
+    <string name="main_reg_is_full_tips">成员数已达上限,请联系贵公司管理员或联系我们0755-8667998.</string>
+    <string name="main_reg_sms_content">尊敬的用户，您注册Oinom的验证码为%1$s，请勿将验证码告知他人。【深圳市纬科联】 </string>
+    <string name="settings_closed_speaker">已启用耳机/听筒</string>
+    <string name="settings_opened_speaker">已启用扬声器</string>
+    <string name="tip_talk_toomany_operation">操作频繁,请稍后再试!</string>
+    <string name="tip_talk_success">抢占成功,开始说话吧!</string>
+    <string name="tip_talk_is_listening">语音繁忙,请空闲时使用!</string>
+    <string name="tip_network_unstable">当前网络信号不稳定，请稍后再试!</string>
+    <string name="tip_talk_no_other_member">在线成员过少,暂不能使用群聊!</string>
+    <string name="settings_input_new_psw">请输入6至12位数字或字母的新密码</string>
+    <string name="notification_ticker_connected">登录成功</string>
+    <string name="tip_call_call_failed_busy_other">对方正忙，请稍后再拨</string>
+    <string name="str_call_closed1">通话结束</string>
+    <string name="str_call_closed2">对方已挂断，通话结束</string>
+    <string name="str_call_closed3">您已取消呼叫</string>
+    <string name="str_call_closed4">对方已取消呼叫</string>
+    <string name="main_reg_type">类型:</string>
+    <string name="main_reg_name">名称:</string>
+    <string name="main_reg_company">公司</string>
+    <string name="main_reg_group">团体</string>
+    <string name="main_reg_family">家庭</string>
+    <string name="str_talk_status_listening"> 正在说话 &#8230;</string>
+    <!-- 已有资源  end ========================================================================================= -->
+
+    <string name="main_reg_input_phone">请输入您的手机号码</string>
+    <string name="main_reg_input_name">请输入您的姓名</string>
+    <string name="main_reg_input_psw">请设置您的登录密码</string>
+    <string name="settings_modify_psw_timeout">修改密码超时,请重试!</string>
+    <string name="settings_modify_psw_request_format_error">请求格式不对!</string>
+    <string name="settings_ora_error">原密码错误,请重新输入!</string>
+    <string name="str_start_camera_fail">相机启动失败</string>
+    <string name="str_not_find_camera">没有找到相机</string>
+    <string name="str_start_gallry_fail">启动图库失败</string>
+    <string name="str_hint_contacts_search">请输入搜索关键字</string>
+
+    <!-- 正在通话状态栏显示 -->
+
+    <string name="str_talk_status_error_media"> 语音繁忙！</string>
+    <string name="str_talk_status_error_network"> 网络超时，请检查！</string>
+    <string name="str_talk_status_error_nomenber"> 群聊人数过少！</string>
+    <string name="str_btn_ok">确定</string>
+    <string name="str_btn_cancel">取消</string>
+    <string name="str_open_gps_dialog_title">GPS未开启</string>
+    <string name="str_open_gps_dialog_message">开启GPS能使定位更精确，是否要马上开启？</string>
+    <string name="str_mutilogin_dialog_title">下线通知</string>
+    <string name="str_mutilogin_dialog_message">您的帐号在另一地点登录，您被迫下线。\r\n如果不是您本人的操作，您的密码很可能已经泄密，请重新登录并修改密码！</string>
+
+    <!-- 对讲机消息栏文字 -->
+    <string name="notification_ticker_connecting">正在重连&#8230;</string>
+    <string name="notification_ticker_disconnect">连接中断</string>
+    <string name="notification_ticker_loading">正在加载&#8230;</string>
+    <string name="notification_ticker_loaded">加载完成</string>
+    <string name="notification_ticker_noaccount">未登录</string>
+    <string name="notification_ticker_online">已切换到“在线”模式</string>
+    <string name="notification_ticker_leaved">已切换到“离开”模式</string>
+    <string name="notification_ticker_busy">已切换到“繁忙”模式</string>
+    <string name="notification_ticker_mute">已切换到“静音”模式</string>
+    <string name="notification_ticker_invisible">已切换到“隐身”模式</string>
+    <string name="notification_ticker_nodisturb">已切换到“请勿打扰”模式</string>
+    <string name="tip_network_disconnected">当前网络已经断掉，请注意!</string>
+    <string name="tip_network_poor">当前网络信号较差，语音质量会较差!</string>
+    <string name="tip_status_online">在线</string>
+    <string name="tip_status_offline">离线</string>
+    <string name="tip_status_offline_neterror">离线(连接超时)</string>
+    <string name="tip_status_offline_logining">离线(正在登陆)</string>
+    <string name="tip_status_nodisturb">请勿打扰</string>
+    <string name="tip_network_unable_to_talk">当前网络对讲机通话不可用!</string>
+    <string name="ongoing_call">通话中</string>
+    <string name="missed_call">未接电话</string>
+
+    <!-- 聊天历史记录界面 -->
+    <string name="tip_chatlog_file_not_found">媒体文件损坏或丢失!</string>
+
+    <!-- 对讲按钮栏提示文字 -->
+    <string name="tip_talk_network_error">网络连接异常,请检查您的网络!</string>
+    <string name="tip_talk_no_active_conversation">当前通话已断开!</string>
+    <string name="tip_talk_no_active_conference">请先进入群聊后再说话!</string>
+    <string name="tip_talk_no_disturb">请切换到在线状态进行说话!</string>
+
+    <!-- 点对点界面显示文字 -->
+    <string name="str_call_calling">正在等待 %1$s 接听 &#8230;</string>
+    <string name="str_call_ongoing">正在通话中 &#8230;</string>
+    <string name="str_call_accepting">正在接听 &#8230;</string>
+    <string name="str_call_closing">正在挂断 &#8230;</string>
+    <string name="str_call_closed5">超时未接，通话结束</string>
+    <string name="str_call_err_answer_failed">接听失败</string>
+    <string name="tip_talk_on_conversation">正在通话中,请稍后再试!</string>
+    <string name="tip_talk_failed">抢占失败,请稍后再试!</string>
+
+    <!-- 点对点界面提示 -->
+    <string name="tip_call_closed_unexpected">网络超时，通话已断开</string>
+    <string name="tip_call_closed_net_error">网络不稳定，通话已断开</string>
+    <string name="tip_call_closed_timeout">暂时无人接听</string>
+    <string name="tip_call_closed_timeout_notalk">超过60秒没有说话</string>
+    <string name="tip_call_call_failed_status_error">对方不在线或忙碌！</string>
+    <string name="tip_call_call_failed_retry">拨号失败，请稍候再试！</string>
+    <string name="tip_call_call_failed_busy_me">您正在通话中！</string>
+    <string name="tip_call_call_failed_busy_server">服务器繁忙，请稍后再试</string>
+    <string name="tip_call_call_failed_offline_other">对方不在线</string>
+    <string name="tip_call_accept_failed_network_timeout">网络超时，未能接通!</string>
+    <string name="tip_call_closed_net_error_other">对方网络不稳定，通话已断开</string>
+    <!-- 对讲出错提示提示 -->
+    <string name="cant_write_file">写入文件错误</string>
+    <string name="tip_tracer_persistent_done">日志保存上传完成!</string>
+    <string name="tip_tracer_persistent_too_much">上传太频繁!请稍后再试</string>
+    <string name="tip_tracer_persistent_failed">日志保存上传失败!</string>
+    <string name="tip_tracer_persistent_failed_nothing">没有可上传的日志!</string>
+
+    <!-- 地图 -->
+    <string name="default_city">深圳</string>
+    <string name="default_address">深圳市</string>
+    <string name="map_tip_initial_error">地图初始化错误!</string>
+    <string name="map_tip_network_error">您的网络出错啦！</string>
+    <!-- <string name="map_tip_input_valid_keyword">输入正确的检索条件！</string> -->
+    <string name="map_tip_initial_key_error">无法连接地图服务器！</string>
+    <string name="map_tip_search_no_result">抱歉，未找到结果！</string>
+    <!-- 地图 end -->
+
+    <string name="settings_set_useravatar_error">设置头像失败!</string>
+    <string name="settings_upload_pic_error">上传图片失败!</string>
+    <string name="settings_least_pic_size">图片大小不能小于188x188!</string>
+    <string name="map_choose_members_for_location">请选择要查看的员工!</string>
+    <string name="map_choose_five_most">最多选择5个人</string>
+    <string name="main_set_status_error">设置状态失败!</string>
+    <string name="main_groups_record">群聊记录</string>
+    <string name="main_get_out_the_group">您已被管理员踢出该群!</string>
+    <string name="main_reqeust_timeout">请求超时!</string>
+    <!-- <string name="main_not_int_any_group">您没有在任何群组当中!</string> -->
+    <string name="main_into_group_chat_error">进入群聊失败,请重试!</string>
+    <string name="main_wait_for_data">等待数据初始化</string>
+    <string name="map_member_location">员工位置</string>
+    <string name="map_param_error">提供的参数有误!</string>
+    <string name="map_not_report_location">没有上报位置信息.</string>
+    <string name="map_not_record">未知</string>
+    <string name="settings_ptt_set">对讲设置</string>
+    <string name="main_history_record">历史记录</string>
+    <string name="main_other_side_outline">对方不在线!</string>
+    <string name="main_check_network">请检查您的网络!</string>
+    <string name="main_server_error">服务器返回错误!</string>
+    <string name="map_is_located">正在定位...</string>
+    
+    <!-- 测试字符串 -->
+    <string name="xml_user_name">用户名</string>
+    <string name="xml_login_server">服务器 :</string>
+    <string name="xml_login_account">账号 :</string>
+    <string name="xml_login_psw">密码 :</string>
+    <string name="xml_login">登陆</string>
+    <!-- 测试字符串 end -->
+    <string name="xml_menu_auto_report">启动时,自动把你的位置上报到服务器</string>
+    <string name="xml_menu_report_interval">位置上报间隔</string>
+    <string name="xml_menu_report_time">位置上报的时间间隔（单位：秒）</string>
+    <string name="xml_camera">照相机</string>
+    <string name="xml_album">相册</string>
+    <string name="main_cannt_into_call">您不在任何群组当中,无法使用该功能!</string>
+    <string name="main_reg_next">下一步</string>
+    <string name="main_reg_country_code">国家码</string>
+    <string name="main_reg_resend">重新发送</string>
+    <string name="main_reg_please_input_phonenum">请输入电话号码</string>
+    <string name="main_reg_manager">管理</string>
+    <string name="main_reg_company_min_lenth">长度不能小于2个字!</string>
+    <string name="main_reg_search_error_tips">查询失败,请重试!</string>
+    <string name="main_reg_request_iliegal_tips">请求非法</string>
+    <string name="main_reg_network_error">网络连接异常,请稍候再试.</string>
+    <string name="main_reg_securitycode_error">验证码错误,请重新输入!</string>
+    <string name="main_reg_phonenum_is_registered">手机号码已经被注册!</string>
+    <string name="main_reg_phonenum_register_fail">注册失败,请重试!</string>
+    <string name="main_reg_is_cid_inexist">该群组不存在!</string>
+    <string name="main_reg_is_full">该群组成员已满!</string>
+    <string name="main_reg_join_fail">加入失败,请重试!</string>
+    <string name="main_reg_register_success">注册成功!</string>
+    <string name="main_reg_join_success">加入成功!</string>
+    
+    <!-- new  -->
+    <string name="main_reg_is_applyed">申请已提交,请等待商务来电.</string>
+    <string name="main_reg_is_apply_fail">申请失败,请稍候重试.</string>
+    <string name="main_reg_limit_char_company">公司</string>
+    <string name="main_reg_limit_char_bloc">集团</string>
+    <string name="main_reg_limit_char_department">部</string>
+    <string name="main_reg_limit_char_group">团</string>
+    <string name="main_reg_limit_char_organization">组</string>
+    <string name="main_reg_limit_char_home">家</string>
+    <string name="main_reg_group_contain_char">请为您的团体取一个带部、团、组字样的名称</string>
+    <string name="main_reg_family_contain_char">请为您的家庭取一个带家字的名称</string>
+    <string name="str_make_sure_agreement">请确认是否已经阅读用户注册协议</string>
+    
+    
+
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">cy_demo_tidy</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string name="one_btn_jackson">"json解析"</string>
+    <string name="two_btn_edittext">"自定义EditText"</string>
+    <string name="three_btn_turn_animation">"圖片翻轉動畫"</string>
+    <string name="four_btn_gallery_one">"Gallery效果one"</string>
+    <string name="five_btn_gallery_two">"Gallery效果two"</string>
+    <string name="six_btn_popupwindow">"PopupWindow效果"</string>
+    <string name="seven_btn_magnifier">"放大镜"</string>
+    <string name="eight_btn_lock">"三星锁屏效果"</string>
+    <string name="nine_btn_dialog">"自定义dialog"</string>
+    <string name="ten_btn_gif">"GIF动画"</string>
+    
+    <!-- for popupwindow-->
+    <string name="string_menu_joker"></string>
+    <string name="fri_label_btn_call">打电话</string>
+    <string name="fri_label_btn_ta">空间</string>
+    <string name="fri_label_btn_sms">发短信</string>
+    <!-- for popupwindow end-->
+    
+    <!-- 放大镜 magnifier -->
+    
+	<!-- 放大镜 magnifier end --> 
+	
+	
+	<!-- 自定义dialog -->
+    <string name="group_shortcuts">group_shortcuts</string>
+    <string name="group_widgets">group_widgets</string>
+    <string name="group_live_folders">group_live_folders</string>
+    <string name="group_wallpapers">group_wallpapers</string>
+	<!-- 自定义dialog end-->
+</resources>

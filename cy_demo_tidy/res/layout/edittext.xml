@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="96dip"
+        android:orientation="vertical"
+        android:background="@drawable/password_input_background"
+        android:gravity="center">
+        <com.cy.edittext.Mogoo_PasswordEditText
+            android:id="@+id/editText1"
+            android:layout_width="274dip"
+            android:layout_height="53dip"
+            android:background="@drawable/mogoo_password_input_bg"
+            android:inputType="number"
+            android:password="true"
+            android:cursorVisible="false"
+            android:maxLength="4" >
+        </com.cy.edittext.Mogoo_PasswordEditText>        
+    </LinearLayout>
+</LinearLayout>

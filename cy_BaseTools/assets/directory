@@ -1,0 +1,10 @@
+user_setting=@SD/softphone/setting
+portrait=@SD/softphone/portrait
+chat_image=@SD/softphone/chat_image
+chat_voice=@SD/softphone/chat_voice
+trace=@SD/softphone/log
+cache=@SD/softphone/cache
+media_cache=@SD/softphone/cache/media
+uil=@SD/softphone/uil
+video_car=/mnt/sdcard2
+avatar=@SD/softphone/avatar
