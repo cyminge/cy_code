@@ -56,7 +56,7 @@ code.iml
 lint.xml
 
 # system compile create
-*/src/com/
+#*/src/com/
 
 # check file
 .checkstyle
