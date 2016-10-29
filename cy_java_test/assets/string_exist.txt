@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="download_unknown_title">unnamed </string>
+    <string name="notification_filename_separator">,</string>
+    <string name="notification_filename_extras">%1$d items remaining </string>
+    <string name="notification_download_complete">Download completed </string>
+    <string name="notification_download_failed">Download failed </string>
+    <string name="notification_need_wifi_for_size">Download files in such size via WIFI</string>
+    <string name="wifi_required_title">Downloading the file via the operator\'s network is not suggested as it is too big </string>
+    <string name="wifi_required_body">WIFI constitutes a requisite to download the file %1$s. Click %2$s to enable automatic download when connecting to WIFI next time  </string>
+    <string name="wifi_recommended_title">Add to the download queue later</string>
+    <string name="wifi_recommended_body">Immediately initiating to download the file %1$s could probably shorten the battery\'s running time and/or cause excessive consumption of cellular data that may result in overcharged bills. Click %2$s below to enable automatic download when connecting to WIFI next time  </string>
+    <string name="button_queue_for_wifi">Queue</string>
+    <string name="button_cancel_download">Cancel</string>
+    <string name="button_start_now">Start immediately </string>
+    <string name="newupdate_available">New version available </string>
+    <string name="newupdate_available_todownload">New version available, click to update </string>
+    <string name="dialog_positive_button">Download </string>
+    <string name="dialog_negative_button">Later </string>
+    <string name="download_updating">%1$s is updating now:</string>
+    <string name="dialog_stop_button">Terminate immediately</string>
+    <string name="dialog_resume_button">Continue to update</string>
+    <string name="dialog_title_running">Updating in process</string>
+    <string name="dialog_text_comfirttostop">Are you sure to suspend updating</string>
+    <string name="tip_update_no_enough_free_space">Low storage space. Please free some space before updating to ensure it goes smoothly</string>
+    <string name="app_no_new_update">Dear customer, the current version is the latest</string>
+    <string name="app_new_update_running">Dear customer, updating now </string>
+    <string name="app_new_update_error">Sorry, an error occurred while checking the version </string>
+    <string name="permlab_downloadManager">Access the download manager</string>
+    <string name="permdesc_downloadManager">Enable programs to access the download manager and use it to download files. However, this function can be exploited by malware to interfere download and gain access to sensitive information </string>
+    <string name="permlab_downloadManagerAdvanced">Download manager\'s advanced functions </string>
+    <string name="permdesc_downloadManagerAdvanced">Enable programs to use the advanced functions of such download manager. However, this function can be exploited by malware to interfere download and gain access to sensitive information </string>
+    <string name="permlab_downloadCompletedIntent">Send the download notice</string>
+    <string name="permdesc_downloadCompletedIntent">Enable programs to notify when download is completed. However, this function can be exploited by malware to interfere download and gain access to sensitive information </string>
+    <string name="permlab_downloadCacheNonPurgeable">Leave the download buffer untouched </string>
+    <string name="permdesc_downloadCacheNonPurgeable">Enable programs to save the downloaded files to the download buffer (The system will not automatically clear the download buffer to reserve more space for the download manager)</string>
+    <string name="permlab_accessAllDownloads">Access all the files downloaded by the system</string>
+    <string name="permdesc_accessAllDownloads">Enable programs to check and modify all the files downloaded by any program of the system</string>
+    <string name="app_new_update_install_error">Sorry, updating failed, please check the network conditions</string>
+    <string name="app_new_update_needed_error">Sorry, you have to update first in order to regain access to this application</string>
+
+</resources>
