@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.cy.frame.downloader.ui.ProgressButton xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/game_list_button"
+    android:layout_width="@dimen/game_download_width"
+    android:layout_height="@dimen/game_download_height"
+    style="@style/ProgressButtonStyle">
+
+    <View
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/download_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/download_text_background"
+        android:gravity="center"
+        android:textColor="@color/game_button_text_green"
+        android:textSize="@dimen/game_button_text_size" />
+</com.cy.frame.downloader.ui.ProgressButton>

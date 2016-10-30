@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="3dp" 
+    android:padding="3dp">
+    
+    <!-- <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        ></LinearLayout> -->
+        
+    <com.cy.frame.downloader.ui.ProgressButton
+        android:id="@+id/game_list_button"
+        style="@style/ProgressButtonStyle"
+        android:layout_width="@dimen/game_download_width"
+        android:layout_height="@dimen/game_download_height"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp">
+
+        <View
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/download_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/download_text_background"
+            android:gravity="center"
+            android:textColor="@color/game_button_text_green"
+            android:textSize="@dimen/game_button_text_size" />
+    </com.cy.frame.downloader.ui.ProgressButton>
+    
+    <TextView 
+            android:id="@+id/game_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            />
+
+</LinearLayout>

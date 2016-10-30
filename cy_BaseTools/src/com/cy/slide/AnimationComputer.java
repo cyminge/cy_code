@@ -9,7 +9,6 @@ public class AnimationComputer {
     }
 
     private long mStartTime;
-
     private float mStartPosition;
     private float mEndPosition;
     private float mAnimationTime;

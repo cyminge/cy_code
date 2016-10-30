@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="uiframe_no_data">暂无数据</string>
+    <string name="uiframe_no_upgrade">恭喜，当前游戏已是最新版本！</string>
+
+</resources>

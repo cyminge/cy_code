@@ -22,6 +22,10 @@ public class TimeRandomString {
 	private static int seq = 0;
 	private static final int MAX = 9999;
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static synchronized String generateSequenceNo() {
 		Calendar rightNow = Calendar.getInstance();
 		StringBuffer sb = new StringBuffer();

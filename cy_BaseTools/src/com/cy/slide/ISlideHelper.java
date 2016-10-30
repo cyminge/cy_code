@@ -23,6 +23,8 @@ public interface ISlideHelper<T> {
 	public int getNextIndex();
 	
 	public void switchImage(boolean isLeft);
+	
+	public void switchNext();
 
 	/**
 	 * if you want to clear cache data, When the Activity in the onStop state,

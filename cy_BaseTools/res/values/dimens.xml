@@ -8,5 +8,21 @@
     <dimen name="conversation_toast_top_default">420px</dimen>
     
     <dimen name="slide_default_image_size">60dip</dimen>
+    
+    <!-- download progress button -->
+        <dimen name="game_download_width">57dip</dimen>
+    <dimen name="game_download_height">23dip</dimen>
+    <dimen name="game_button_text_size">12dip</dimen>
+    <dimen name="progress_button_margin_right">15dip</dimen>
+    <dimen name="notification_bar_padding">6dip</dimen>
+    <dimen name="notification_icon_size">57dip</dimen>
+    <dimen name="game_list_name_margin_left">10dip</dimen>
+    <dimen name="notification_bar_title_margin_right">10dip</dimen>
+    <dimen name="game_list_name_size">16dip</dimen>
+    <dimen name="notification_bar_detail_margin_top">6dip</dimen>
+    <dimen name="notification_bar_detail_size">14dip</dimen>
+    
+    
+    <!-- download progress button end -->
 
 </resources>

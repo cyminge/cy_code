@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="50dp" >
+
+    <ImageView
+        android:id="@+id/download_mgr_btn"
+        android:layout_width="52dip"
+        android:layout_height="41dip"
+        android:layout_centerVertical="true"
+        android:contentDescription="3"
+        android:src="@drawable/uiframe_download_manager_icon"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/download_notify"
+        android:layout_width="8dip"
+        android:layout_height="8dip"
+        android:layout_marginLeft="-21dip"
+        android:layout_marginStart="-21dip"
+        android:layout_marginTop="9dip"
+        android:layout_toRightOf="@id/download_mgr_btn"
+        android:layout_toEndOf="@id/download_mgr_btn"
+        android:background="@drawable/uiframe_menu_notify"
+        android:visibility="gone" />
+
+</RelativeLayout>

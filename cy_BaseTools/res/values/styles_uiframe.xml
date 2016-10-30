@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="CircleProgressBarNormal" parent="@android:style/Widget.Holo.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/uiframe_circle_progress_bar_normal</item>
+    </style>
+
+</resources>

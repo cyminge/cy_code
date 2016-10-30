@@ -1,7 +1,13 @@
 package com.cy.global;
 
+import java.util.List;
+
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.Application;
 import android.content.Context;
+
+import com.cy.constant.Constant;
 
 public class BaseApplication extends Application {
 
@@ -22,11 +28,23 @@ public class BaseApplication extends Application {
 
         mBaseApplication = this;
         mBaseAppContext = mBaseApplication.getApplicationContext();
-        InitialWatchDog.init(this);
+        if(isMainProcess()) {
+            InitialWatchDog.init(this);
+        }
     }
-
-    public static BaseApplication getInstance() {
-        return mBaseApplication;
+    
+    private boolean isMainProcess() {
+        String processName = Constant.EMPTY;
+        int pid = android.os.Process.myPid();
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<RunningAppProcessInfo> allProcesses = activityManager.getRunningAppProcesses();
+        for (RunningAppProcessInfo process : allProcesses) {
+            if (process.pid == pid) {
+                processName = process.processName;
+                break;
+            }
+        }
+        return getPackageName().equals(processName);
     }
 
 }

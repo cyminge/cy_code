@@ -3,4 +3,13 @@
     
     <color name="slide_view_default_bitmap_bg_color">#FFE1E1E1</color>
     
+        <color name="game_button_text_green">#FF85BE3B</color>
+    
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="notify_bg">#FF303030</color>
+    <color name="notification_bar_status">#FFBABABA</color>
+    <color name="default_bitmap_bg_color">#FFE1E1E1</color>
+    
 </resources>

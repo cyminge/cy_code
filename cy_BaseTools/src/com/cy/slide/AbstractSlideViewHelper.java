@@ -6,7 +6,7 @@ import java.util.List;
 public abstract class AbstractSlideViewHelper<T> implements ISlideHelper<T> {
 
 	protected List<T> mSlideShowingList = new ArrayList<T>();
-	private int mCurrIndex = 0;
+	protected int mCurrIndex = 0;
 
 	@Override
 	public void init(List<T> slideData) {
@@ -95,6 +95,11 @@ public abstract class AbstractSlideViewHelper<T> implements ISlideHelper<T> {
 		} else {
 			mCurrIndex = getNextIndex();
 		}
+	}
+	
+	@Override
+	public void switchNext() {
+		switchImage(false);
 	}
 
 	@Override

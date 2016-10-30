@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/notify_bg"
+    android:padding="@dimen/notification_bar_padding">
+
+    <ImageView
+        android:id="@+id/notify_icon"
+        android:layout_width="@dimen/notification_icon_size"
+        android:layout_height="@dimen/notification_icon_size"
+        android:contentDescription=""
+        android:src="@drawable/ic_launcher" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/notify_icon"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/notify_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/game_list_name_margin_left"
+            android:layout_marginRight="@dimen/notification_bar_title_margin_right"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/game_list_name_size" />
+
+        <TextView
+            android:id="@+id/notify_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/game_list_name_margin_left"
+            android:layout_marginRight="@dimen/notification_bar_title_margin_right"
+            android:layout_marginTop="@dimen/notification_bar_detail_margin_top"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/notification_bar_status"
+            android:textSize="@dimen/notification_bar_detail_size" />
+    </LinearLayout>
+
+</RelativeLayout>

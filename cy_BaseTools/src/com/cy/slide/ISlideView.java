@@ -15,5 +15,8 @@ public interface ISlideView {
 
     public int getCount();
 
+    /**
+     * 更新UI
+     */
     public void update();
 }

@@ -2,29 +2,25 @@ package com.cy.slide;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.text.TextUtils;
 import android.util.Log;
+
 import com.cy.R;
 import com.cy.constant.Constant;
-import com.cy.imageloader.ImageLoader;
-import com.cy.utils.StringUtil;
-import com.cy.utils.bitmap.BitmapUtils;
+import com.cy.frame.downloader.util.JsonConstant;
+import com.cy.utils.Utils;
 
-@SuppressLint("NewApi") public class SlideViewHelper extends AbstractSlideViewHelper<AdItem> {
+public class SlideViewHelper extends AbstractSlideViewHelper<AdItem> {
 
 	private static final int PIC_COUNT_PER_ITEM = 2;
-
+	
 	private static final String SP_NAME = "sp_name_slide_view";
 
 	public interface DataParsedListener {
@@ -36,12 +32,14 @@ import com.cy.utils.bitmap.BitmapUtils;
 	private SlideView2 mSlideView;
 
 	private DataParsedListener mDataParsedlistener;
-	private ImageLoader mImageLoader;
+	
+	private IconManager mShowingIconManager;
+	
+	private ArrayList<AdItem> mslideNewData = new ArrayList<AdItem>();
 
 	protected SlideViewHelper(SlideView2 slideView, Context context) {
 		mSlideView = slideView;
 		mContext = context;
-		mImageLoader = new ImageLoader(context);
 	}
 
 	protected boolean setDataSource(String source, JSONObject json, DataParsedListener listener) {
@@ -66,11 +64,11 @@ import com.cy.utils.bitmap.BitmapUtils;
 			@Override
 			public void run() {
 				initSlideBitmap();
-				// mSlideView.resetIndexWidth();
-				// mSlideView.prepareAnimation();
+//				mSlideView.resetIndexWidth();
+//				mSlideView.prepareAnimation();
 			}
 		}, Constant.MILLIS_500);
-
+		
 		return true;
 	}
 
@@ -88,14 +86,18 @@ import com.cy.utils.bitmap.BitmapUtils;
 	}
 
 	private void setDataList(JSONObject json, String source) {
-		ArrayList<AdItem> slideData = createAdItems(json);
+		mslideNewData = createAdItems(json);
 		if (mSlideShowingList.isEmpty()) {
-			init(slideData);
-			storeDataSource(source, json);
-			return;
+			mSlideShowingList = createAdItems(getStoredJson(source));
 		}
+		
+		if(mSlideShowingList.isEmpty()) {
+			init(mslideNewData);
+			storeDataSource(source, json);
+		}
+		
 
-		if (update(slideData)) {
+		if (update(mslideNewData)) {
 			storeDataSource(source, json);
 		}
 	}
@@ -114,59 +116,49 @@ import com.cy.utils.bitmap.BitmapUtils;
 			return;
 		}
 
-		// if (mSlideShowingList.isEmpty() || mNewDataList == null) {
-		// return;
-		// }
+//		if (mSlideShowingList.isEmpty() || mNewDataList == null) {
+//			return;
+//		}
 
 		initDefaultBmp();
+		initIconsManager();
 		obtainBitmap();
 	}
 
 	private void initDefaultBmp() {
-		if (BitmapUtils.isBitmapEmpty(mDefaultBmp)) {
-			mDefaultBmp = generateDefaultBmp(mSlideView.getViewWidth(), mSlideView.getViewHeight(),
-					R.color.slide_view_default_bitmap_bg_color, mSlideView.getViewPaddingBottom());
+		if (BitmapUtil.isBitmapEmpty(mDefaultBmp)) {
+			mDefaultBmp = BitmapManager.generateDefaultBmp(mSlideView.getViewWidth(),
+					mSlideView.getViewHeight(), R.color.default_bitmap_bg_color,
+					mSlideView.getViewPaddingBottom());
 			if (mSlideView.isExit()) {
-				BitmapUtils.recycleBitmap(mDefaultBmp);
+				BitmapUtil.recycleBitmap(mDefaultBmp);
 			}
 		}
 	}
 
-	private Bitmap generateDefaultBmp(int width, int height, int colorId, int paddingBottom) {
-		if (width <= 0 || height <= 0) {
-			return null;
-		}
-		Bitmap defaultBmp;
-		Resources res = mContext.getResources();
-		Bitmap defaultIcon = BitmapUtils.decodeResource(res, R.drawable.slide_default_icon);
-		defaultBmp = Bitmap.createBitmap(width, height, Config.ARGB_8888);
-		int targetSize = (int) res.getDimension(R.dimen.slide_default_image_size);
-		Canvas canvas = new Canvas(defaultBmp);
-		canvas.drawColor(res.getColor(colorId));
-		Rect rect = new Rect();
-		rect.left = width / 2 - targetSize / 2;
-		rect.right = rect.left + targetSize;
-		rect.top = (height - targetSize - paddingBottom) / 2;
-		rect.bottom = rect.top + targetSize;
-		canvas.drawBitmap(defaultIcon, null, rect, BitmapUtils.HIGH_PAINT);
-		BitmapUtils.recycleBitmap(defaultIcon);
-		return defaultBmp;
+	private void initIconsManager() {
+//		if (mShowingIconsManager == null) {
+//			mShowingIconsManager = new SlideIconsManager();
+//		}
+//		if (mNewDataIconsManager == null) {
+//			mNewDataIconsManager = new SlideIconsManager();
+//		}
 	}
 
 	private void obtainBitmap() {
-		for (int i = 0; i < mSlideShowingList.size(); i++) {
-			downBitmap(mShowingIconsManager, getShowingAdItem(i), i * PIC_COUNT_PER_ITEM);
-		}
+//		for (int i = 0; i < mShowingList.size(); i++) {
+//			downBitmap(mShowingIconsManager, getShowingAdItem(i), i * PIC_COUNT_PER_ITEM);
+//		}
 //		for (int i = 0; i < mNewDataList.size(); i++) {
 //			downBitmap(mNewDataIconsManager, mNewDataList.get(i), i * PIC_COUNT_PER_ITEM);
 //		}
 	}
 
-	private void downBitmap(AdItem item, int index) {
-		mImageLoader.displayImage(iconUrl, view, defBitmapId);.getBitmap(index, item.mImageUrl);
-		if (item.mArgs != null) {
-			iconsManager.getBitmap(index + 1, item.mArgs.mIconUrl);
-		}
+	private void downBitmap(IconManager iconsManager, AdItem item, int index) {
+//		iconsManager.getBitmap(index, item.mImageUrl);
+//		if (item.mArgs != null) {
+//			iconsManager.getBitmap(index + 1, item.mArgs.mIconUrl);
+//		}
 	}
 
 	private ArrayList<AdItem> createAdItems(JSONObject object) {
@@ -175,16 +167,17 @@ import com.cy.utils.bitmap.BitmapUtils;
 			return slideList;
 		}
 
+		
 		try {
 			final JSONArray slideArray = object.getJSONArray(SlideConstant.SLIDE_ITEMS);
 			for (int i = 0; i < slideArray.length(); i++) {
 				JSONObject slideObject = slideArray.getJSONObject(i);
 				AdItem adItem = new AdItem();
 				adItem.mId = slideObject.getString(SlideConstant.AD_ID);
-				adItem.mTitle = slideObject.getString(SlideConstant.TITLE);
+				adItem.mTitle = slideObject.getString(JsonConstant.TITLE);
 				adItem.mImageUrl = slideObject.getString(SlideConstant.IMAGE_URL);
-				if (!StringUtil.isUrlValid(adItem.mImageUrl)) {
-					adItem.mImageUrl = "";
+				if (Utils.isUrlInvalid(adItem.mImageUrl)) {
+					adItem.mImageUrl = Constant.EMPTY;
 				}
 				adItem.mViewType = slideObject.getString(SlideConstant.VIEW_TYPE);
 				adItem.mParam = slideObject.getString(SlideConstant.PARAM);
@@ -198,7 +191,7 @@ import com.cy.utils.bitmap.BitmapUtils;
 
 	private JSONObject getStoredJson(String source) {
 		SharedPreferences sp = mContext.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
-		String data = sp.getString(source, "");
+		String data = sp.getString(source, Constant.EMPTY);
 		JSONObject object = null;
 		try {
 			object = new JSONObject(data);
@@ -218,89 +211,60 @@ import com.cy.utils.bitmap.BitmapUtils;
 	}
 
 	protected Bitmap getSlideBitmap(int index) {
-		return mShowingIconsManager.getBitmap(index * PIC_COUNT_PER_ITEM, getShowingAdItem(index).mImageUrl);
-	}
-
-	protected Bitmap getIconBitmap(int index) {
-		return mShowingIconsManager.getBitmap(index * PIC_COUNT_PER_ITEM + 1,
-				getShowingAdItem(index).mArgs.mIconUrl);
-	}
-
-	protected String getSlideTextView(int index) {
-		return getShowingAdItem(index).mTitle;
-	}
-
-	protected void switchNext() {
-		mCurIndex = getNextIndex();
+		return mShowingIconManager.getBitmap(index * PIC_COUNT_PER_ITEM, getItem(index).mImageUrl);
 	}
 
 	protected void onItemClick() {
-		if (mShowingList.isEmpty()) {
-			return;
-		}
-
-		AdItem adItem = getShowingAdItem(mCurIndex);
-		String type = adItem.mViewType;
-		String param = adItem.mParam;
-		ViewTypeUtil.onClickNavigations(mContext, type, param, createSource(adItem.mId));
+//		AdItem adItem = getItem(mCurrIndex);
+//		String type = adItem.mViewType;
+//		String param = adItem.mParam;
+//		ViewTypeUtil.onClickNavigations(mContext, type, param, createSource(adItem.mId));
 	}
 
-	private String createSource(String adid) {
-		String preSource = StatisValue.AD1 + (mCurIndex + 1);
-		String curSource = StatisValue.AD_ID + adid;
-		String source = StatisValue.combine(preSource, curSource);
-		return combinePageSource(source);
+	protected String createSource(String adid) {
+		return "";
 	}
 
-	private String combinePageSource(String source) {
-		String pageSource = StatisSourceManager.getInstance().getCurSource();
-		if (TextUtils.isEmpty(source) || pageSource.contains(StatisValue.HOME)) {
-			return source;
-		}
+    protected void checkAllImageDone() {
+        if (isAllImageDone()) {
+            onAllImageDone();
+        }
+    }
 
-		return StatisValue.combine(pageSource, source);
-	}
+    private boolean isAllImageDone() {
+        if (mNewDataList.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < mNewDataList.size(); i++) {
+            if (!mNewDataIconsManager.hasBitmap(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	protected void checkAllImageDone() {
-		if (isAllImageDone()) {
-			onAllImageDone();
-		}
-	}
+    private void onAllImageDone() {
+        checkCurIndex();
+        replaceShowingList();
+        mSlideView.resetIndexWidth();
+        mSlideView.prepareAnimation();
+        mSlideView.postInvalidate();
+    }
 
-	private boolean isAllImageDone() {
-		if (mNewDataList.isEmpty()) {
-			return false;
-		}
-		for (int i = 0; i < mNewDataList.size(); i++) {
-			if (!mNewDataIconsManager.hasBitmap(i)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private void onAllImageDone() {
-		checkCurIndex();
-		replaceShowingList();
-		mSlideView.resetIndexWidth();
-		mSlideView.prepareAnimation();
-		mSlideView.postInvalidate();
-	}
-
-	private void replaceShowingList() {
-		mShowingList.clear();
-		mShowingList.addAll(mNewDataList);
-		mShowingIconsManager.recycle();
-		for (int i = 0; i < mNewDataList.size(); i++) {
-			Bitmap bitmap = mNewDataIconsManager.getBitmap(i, null);
-			mShowingIconsManager.putToIconsMap(i, bitmap);
-		}
-		mNewDataList.clear();
-	}
+    private void replaceShowingList() {
+        mShowingList.clear();
+        mShowingList.addAll(mNewDataList);
+        mShowingIconsManager.recycle();
+        for (int i = 0; i < mNewDataList.size(); i++) {
+            Bitmap bitmap = mNewDataIconsManager.getBitmap(i, null);
+            mShowingIconsManager.putToIconsMap(i, bitmap);
+        }
+        mNewDataList.clear();
+    }
 
 	private void checkCurIndex() {
-		if (mCurIndex >= mShowingList.size()) {
-			mCurIndex = 0;
+		if (mCurrIndex >= mSlideShowingList.size()) {
+			mCurrIndex = 0;
 		}
 	}
 

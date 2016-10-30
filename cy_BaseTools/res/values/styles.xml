@@ -31,5 +31,18 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">@android:color/secondary_text_light</item>
     </style>
+    
+    <style name="ProgressButtonStyle">
+        <item name="android:layout_width">@dimen/game_download_width</item>
+        <item name="android:layout_height">@dimen/game_download_height</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">@dimen/progress_button_margin_right</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="ListViewSelectorStyle">
+        <item name="android:listSelector">@android:color/transparent</item>
+    </style>
 
 </resources>

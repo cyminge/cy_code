@@ -22,8 +22,11 @@ import android.view.MotionEvent;
 import android.view.animation.DecelerateInterpolator;
 
 import com.cy.R;
+import com.cy.frame.downloader.core.DownloadInfoMgr;
+import com.cy.frame.downloader.core.DownloadInfoMgr.DownloadChangeListener;
 import com.cy.slide.AnimationComputer.OnAnimFinishListener;
 import com.cy.slide.SlideViewHelper.DataParsedListener;
+import com.cy.utils.Utils;
 
 public class SlideView extends RecyclableView implements ISlideView {
 

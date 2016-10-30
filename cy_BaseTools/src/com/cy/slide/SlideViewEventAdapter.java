@@ -9,15 +9,20 @@ import android.view.animation.DecelerateInterpolator;
 
 import com.cy.constant.Constant;
 
+/**
+ * 处理slideView手势滑动
+ * @author zf
+ *
+ */
 public class SlideViewEventAdapter {
     private float mOffsetX = 0;
     private GestureDetector mGestureDetector;
     private AnimationComputer mAnimComputer;
     private ISlideView mTargetView;
-    private boolean mIsGestureSliding = false;
-    private boolean mIsCycled = false;
+    private boolean mIsGestureSliding = false; // 是否手指滑动
+    private boolean mIsCycled = false; // 是否轮播
     private boolean mBeginScroll = false;
-    private boolean mGestureDetectorEnabled = true;
+    private boolean mGestureDetectorEnabled = true; // 手势检测器
 
     public SlideViewEventAdapter(Context context, ISlideView view) {
         this(context, view, false, null);
@@ -55,6 +60,7 @@ public class SlideViewEventAdapter {
                 if (isSingle()) {
                     return false;
                 }
+                
                 if (mGestureDetectorEnabled && !mBeginScroll) {
                     mBeginScroll = true;
                     mIsGestureSliding = true;
@@ -64,8 +70,10 @@ public class SlideViewEventAdapter {
                 if (mIsCycled) {
                     distanceX = onNoCycle(distanceX);
                 }
+                
                 mOffsetX -= distanceX;
                 mTargetView.update();
+                
                 return false;
             }
 

@@ -7,12 +7,13 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 
-import com.cy.tracer.CrashTracer;
-import com.cy.tracer.Tracer;
-import com.cy.tracer.export.IOnShowExceptionInfo;
+import com.cy.frame.downloader.downloadmanager.DownloadService;
+import com.cy.threadpool.AbstractThreadPool;
+import com.cy.utils.sharepref.SharePrefUtil;
 
 /**
  * app启动初始化类
@@ -23,8 +24,7 @@ import com.cy.tracer.export.IOnShowExceptionInfo;
 public enum InitialWatchDog {
     INSTANCE;
 
-    private InitialWatchDog() {
-    }
+    private InitialWatchDog() {}
 
     private Context mContext;
     public boolean sIsInitializeDone = false;
@@ -101,43 +101,16 @@ public enum InitialWatchDog {
         context = context.getApplicationContext();
         mContext = context;
 
-        initialEnvironment(context); // log打印初始化
-        Tracer.persisteLog(false); // 保存日志文件
+        SharePrefUtil.init(context);
+        
+        DownloadService.startDownloadService(context);
+        
+//        DownloadInfoMgr.initDownloadService(); // 下载服务
+//        registerReceiver();
 
         sIsInitializeDone = true;
         return true;
     }
-
-    private int initialEnvironment(Context context) {
-        /* 优先初始化log */
-        initialLogDebug(context);
-        return 0;
-    }
-
-    // 上报日志
-    public static int initialLogDebug(Context context) {
-        Tracer.init(context, new OnMaxLogFrame(context));
-        CrashTracer.getInstance().init(context);
-
-        final Context cxt = context.getApplicationContext();
-        CrashTracer.getInstance().setShowInfo(new IOnShowExceptionInfo() {
-
-            @Override
-            public boolean isShownInfo() {
-                return true;
-            }
-        });
-        return 0;
-    }
-
-    public static Handler mMainHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.obj instanceof Runnable) {
-                ThreadPoolUtil.post((Runnable) msg.obj);
-            }
-        }
-    };
 
     private void Deinitialize(Context context) {
         if (!sIsInitializeDone) {
@@ -145,6 +118,44 @@ public enum InitialWatchDog {
         }
 
         sIsInitializeDone = false;
+    }
+    
+    public static void post(Runnable runnable) {
+        mMainHandler.post(runnable);
+    }
+    
+    public static void postDelay(Runnable runnable, long delayMillis) {
+        mMainHandler.postDelayed(runnable, delayMillis);
+    }
+    
+    public static Handler mMainHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+        	if(!(msg.obj instanceof Runnable)) {
+        		return;
+        	}
+        	
+        	AbstractThreadPool abstractThreadPool = AbstractThreadPool.mThreadPoolMap.get(msg.arg2);
+        	if(null != abstractThreadPool) {
+        		abstractThreadPool.post(((Runnable)msg.obj));
+    		}
+        }
+    };
+    
+    private static HandlerThread sHandlerThread;
+    private static volatile Handler sLoopHandler;
+    
+    public static Handler getLoopHandler() {
+        initHandlerThread();
+        return sLoopHandler;
+    }
+
+    private static void initHandlerThread() {
+        if (sLoopHandler == null) {
+            sHandlerThread = new HandlerThread("DaemonThread");
+            sHandlerThread.start();
+            sLoopHandler = new Handler(sHandlerThread.getLooper());
+        }
     }
 
 }

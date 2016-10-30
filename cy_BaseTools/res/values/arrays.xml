@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string-array name="game_list_button_status">
+        <item>@string/download</item>
+        <item>@string/pause</item>
+        <item>@string/update</item>
+        <item>@string/launch</item>
+        <item>@string/game_installing</item>
+        <item>@string/launch</item>
+        <item>@string/resume</item>
+        <item>@string/install</item>
+        <item>@string/retry</item>
+        <item>@string/reward_download</item>
+        <item>@string/reward_upgrade</item>
+        <item>@string/subscribe</item>
+        <item>@string/subscribed</item>
+    </string-array>
+    
+
+</resources>
