@@ -2,12 +2,11 @@ package com.cy.utils.storage;
 
 import java.io.File;
 
-import com.cy.utils.SharedPrefUtil_bak;
-import com.cy.utils.sharepref.SharePrefUtil;
-
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.TextUtils;
+
+import com.cy.utils.sharepref.SharePrefUtil;
 
 public class GNStorageUtils {
     private static final String STORAGE_PATH = "storage_path";

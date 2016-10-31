@@ -4,7 +4,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
 
 import android.os.Handler;
 
@@ -35,7 +35,7 @@ public class BackgroundTaskThreadPool extends AbstractThreadPool {
 
 	@Override
 	protected Handler createHandler() {
-		return InitialWatchDog.mMainHandler;
+		return WatchDog.mMainHandler;
 	}
 
 	@Override

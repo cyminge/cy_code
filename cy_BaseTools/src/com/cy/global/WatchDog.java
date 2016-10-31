@@ -12,6 +12,7 @@ import android.os.Looper;
 import android.os.Message;
 
 import com.cy.frame.downloader.downloadmanager.DownloadService;
+import com.cy.imageloader.ImageLoader;
 import com.cy.threadpool.AbstractThreadPool;
 import com.cy.utils.sharepref.SharePrefUtil;
 
@@ -21,10 +22,10 @@ import com.cy.utils.sharepref.SharePrefUtil;
  * @author JLB6088
  * 
  */
-public enum InitialWatchDog {
+public enum WatchDog {
     INSTANCE;
 
-    private InitialWatchDog() {}
+    private WatchDog() {}
 
     private Context mContext;
     public boolean sIsInitializeDone = false;
@@ -102,6 +103,7 @@ public enum InitialWatchDog {
         mContext = context;
 
         SharePrefUtil.init(context);
+        ImageLoader.initialize(context, 0);
         
         DownloadService.startDownloadService(context);
         
@@ -124,8 +126,12 @@ public enum InitialWatchDog {
         mMainHandler.post(runnable);
     }
     
-    public static void postDelay(Runnable runnable, long delayMillis) {
+    public static void postDelayed(Runnable runnable, long delayMillis) {
         mMainHandler.postDelayed(runnable, delayMillis);
+    }
+    
+    public static void removeRunnable(Runnable runnable) {
+        mMainHandler.removeCallbacks(runnable);
     }
     
     public static Handler mMainHandler = new Handler(Looper.getMainLooper()) {

@@ -14,7 +14,7 @@ import com.cy.frame.downloader.install.InstallManager;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager.UpgradeAppInfo;
 import com.cy.global.BaseApplication;
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
 import com.cy.utils.Utils;
 import com.cy.utils.storage.GNStorageUtils;
 
@@ -86,7 +86,7 @@ public class SingleDownloadManager extends StartDownloadManager {
     public void execute(DownloadArgs downloadArgs, SingleDownloadListener listener, boolean isApplyFail) {
         mDownloadArgs = downloadArgs;
         mListener = listener;
-        mContext = InitialWatchDog.INSTANCE.getTopActivity();
+        mContext = WatchDog.INSTANCE.getTopActivity();
         if (isApplyFail) { // 提示错误
             applyFail(mDownloadArgs);
             return;

@@ -91,7 +91,7 @@ public class PauseOnScrollListener implements OnScrollListener {
         case OnScrollListener.SCROLL_STATE_IDLE:
             Log.e("aa", "-->开启");
             imageLoader.setPauseLoad(false);
-            imageLoader.reDisplayImage();
+//            imageLoader.reDisplayImage();  // 为毛要加这个??
 
             break;
         case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:

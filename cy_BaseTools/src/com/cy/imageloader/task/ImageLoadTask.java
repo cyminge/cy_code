@@ -8,16 +8,19 @@ import android.util.Log;
 import android.view.View;
 
 import com.cy.imageloader.ImageLoader;
+import com.cy.imageloader.listener.ImageLoadingListener;
 
 public class ImageLoadTask implements Runnable {
     private WeakReference<ImageLoader> mImageLoaderWeakRef;
     private String mUrl;
     private View mView;
+    private ImageLoadingListener mImageLoadingListener;
 
-    public ImageLoadTask(ImageLoader imageLoader, String url, View view) {
+    public ImageLoadTask(ImageLoader imageLoader, String url, View view, ImageLoadingListener imageLoadingListener) {
         mImageLoaderWeakRef = new WeakReference<ImageLoader>(imageLoader);
         mUrl = url;
         mView = view;
+        mImageLoadingListener = imageLoadingListener;
     }
 
     public void run() {
@@ -41,19 +44,19 @@ public class ImageLoadTask implements Runnable {
             Bitmap retBitmap = imageLoader.resizeBitmap(bitmap, mView);
             boolean isCached = imageLoader.putDiskCacheBitmap(mUrl, retBitmap);
             if(isCached) {
-                onLoadBitmap(retBitmap, mView);
+                onLoadBitmap(retBitmap, mView, mImageLoadingListener);
             }
         }
 
     }
 
-    private void onLoadBitmap(Bitmap retBitmap, View view) {
+    private void onLoadBitmap(Bitmap retBitmap, View view, ImageLoadingListener imageLoadingListener) {
         final ImageLoader imageLoader = mImageLoaderWeakRef.get();
         if (null == imageLoader) {
             return;
         }
 
-        boolean isUseful = imageLoader.onHandleFinish(view, retBitmap, mUrl);
+        boolean isUseful = imageLoader.onHandleFinish(view, retBitmap, mUrl, imageLoadingListener);
         if (isUseful) {
             imageLoader.putMemoryCacheBitmap(mUrl, retBitmap);
         }

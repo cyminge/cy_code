@@ -9,7 +9,7 @@ import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.frame.downloader.entity.ListData;
 import com.cy.frame.downloader.install.InstallManager;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
 import com.cy.utils.Utils;
 
 public class ButtonStatusManager {
@@ -177,7 +177,7 @@ public class ButtonStatusManager {
             addPackage(pkgName);
         }
 
-        int size = InitialWatchDog.INSTANCE.getSize();
+        int size = WatchDog.INSTANCE.getSize();
         if (size <= 0) {
             return;
         }

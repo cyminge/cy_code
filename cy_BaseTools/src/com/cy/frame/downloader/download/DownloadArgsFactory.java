@@ -18,7 +18,7 @@ import com.cy.frame.downloader.statis.StatisValue;
 import com.cy.frame.downloader.util.JsonConstant;
 import com.cy.frame.downloader.util.JsonUtils;
 import com.cy.frame.downloader.util.UrlConstant;
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
 import com.cy.threadpool.NomalThreadPool;
 import com.cy.utils.Utils;
 
@@ -121,7 +121,7 @@ public class DownloadArgsFactory {
     }
 
     private void blockThread() {
-        Activity activity = InitialWatchDog.INSTANCE.getTopActivity();
+        Activity activity = WatchDog.INSTANCE.getTopActivity();
         if (activity != null && activity.isFinishing()) {
             return;
         }

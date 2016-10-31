@@ -26,7 +26,8 @@ import com.cy.cache.disk.naming.HashCodeFileNameGenerator;
 import com.cy.cache.memory.MemoryCache;
 import com.cy.cache.memory.impl.LruMemoryCache;
 import com.cy.constant.Constant;
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
+import com.cy.imageloader.listener.ImageLoadingListener;
 import com.cy.imageloader.task.ImageLoadTask;
 import com.cy.imageloader.ui.AlphaAnimImageView;
 import com.cy.tracer.Tracer;
@@ -41,7 +42,8 @@ import com.cy.utils.storage.StorageUtils;
  * @author JLB6088
  * 
  */
-public class ImageLoader {
+public enum ImageLoader {
+	INSTANCE;
 
     private static final String TAG = "ImageLoader";
 
@@ -58,20 +60,26 @@ public class ImageLoader {
 
     private static final String IMAGE_DISK_CACHE_PATH = "cyTest";
 
-    public ImageLoader(Context context) { // default memory cache
-        this(context, 0);
+    private ImageLoader() {
     }
 
-    public ImageLoader(Context context, int maxSize) {
-        int maxMemory = (int) Runtime.getRuntime().maxMemory();
-        if (0 == maxSize) {
-            maxSize = maxMemory / 8;
-        }
-        Tracer.i(TAG, "maxMemory = " + maxMemory);
-        mContext = context;
-        mMemoryCache = new LruMemoryCache(maxSize);
-        mDiskCache = createDiskCache(context);
-    }
+    public static void initialize(Context context, int maxSize) {
+		INSTANCE.startInitialize(context, maxSize);
+	}
+
+	private void startInitialize(Context context, int maxSize) {
+		synchronized (ImageLoader.class) {
+			int maxMemory = (int) Runtime.getRuntime().maxMemory();
+	        if (0 == maxSize) {
+	            maxSize = maxMemory / 8;
+	        }
+	        Tracer.i(TAG, "image loader max Memory : " + maxMemory);
+	        mContext = context;
+	        mMemoryCache = new LruMemoryCache(maxSize);
+	        mDiskCache = createDiskCache(context);
+		}
+
+	}
 
     private DiskCache createDiskCache(Context context) {
         return createDiskCache(context, createFileNameGenerator(), 100 * 1024 * 1024, 0);
@@ -208,14 +216,15 @@ public class ImageLoader {
      * @param view
      * @param defBitmapId
      */
-    public void displayImage(String iconUrl, ImageView view, int defBitmapId) {
+    public void displayImage(String iconUrl, ImageView view, int defBitmapId, ImageLoadingListener imageLoadingListener) {
         Log.e("aa", "加载");
         if (TextUtils.isEmpty(iconUrl)) {
             view.setImageResource(defBitmapId);
             return;
         }
         
-        Bitmap bitmap = getBitmap(iconUrl, view);
+        Bitmap bitmap = getBitmap(iconUrl, view, imageLoadingListener);
+        
         if (BitmapUtils.isBitmapEmpty(bitmap)) {
             view.setImageResource(defBitmapId);
             return;
@@ -228,12 +237,12 @@ public class ImageLoader {
         }
     }
 
-    private Bitmap getBitmap(String iconUrl, View view) {
+    public Bitmap getBitmap(String iconUrl, View view) {
         if (null != view) {
             view.setTag(hashKeyForDisk(iconUrl));
         }
         
-        return loadBitmap(iconUrl, view);
+        return loadBitmap(iconUrl, view, null);
     }
 
     /**
@@ -243,7 +252,7 @@ public class ImageLoader {
      * @param view
      * @return
      */
-    private Bitmap loadBitmap(String iconUrl, View view) {
+    private Bitmap loadBitmap(String iconUrl, View view, ImageLoadingListener imageLoadingListener) {
         Bitmap bitmap = mMemoryCache.get(hashKeyForDisk(iconUrl)); // 缓存
         if (null != bitmap) {
 //            Log.e("cyTest", "应该这里就返回啊");
@@ -251,7 +260,7 @@ public class ImageLoader {
         }
         
         // 从硬盘获取或网络获取
-        startLoadBitmapTask(iconUrl, view);
+        startLoadBitmapTask(iconUrl, view, imageLoadingListener);
         return null;
         // && StorageUtils.isSDCardMounted()
 
@@ -294,7 +303,11 @@ public class ImageLoader {
         });
     }
 
-    public boolean onHandleFinish(View view, Bitmap bitmap, String iconUrl) {
+    public boolean onHandleFinish(View view, Bitmap bitmap, String iconUrl, ImageLoadingListener imageLoadingListener) {
+    	if(null != imageLoadingListener) {
+    		imageLoadingListener.onLoadingComplete(iconUrl, view, bitmap);
+    		return true;
+    	}
         if (!hashKeyForDisk(iconUrl).equals(view.getTag().toString())) {
             return true;
         }
@@ -308,17 +321,17 @@ public class ImageLoader {
      * @param position
      * @param iconUrl
      */
-    private void startLoadBitmapTask(String iconUrl, View view) {
+    private void startLoadBitmapTask(String iconUrl, View view, ImageLoadingListener imageLoadingListener) {
         if (mPauseLoad) {
-            mViewNeedToLoad.put(view, iconUrl);
+//            mViewNeedToLoad.put(view, iconUrl);
             return;
         }
         
         Message msg = Message.obtain();
         msg.what = getTaskKey();
-        msg.obj = new ImageLoadTask(this, iconUrl, view);
+        msg.obj = new ImageLoadTask(this, iconUrl, view, imageLoadingListener);
         long delay = getTaskDelay();
-        InitialWatchDog.mMainHandler.sendMessageDelayed(msg, delay);
+        WatchDog.mMainHandler.sendMessageDelayed(msg, delay);
     }
 
     private int getTaskKey() {
@@ -347,13 +360,16 @@ public class ImageLoader {
 
     public void removeCheckTask() {
         resetTaskDelay();
-        InitialWatchDog.mMainHandler.removeMessages(getTaskKey());
+        WatchDog.mMainHandler.removeMessages(getTaskKey());
     }
     
     private void resetTaskDelay() {
         mTaskDelay = IMAGE_LOAD_DELAY;
     }
     
+    /**
+     * 这个方法是搞什么飞机的
+     */
     public void reDisplayImage() {
         if(mViewNeedToLoad.size() > 0 ) { // mViewNeedToLoad 要不要同步
             removeCheckTask();
@@ -392,65 +408,5 @@ public class ImageLoader {
         // removeCheckTask();
         // }
     }
-
-    // ================================================================================
-
-    // public interface IconInfoProvider {
-    // public int getMaxIconCount();
-    //
-    // public String getIconUrl(int position);
-    // }
-    //
-    // public static class IconData {
-    // public String mIconUrl;
-    // }
-    //
-    // private static final int MAX_CACHE_SIZE = 160;
-    // private static final int MID_CACHE_SIZE = 64;
-    // private static final int DEFAULT_CACHE_SIZE = 32;
-    // private static final int ICON_CHECKER_DELAY = 200;
-
-    // private int mCurPosition;
-    // private int mAnchorPosition = Constant.DEFAULT_NUM;
-    // private SparseArray<Bitmap> mIconsArray = new SparseArray<Bitmap>();
-    // private SparseArray<View> mViewArray = new SparseArray<View>();
-    // private HashMap<String, Object> mUrlLockSet = new HashMap<String,
-    // Object>();
-    //
-    // private IconInfoProvider mIconInfoProvider;
-    // private int mCacheSize = DEFAULT_CACHE_SIZE;
-    // private int mHalfCacheSize = DEFAULT_CACHE_SIZE / 2;
-    // private int mTaskDelay = ICON_CHECKER_DELAY;
-    // private boolean mPauseLoad = false; // 是否暂停加载
-    //
-    // public void setMaxCacheSize() {
-    // mCacheSize = MAX_CACHE_SIZE;
-    // mHalfCacheSize = MAX_CACHE_SIZE / 2;
-    // }
-    //
-    // public void setMidCacheSize() {
-    // mCacheSize = MID_CACHE_SIZE;
-    // mHalfCacheSize = MID_CACHE_SIZE / 2;
-    // }
-    //
-    // /**
-    // * 每个Item加载的图片信息
-    // *
-    // * @param provider
-    // */
-    // public void setIconInfoProvider(IconInfoProvider provider) {
-    // mIconInfoProvider = provider;
-    // }
-    //
-    // /**
-    // * 设置是否暂停加载图片的任务
-    // *
-    // * @param pauseLoad
-    // */
-    // protected void setPauseLoad(boolean pauseLoad) {
-    // mPauseLoad = pauseLoad;
-    // }
-    //
-    //
 
 }

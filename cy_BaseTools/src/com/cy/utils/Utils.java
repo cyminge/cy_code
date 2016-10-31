@@ -40,7 +40,7 @@ import com.cy.frame.downloader.statis.StatisValue;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager.UpgradeAppInfo;
 import com.cy.global.BaseApplication;
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
 import com.cy.utils.storage.FileUtils;
 import com.cy.utils.storage.GNStorageUtils;
 
@@ -529,7 +529,7 @@ public class Utils {
     }
 
     public static Resources getResources() {
-        return InitialWatchDog.getContext().getResources();
+        return WatchDog.getContext().getResources();
     }
 
     public static boolean hasNetwork() {
@@ -546,7 +546,7 @@ public class Utils {
     }
 
     private static Object getSystemService(String service) {
-        return InitialWatchDog.getContext().getSystemService(service);
+        return WatchDog.getContext().getSystemService(service);
     }
 
     public static String getExceptionInfo(Throwable ex) {

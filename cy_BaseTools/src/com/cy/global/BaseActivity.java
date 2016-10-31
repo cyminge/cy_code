@@ -20,7 +20,7 @@ public class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		InitialWatchDog.INSTANCE.addActivity(this, canAsBootActivity());
+		WatchDog.INSTANCE.addActivity(this, canAsBootActivity());
 	}
 	
 	protected boolean canAsBootActivity() {

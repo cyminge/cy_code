@@ -30,7 +30,7 @@ import android.widget.TextView;
 
 import com.cy.R;
 import com.cy.global.BaseApplication;
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
 import com.cy.utils.Utils;
 
 public class GameDialog extends Dialog {
@@ -339,7 +339,7 @@ public class GameDialog extends Dialog {
             public void onItemClick(AdapterView<?> av, View view, int position, long id) {
                 if (mCheckedItem != position) {
                     mCheckedItem = position;
-                    InitialWatchDog.post(new Runnable() {
+                    WatchDog.post(new Runnable() {
                         @Override
                         public void run() {
                             mBaseAdapter.notifyDataSetChanged();

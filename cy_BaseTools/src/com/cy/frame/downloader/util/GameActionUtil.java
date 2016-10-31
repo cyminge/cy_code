@@ -15,7 +15,7 @@ import android.widget.RemoteViews;
 import com.cy.constant.Constant;
 import com.cy.frame.downloader.statis.StatisValue;
 import com.cy.global.BaseApplication;
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
 import com.cy.threadpool.NomalThreadPool;
 import com.cy.utils.Utils;
 import com.cy.utils.sharepref.SharePrefUtil;
@@ -174,7 +174,7 @@ public class GameActionUtil {
         String statisSource = StatisValue.combine(StatisValue.INSTALL_SEND, source);
 
         Intent intent = new Intent();
-        Activity topActivity = InitialWatchDog.INSTANCE.getTopActivity();
+        Activity topActivity = WatchDog.INSTANCE.getTopActivity();
 //        String className = MyGiftListActivity.class.getName(); // cyminge modify
         String className = "aa";
         if (topActivity == null || topActivity.getClass().getName().equals(className)) {

@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.cy.cache.memory.MemoryCache;
 

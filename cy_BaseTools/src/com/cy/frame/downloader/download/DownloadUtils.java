@@ -21,7 +21,7 @@ import com.cy.frame.downloader.upgrade.GamesUpgradeManager.UpgradeAppInfo;
 import com.cy.frame.downloader.util.GameActionUtil;
 import com.cy.frame.downloader.util.GameInstaller;
 import com.cy.global.BaseApplication;
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
 import com.cy.utils.Utils;
 import com.cy.utils.sharepref.SharePrefUtil;
 import com.cy.utils.storage.FileUtils;
@@ -108,7 +108,7 @@ public class DownloadUtils {
     }
 
     public static void toast(int reason) {
-        if (InitialWatchDog.INSTANCE.getTopActivity() == null) {
+        if (WatchDog.INSTANCE.getTopActivity() == null) {
             return;
         }
 

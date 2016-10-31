@@ -16,7 +16,7 @@ import com.cy.frame.downloader.statis.StatisValue;
 import com.cy.frame.downloader.util.JsonConstant;
 import com.cy.frame.downloader.util.NotificationUtils;
 import com.cy.global.BaseApplication;
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
 import com.cy.utils.Utils;
 
 public class DownloadNotification {
@@ -40,7 +40,7 @@ public class DownloadNotification {
         String title = app.getResources().getString(R.string.notification_downloading, count);
         notification.contentView = Utils.getRemoteViews(title, detail);
 
-        Activity topActivity = InitialWatchDog.INSTANCE.getTopActivity();
+        Activity topActivity = WatchDog.INSTANCE.getTopActivity();
         String downloadActivityName = DownloadActivity.class.getName(); // 此DownloadActivity跟原来的DownloadActivity不一样，  cyminge modify ???
         Intent intent = new Intent();
         if (topActivity == null || topActivity.getClass().getName().equals(downloadActivityName)) {

@@ -9,7 +9,7 @@ import com.cy.frame.downloader.controller.DownloadOrderMgr;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.frame.downloader.downloadmanager.DownloadDB;
 import com.cy.frame.downloader.downloadmanager.DownloadService;
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
 import com.cy.listener.GameListenerManager;
 import com.cy.utils.Utils;
 import com.cy.utils.storage.GNStorageUtils;
@@ -294,8 +294,8 @@ public class DownloadInfoMgr {
         delay = Math.max(0, delay);
         delay = Math.min(NOTIFY_PROGRESS_DELAY_TIME, delay);
         
-        InitialWatchDog.getLoopHandler().removeCallbacks(mOnProgressChangeRunnable);
-        InitialWatchDog.getLoopHandler().postDelayed(mOnProgressChangeRunnable, delay);
+        WatchDog.getLoopHandler().removeCallbacks(mOnProgressChangeRunnable);
+        WatchDog.getLoopHandler().postDelayed(mOnProgressChangeRunnable, delay);
     }
 
     public void updateProgressNoDelay(DownloadInfo info) {

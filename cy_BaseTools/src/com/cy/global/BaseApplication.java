@@ -29,7 +29,7 @@ public class BaseApplication extends Application {
         mBaseApplication = this;
         mBaseAppContext = mBaseApplication.getApplicationContext();
         if(isMainProcess()) {
-            InitialWatchDog.init(this);
+            WatchDog.init(this);
         }
     }
     

@@ -9,35 +9,36 @@ import com.cy.constant.Constant;
 @SuppressLint("NewApi") 
 public class SharePrefUtil {
 
-    private static final String GAME_PREF = "game_pref";
-    private static SharedPreferences sPre;
+	private static final String SHARE_PREF_NAME = "cy_pref_name";
+	
+    private static SharedPreferences sSharePref;
 
     public static void init(Context context) {
-        sPre = context.getSharedPreferences(GAME_PREF, Context.MODE_PRIVATE);
+        sSharePref = context.getSharedPreferences(SHARE_PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public static void remove(String key) {
-        sPre.edit().remove(key).apply();
+        sSharePref.edit().remove(key).apply();
     }
 
     public static void putInt(String key, int value) {
-        sPre.edit().putInt(key, value).apply();
+        sSharePref.edit().putInt(key, value).apply();
     }
 
     public static int getInt(String key, int defValue) {
-        return sPre.getInt(key, defValue);
+        return sSharePref.getInt(key, defValue);
     }
 
     public static void putBoolean(String key, boolean value) {
-        sPre.edit().putBoolean(key, value).apply();
+        sSharePref.edit().putBoolean(key, value).apply();
     }
 
     public static boolean getBoolean(String key, boolean defValue) {
-        return sPre.getBoolean(key, defValue);
+        return sSharePref.getBoolean(key, defValue);
     }
 
     public static void putString(String key, String value) {
-        sPre.edit().putString(key, value).apply();
+        sSharePref.edit().putString(key, value).apply();
     }
 
     public static String getString(String key) {
@@ -45,15 +46,15 @@ public class SharePrefUtil {
     }
 
     public static String getString(String key, String defValue) {
-        return sPre.getString(key, defValue);
+        return sSharePref.getString(key, defValue);
     }
 
     public static void putLong(String key, long value) {
-        sPre.edit().putLong(key, value).apply();
+        sSharePref.edit().putLong(key, value).apply();
     }
 
     public static long getLong(String key, long defValue) {
-        return sPre.getLong(key, defValue);
+        return sSharePref.getLong(key, defValue);
     }
 
     public static void putHashTime(String key, long value) {
@@ -67,11 +68,11 @@ public class SharePrefUtil {
     }
 
     public static void putFloat(String key, float value) {
-        sPre.edit().putFloat(key, value).apply();
+        sSharePref.edit().putFloat(key, value).apply();
     }
 
     public static float getFloat(String key, float defValue) {
-        return sPre.getFloat(key, defValue);
+        return sSharePref.getFloat(key, defValue);
     }
 
     public static void saveVersion(String prefKey, String jsonData) {
@@ -88,6 +89,6 @@ public class SharePrefUtil {
     }
     
     public static void clearPreference(String key) {
-    	sPre.edit().remove(key).apply();
+    	sSharePref.edit().remove(key).apply();
     }
 }

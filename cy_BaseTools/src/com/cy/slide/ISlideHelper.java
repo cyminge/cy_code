@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface ISlideHelper<T> {
 
-	public void init(List<T> slideData);
+	public void initSlideData(List<T> slideData);
 
-	public boolean update(List<T> slideData);
+	public boolean updateSlideData(List<T> slideData);
 	
 	public T getItem(int index);
 
@@ -22,7 +22,7 @@ public interface ISlideHelper<T> {
 
 	public int getNextIndex();
 	
-	public void switchImage(boolean isLeft);
+	public boolean switchImage(boolean isLeft);
 	
 	public void switchNext();
 

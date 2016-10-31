@@ -2,23 +2,64 @@ package com.cy.slide;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.cy.constant.Constant;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.text.TextUtils;
 
-public abstract class AbstractSlideViewHelper<T> implements ISlideHelper<T> {
+@SuppressLint("NewApi") public abstract class AbstractSlideViewHelper<T> implements ISlideHelper<T> {
 
 	protected List<T> mSlideShowingList = new ArrayList<T>();
 	protected int mCurrIndex = 0;
+	
+	protected Context mContext;
+	protected SlideView2 mSlideView;
+	
+	public AbstractSlideViewHelper(Context context, SlideView2 slideView) {
+		mContext = context;
+		mSlideView = slideView;
+		mSlideView.init(context, SlideView2.ANIMATION_EFFECTS_TYPE_1);
+	}
+	
+	protected JSONObject getStoredJson(String slideSharePrefKey) {
+		SharedPreferences sp = mContext.getSharedPreferences(getSlideSharePrefName(), Context.MODE_PRIVATE); 
+		String data = sp.getString(slideSharePrefKey, Constant.EMPTY);
+		if(TextUtils.isEmpty(data)) {
+			return null;
+		}
+		
+		JSONObject object = null;
+		try {
+			object = new JSONObject(data);
+		} catch (JSONException e) {
+		}
+		
+		return object;
+	}
 
+	protected void storeDataSource(String slideSharePrefKey, JSONObject json) {
+		String data = json.toString();
+		SharedPreferences sp = mContext.getSharedPreferences(getSlideSharePrefName(), Context.MODE_PRIVATE);
+		sp.edit().putString(slideSharePrefKey, data).apply();
+	}
+	
+	abstract String getSlideSharePrefName();
+	
 	@Override
-	public void init(List<T> slideData) {
+	public void initSlideData(List<T> slideData) {
 		if (null == slideData || slideData.isEmpty()) {
 			return;
 		}
 
 		mSlideShowingList.addAll(slideData);
+		
 	}
 
 	@Override
-	public boolean update(List<T> slideData) {
+	public boolean updateSlideData(List<T> slideData) {
 		if (null == slideData || slideData.isEmpty()) {
 			return false;
 		}
@@ -89,12 +130,14 @@ public abstract class AbstractSlideViewHelper<T> implements ISlideHelper<T> {
 	}
 	
 	@Override
-	public void switchImage(boolean isLeft) {
+	public boolean switchImage(boolean isLeft) {
 		if (isLeft) {
 			mCurrIndex = getPreIndex();
 		} else {
 			mCurrIndex = getNextIndex();
 		}
+		
+		return true;
 	}
 	
 	@Override

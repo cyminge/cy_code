@@ -20,7 +20,7 @@ import com.cy.frame.downloader.core.DownloadStatusMgr;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.install.InstallManager;
 import com.cy.global.BaseApplication;
-import com.cy.global.InitialWatchDog;
+import com.cy.global.WatchDog;
 import com.cy.threadpool.NomalThreadPool;
 import com.cy.utils.Utils;
 import com.cy.utils.storage.GNStorageUtils;
@@ -95,7 +95,7 @@ import com.cy.utils.storage.GNStorageUtils;
     }
 
     private static void startSystemInstallerForGameHall(File file, int code) {
-        Activity activity = InitialWatchDog.INSTANCE.getTopActivity();
+        Activity activity = WatchDog.INSTANCE.getTopActivity();
         if (activity == null) {
             return;
         }

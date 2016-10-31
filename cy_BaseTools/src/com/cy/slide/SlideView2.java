@@ -7,6 +7,7 @@ import android.text.format.DateUtils;
 import android.view.animation.DecelerateInterpolator;
 
 import com.cy.slide.AnimationComputer.OnAnimFinishListener;
+import com.cy.utils.bitmap.BitmapUtils;
 
 public class SlideView2 extends RecyclableView implements ISlideView {
 	
@@ -23,17 +24,12 @@ public class SlideView2 extends RecyclableView implements ISlideView {
 	private int mAnimationEffectsType;
 	
 	public SlideView2(Context context) {
-		this(context, ANIMATION_EFFECTS_TYPE_1);
-	}
-	
-	public SlideView2(Context context, int effectsType) {
 		super(context);
-		mAnimationEffectsType = effectsType;
-		init(context);
 	}
 	
-	private void init(Context context) {
+	public void init(Context context, int effectsType) {
 		mSlideViewHelper = new SlideViewHelper(this, context);
+		mAnimationEffectsType = effectsType;
 		mAnimationComputer = new AnimationComputer(new DecelerateInterpolator(), mAnimFinishListener);
 		mSlideViewEventAdapter = new SlideViewEventAdapter(context, this, true, mAnimationComputer);
 	}
@@ -60,6 +56,15 @@ public class SlideView2 extends RecyclableView implements ISlideView {
 //            startAnimation();
         }
     };
+    
+    protected void prepareAnimation() {
+        removeCallbacks(mSwitchCommand);
+        if (isSingle()) {
+            return;
+        }
+
+        postDelayed(mSwitchCommand, NEXT_SWITCH_DELAY);
+    }
     
     private int mWidth;
     private int mHeight;
@@ -99,27 +104,25 @@ public class SlideView2 extends RecyclableView implements ISlideView {
     }
     
     private void drawSlideItem(Canvas canvas, float xOffset) {
-    	if(mAnimationEffectsType == 1) {
-    		drawItem(canvas, 0, mSlideViewHelper.getCurIndex(), xOffset);
-            if (isSingle()) {
-                return;
-            }
+		drawItem(canvas, 0, mSlideViewHelper.getCurrIndex(), xOffset);
+        if (isSingle()) {
+            return;
+        }
 
-            if (FloatUtil.isPositive(xOffset)) { // 手指向左
-                drawItem(canvas, -1, mSlideViewHelper.getPreIndex(), xOffset);
-            } else if (FloatUtil.isNegative(xOffset)) { // 手指向左
-                drawItem(canvas, 1, mSlideViewHelper.getNextIndex(), xOffset);
-            }
-    	}
+        if (FloatUtil.isPositive(xOffset)) { // 手指向左
+            drawItem(canvas, -1, mSlideViewHelper.getPreIndex(), xOffset);
+        } else if (FloatUtil.isNegative(xOffset)) { // 手指向左
+            drawItem(canvas, 1, mSlideViewHelper.getNextIndex(), xOffset);
+        }
 	}
     
     private void drawItem(Canvas canvas, int pageOffset, int index, float xOffset) {
         Bitmap bitmap = mSlideViewHelper.getSlideBitmap(index);
-        if (BitmapUtil.isBitmapEmpty(bitmap)) {
+        if (BitmapUtils.isBitmapEmpty(bitmap)) {
             canvas.drawBitmap(mSlideViewHelper.getDefaultBitmap(), xOffset + mWidth * pageOffset, 0,
-                    BitmapManager.HIGH_PAINT);
+            		BitmapUtils.HIGH_PAINT);
         } else {
-            canvas.drawBitmap(bitmap, xOffset + mWidth * pageOffset, 0, BitmapManager.HIGH_PAINT);
+            canvas.drawBitmap(bitmap, xOffset + mWidth * pageOffset, 0, BitmapUtils.HIGH_PAINT);
         }
     }
     
@@ -157,7 +160,7 @@ public class SlideView2 extends RecyclableView implements ISlideView {
 
 	@Override
 	public int getCurrentIndex() {
-		return mSlideViewHelper.getCurIndex();
+		return mSlideViewHelper.getCurrIndex();
 	}
 
 	@Override
