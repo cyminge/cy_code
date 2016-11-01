@@ -21,7 +21,6 @@ import com.cy.frame.downloader.util.JsonConstant;
 import com.cy.frame.downloader.util.JsonUtils;
 import com.cy.frame.downloader.util.UrlConstant;
 import com.cy.global.BaseApplication;
-import com.cy.global.HostsProperties;
 import com.cy.utils.Utils;
 
 public class DownloadUrlUtils {
@@ -32,7 +31,8 @@ public class DownloadUrlUtils {
      * @return
      */
     public static int getDownloadUrl(DownloadInfo info) {
-        if (null != info.mRawDownloadUrl && !info.mRawDownloadUrl.contains(HostsProperties.getOfficialDownloadUrlMark())) { // 如果地址非官方的时候，直接就返回，不然还需要经过转换
+//        if (null != info.mRawDownloadUrl && !info.mRawDownloadUrl.contains(HostsProperties.getOfficialDownloadUrlMark())) { // 如果地址非官方的时候，直接就返回，不然还需要经过转换
+        if (null != info.mRawDownloadUrl && !info.mRawDownloadUrl.contains("gionee.com")) { // 如果地址非官方的时候，直接就返回，不然还需要经过转换
             return DownloadStatusMgr.REASON_NONE;
         }
 

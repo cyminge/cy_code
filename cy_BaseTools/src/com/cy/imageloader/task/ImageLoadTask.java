@@ -34,9 +34,9 @@ public class ImageLoadTask implements Runnable {
 
         Bitmap bitmap = imageLoader.getMemoryCacheBitmap(mUrl);
         if (null == bitmap) {
-            bitmap = imageLoader.getDiskCacheBitmap(mUrl, mView); // 从本地缓存获取
+            bitmap = imageLoader.getLocalCacheBitmap(mUrl); // 从本地缓存获取
             if (null == bitmap) {
-                bitmap = imageLoader.getNetBitmap(mUrl, mView); // 从网络获取
+                bitmap = imageLoader.getNetBitmap(mUrl); // 从网络获取
             }
         }
 

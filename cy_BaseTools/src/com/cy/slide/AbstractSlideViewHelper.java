@@ -10,7 +10,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-@SuppressLint("NewApi") public abstract class AbstractSlideViewHelper<T> implements ISlideHelper<T> {
+@SuppressLint("NewApi") 
+public abstract class AbstractSlideViewHelper<T> implements ISlideHelper<T> {
 
 	protected List<T> mSlideShowingList = new ArrayList<T>();
 	protected int mCurrIndex = 0;

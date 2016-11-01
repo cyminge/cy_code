@@ -86,15 +86,13 @@ public class SlideView2 extends RecyclableView implements ISlideView {
         drawSlideItem(canvas, xOffset);
         if (!mAnimationComputer.isFinish()) {
             invalidate();
-        } else {
-        	mSlideViewHelper.checkAllImageDone();
         }
     }
     
     private float caculateXOffset() {
-//    	if (isSingle()) {
-//            return 0f;
-//        }
+    	if (isSingle()) { //??
+            return 0f;
+        }
     	
         if (mSlideViewEventAdapter.isGestureSliding()) {
             return mSlideViewEventAdapter.getOffsetX();

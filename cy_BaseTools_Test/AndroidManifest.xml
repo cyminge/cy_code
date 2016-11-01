@@ -28,7 +28,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.cy.imageloadertest.MainActivity"
+            android:name="com.cy.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,6 +36,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.cy.imageloadertest.ImageLoaderActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.cy.downloadtest.DownloadActivity"
+            android:label="@string/app_name" >
+        </activity>
+        
+        <service android:name="com.cy.frame.downloader.downloadmanager.DownloadService" >
+            <intent-filter>
+                <action android:name="game.intent.action.DOWNLOAD_SERVICE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

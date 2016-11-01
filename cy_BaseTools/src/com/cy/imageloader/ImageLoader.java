@@ -30,6 +30,7 @@ import com.cy.global.WatchDog;
 import com.cy.imageloader.listener.ImageLoadingListener;
 import com.cy.imageloader.task.ImageLoadTask;
 import com.cy.imageloader.ui.AlphaAnimImageView;
+import com.cy.imageloader.ui.ImageViewAware;
 import com.cy.tracer.Tracer;
 import com.cy.utils.bitmap.BitmapUtils;
 import com.cy.utils.storage.StorageUtils;
@@ -141,10 +142,9 @@ public enum ImageLoader {
      * 获取磁盘图片
      * 
      * @param key
-     * @param targetView
      * @return
      */
-    public Bitmap getDiskCacheBitmap(String bitmapUrl, View targetView) {
+    public Bitmap getLocalCacheBitmap(String bitmapUrl) {
         Bitmap bitmap = null;
         File imageFile = mDiskCache.get(bitmapUrl);
         if (imageFile != null && imageFile.exists() && imageFile.length() > 0) {
@@ -181,7 +181,7 @@ public enum ImageLoader {
         return sb.toString();
     }
 
-    public Bitmap getNetBitmap(String url, View targetView) {
+    public Bitmap getNetBitmap(String url) {
         File file = ImageLoaderHelper.downloadImage(mContext, url);
         if (null != file) {
             return getDiskCacheBitmap(file.getPath());
@@ -207,15 +207,11 @@ public enum ImageLoader {
         int desHeight = view.getHeight();
         return BitmapUtils.extractThumbnailIfNeed(bitmap, desWidth, desHeight);
     }
+    
+    public void displayImage(String iconUrl, ImageView view, int defBitmapId) {
+        displayImage(iconUrl, view, defBitmapId, null);
+    }
 
-    /**
-     * 显示图像
-     * 
-     * @param position
-     * @param iconUrl
-     * @param view
-     * @param defBitmapId
-     */
     public void displayImage(String iconUrl, ImageView view, int defBitmapId, ImageLoadingListener imageLoadingListener) {
         Log.e("aa", "加载");
         if (TextUtils.isEmpty(iconUrl)) {
@@ -237,12 +233,12 @@ public enum ImageLoader {
         }
     }
 
-    public Bitmap getBitmap(String iconUrl, View view) {
+    public Bitmap getBitmap(String iconUrl, View view, ImageLoadingListener imageLoadingListener) {
         if (null != view) {
             view.setTag(hashKeyForDisk(iconUrl));
         }
         
-        return loadBitmap(iconUrl, view, null);
+        return loadBitmap(iconUrl, view, imageLoadingListener);
     }
 
     /**
@@ -252,7 +248,7 @@ public enum ImageLoader {
      * @param view
      * @return
      */
-    private Bitmap loadBitmap(String iconUrl, View view, ImageLoadingListener imageLoadingListener) {
+    public Bitmap loadBitmap(String iconUrl, View view, ImageLoadingListener imageLoadingListener) {
         Bitmap bitmap = mMemoryCache.get(hashKeyForDisk(iconUrl)); // 缓存
         if (null != bitmap) {
 //            Log.e("cyTest", "应该这里就返回啊");
@@ -308,6 +304,7 @@ public enum ImageLoader {
     		imageLoadingListener.onLoadingComplete(iconUrl, view, bitmap);
     		return true;
     	}
+    	
         if (!hashKeyForDisk(iconUrl).equals(view.getTag().toString())) {
             return true;
         }
@@ -371,20 +368,20 @@ public enum ImageLoader {
      * 这个方法是搞什么飞机的
      */
     public void reDisplayImage() {
-        if(mViewNeedToLoad.size() > 0 ) { // mViewNeedToLoad 要不要同步
-            removeCheckTask();
-            Iterator<Entry<View, String>> iter = mViewNeedToLoad.entrySet().iterator();
-            while(iter.hasNext()) {
-                Entry<View, String> entry = iter.next();
-                loadBitmap(entry.getValue(), entry.getKey()); // ???
-//                Message msg = Message.obtain();
-//                msg.what = getTaskKey();
-//                msg.obj = new ImageLoadTask(this, entry.getValue(), entry.getKey());
-//                long delay = getTaskDelay();
-//                InitialWatchDog.mMainHandler.sendMessageDelayed(msg, delay);
-            }
-            mViewNeedToLoad.clear();
-        }
+//        if(mViewNeedToLoad.size() > 0 ) { // mViewNeedToLoad 要不要同步
+//            removeCheckTask();
+//            Iterator<Entry<View, String>> iter = mViewNeedToLoad.entrySet().iterator();
+//            while(iter.hasNext()) {
+//                Entry<View, String> entry = iter.next();
+//                loadBitmap(entry.getValue(), entry.getKey()); // ???
+////                Message msg = Message.obtain();
+////                msg.what = getTaskKey();
+////                msg.obj = new ImageLoadTask(this, entry.getValue(), entry.getKey());
+////                long delay = getTaskDelay();
+////                InitialWatchDog.mMainHandler.sendMessageDelayed(msg, delay);
+//            }
+//            mViewNeedToLoad.clear();
+//        }
     }
 
     public void exit() {
