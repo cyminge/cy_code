@@ -31,6 +31,7 @@ import com.cy.imageloader.listener.ImageLoadingListener;
 import com.cy.imageloader.task.ImageLoadTask;
 import com.cy.imageloader.ui.AlphaAnimImageView;
 import com.cy.imageloader.ui.ImageViewAware;
+import com.cy.threadpool.ImageLoadThreadPool;
 import com.cy.tracer.Tracer;
 import com.cy.utils.bitmap.BitmapUtils;
 import com.cy.utils.storage.StorageUtils;
@@ -270,7 +271,7 @@ public enum ImageLoader {
             return false;
         }
 
-        if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
+        if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {  // mContext已经不是一个Activity后，这里要怎么处理??
             return false;
         }
 
@@ -288,7 +289,7 @@ public enum ImageLoader {
     }
 
     protected void setImageBitmap(final View view, final Bitmap bitmap) {
-        ((Activity) mContext).runOnUiThread(new Runnable() {
+        WatchDog.post(new Runnable() {
             @Override
             public void run() {
                 ((ImageView) view).setImageBitmap(bitmap);
@@ -319,8 +320,8 @@ public enum ImageLoader {
      * @param iconUrl
      */
     private void startLoadBitmapTask(String iconUrl, View view, ImageLoadingListener imageLoadingListener) {
-        if (mPauseLoad) {
-//            mViewNeedToLoad.put(view, iconUrl);
+        if (mPauseLoad) {  // 这里如果滑动太多的话，需要加载的数据就越多，其实没意义
+            mViewNeedToLoad.put(view, iconUrl);
             return;
         }
         
@@ -328,7 +329,7 @@ public enum ImageLoader {
         msg.what = getTaskKey();
         msg.obj = new ImageLoadTask(this, iconUrl, view, imageLoadingListener);
         long delay = getTaskDelay();
-        WatchDog.mMainHandler.sendMessageDelayed(msg, delay);
+        ImageLoadThreadPool.getInstance().postDelayed(msg, delay);
     }
 
     private int getTaskKey() {
@@ -357,7 +358,7 @@ public enum ImageLoader {
 
     public void removeCheckTask() {
         resetTaskDelay();
-        WatchDog.mMainHandler.removeMessages(getTaskKey());
+        ImageLoadThreadPool.getInstance().removeHandlerMsg(getTaskKey());
     }
     
     private void resetTaskDelay() {
@@ -368,20 +369,20 @@ public enum ImageLoader {
      * 这个方法是搞什么飞机的
      */
     public void reDisplayImage() {
-//        if(mViewNeedToLoad.size() > 0 ) { // mViewNeedToLoad 要不要同步
-//            removeCheckTask();
-//            Iterator<Entry<View, String>> iter = mViewNeedToLoad.entrySet().iterator();
-//            while(iter.hasNext()) {
-//                Entry<View, String> entry = iter.next();
-//                loadBitmap(entry.getValue(), entry.getKey()); // ???
-////                Message msg = Message.obtain();
-////                msg.what = getTaskKey();
-////                msg.obj = new ImageLoadTask(this, entry.getValue(), entry.getKey());
-////                long delay = getTaskDelay();
-////                InitialWatchDog.mMainHandler.sendMessageDelayed(msg, delay);
-//            }
-//            mViewNeedToLoad.clear();
-//        }
+        if(mViewNeedToLoad.size() > 0 ) { // mViewNeedToLoad 要不要同步
+            removeCheckTask();
+            Iterator<Entry<View, String>> iter = mViewNeedToLoad.entrySet().iterator();
+            while(iter.hasNext()) {
+                Entry<View, String> entry = iter.next();
+                loadBitmap(entry.getValue(), entry.getKey(), null); // ???
+//                Message msg = Message.obtain();
+//                msg.what = getTaskKey();
+//                msg.obj = new ImageLoadTask(this, entry.getValue(), entry.getKey());
+//                long delay = getTaskDelay();
+//                InitialWatchDog.mMainHandler.sendMessageDelayed(msg, delay);
+            }
+            mViewNeedToLoad.clear();
+        }
     }
 
     public void exit() {

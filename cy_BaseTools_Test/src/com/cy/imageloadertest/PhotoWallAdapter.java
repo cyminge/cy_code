@@ -38,6 +38,8 @@ public class PhotoWallAdapter extends BaseAdapter {
         }
         holder.imageView = (ImageView) convertView.findViewById(R.id.photo);
         mImageLoader.displayImage(Images.imageThumbUrls[position], holder.imageView, R.drawable.default_icon);
+        
+        notifyDataSetChanged();
         return convertView;
     }
 

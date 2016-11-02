@@ -44,6 +44,8 @@ public class PauseOnScrollListener implements OnScrollListener {
     private final boolean pauseOnScroll;
     private final boolean pauseOnFling;
     private final OnScrollListener externalListener;
+    
+    private int mAnchorPosition = -1;
 
     /**
      * Constructor
@@ -90,24 +92,28 @@ public class PauseOnScrollListener implements OnScrollListener {
         switch (scrollState) {
         case OnScrollListener.SCROLL_STATE_IDLE:
             Log.e("aa", "-->开启");
+            
             imageLoader.setPauseLoad(false);
-//            imageLoader.reDisplayImage();  // 为毛要加这个??
+            imageLoader.reDisplayImage();  // 为毛要加这个??
 
             break;
         case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
             Log.e("aa", "-->暂停");
             if (pauseOnScroll) {
-                imageLoader.setPauseLoad(true);
-                imageLoader.removeCheckTask();
+//                imageLoader.setPauseLoad(true);
+//                imageLoader.removeCheckTask();
             }
             break;
         case OnScrollListener.SCROLL_STATE_FLING:
+        	Log.e("aa", "-->FLING");
             if (pauseOnFling) {
+            	imageLoader.setPauseLoad(true);
+                imageLoader.removeCheckTask();
             }
             break;
         }
         if (externalListener != null) {
-//            externalListener.onScrollStateChanged(view, scrollState);
+            externalListener.onScrollStateChanged(view, scrollState);
         }
     }
 
@@ -116,5 +122,18 @@ public class PauseOnScrollListener implements OnScrollListener {
         if (externalListener != null) {
             externalListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
         }
+        
+//        if (visibleItemCount == 0) {
+//            return;
+//        }
+//        if (!(listView instanceof ListView)) {
+//            return;
+//        }
+//        int headerCount = ((ListView) listView).getHeaderViewsCount();
+//        int footerCount = ((ListView) listView).getFooterViewsCount();
+//        if (totalItemCount - headerCount - footerCount < MIN_ITEM_COUNT_UPDATE_CACHE) {
+//            return;
+//        }
+//        mAnchorPosition = Math.max(0, firstVisibleItem - headerCount);
     }
 }
