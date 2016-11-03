@@ -214,7 +214,7 @@ public enum ImageLoader {
     }
 
     public void displayImage(String iconUrl, ImageView view, int defBitmapId, ImageLoadingListener imageLoadingListener) {
-        Log.e("aa", "加载");
+        Log.e("cyTest", "加载");
         if (TextUtils.isEmpty(iconUrl)) {
             view.setImageResource(defBitmapId);
             return;
@@ -253,6 +253,7 @@ public enum ImageLoader {
         Bitmap bitmap = mMemoryCache.get(hashKeyForDisk(iconUrl)); // 缓存
         if (null != bitmap) {
 //            Log.e("cyTest", "应该这里就返回啊");
+        	Log.e("cyTest", "--> mUrl00:"+iconUrl);
             return bitmap;
         }
         
@@ -322,6 +323,7 @@ public enum ImageLoader {
     private void startLoadBitmapTask(String iconUrl, View view, ImageLoadingListener imageLoadingListener) {
         if (mPauseLoad) {  // 这里如果滑动太多的话，需要加载的数据就越多，其实没意义
             mViewNeedToLoad.put(view, iconUrl);
+            Log.e("cyTest", "--> iconUrl:"+iconUrl);
             return;
         }
         
@@ -369,11 +371,14 @@ public enum ImageLoader {
      * 这个方法是搞什么飞机的
      */
     public void reDisplayImage() {
+    	Log.e("cyTest", "----------------- > mViewNeedToLoad.size:"+mViewNeedToLoad.size());
         if(mViewNeedToLoad.size() > 0 ) { // mViewNeedToLoad 要不要同步
             removeCheckTask();
             Iterator<Entry<View, String>> iter = mViewNeedToLoad.entrySet().iterator();
+            int counts = 0;
             while(iter.hasNext()) {
                 Entry<View, String> entry = iter.next();
+                counts++;
                 loadBitmap(entry.getValue(), entry.getKey(), null); // ???
 //                Message msg = Message.obtain();
 //                msg.what = getTaskKey();
@@ -381,6 +386,7 @@ public enum ImageLoader {
 //                long delay = getTaskDelay();
 //                InitialWatchDog.mMainHandler.sendMessageDelayed(msg, delay);
             }
+            Log.e("cyTest", "重新加载次数："+counts);
             mViewNeedToLoad.clear();
         }
     }

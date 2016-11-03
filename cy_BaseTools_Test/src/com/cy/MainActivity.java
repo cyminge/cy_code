@@ -7,6 +7,7 @@ import android.view.View;
 import com.cy.downloadtest.DownloadActivity;
 import com.cy.global.BaseActivity;
 import com.cy.imageloadertest.ImageLoaderActivity;
+import com.cy.test.R;
 
 public class MainActivity extends BaseActivity {
 

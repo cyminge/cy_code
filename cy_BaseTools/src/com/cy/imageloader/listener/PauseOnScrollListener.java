@@ -91,21 +91,21 @@ public class PauseOnScrollListener implements OnScrollListener {
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         switch (scrollState) {
         case OnScrollListener.SCROLL_STATE_IDLE:
-            Log.e("aa", "-->开启");
+            Log.e("cyTest", "-->停止滚动");
             
             imageLoader.setPauseLoad(false);
             imageLoader.reDisplayImage();  // 为毛要加这个??
 
             break;
         case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-            Log.e("aa", "-->暂停");
+            Log.e("cyTest", "-->滚动");
             if (pauseOnScroll) {
 //                imageLoader.setPauseLoad(true);
 //                imageLoader.removeCheckTask();
             }
             break;
         case OnScrollListener.SCROLL_STATE_FLING:
-        	Log.e("aa", "-->FLING");
+        	Log.e("cyTest", "-->甩动");
             if (pauseOnFling) {
             	imageLoader.setPauseLoad(true);
                 imageLoader.removeCheckTask();
@@ -122,6 +122,8 @@ public class PauseOnScrollListener implements OnScrollListener {
         if (externalListener != null) {
             externalListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
         }
+        
+//        Log.e("cyTest", "firstVisibleItem:"+firstVisibleItem+", visibleItemCount"+visibleItemCount+", totalItemCount"+totalItemCount);
         
 //        if (visibleItemCount == 0) {
 //            return;

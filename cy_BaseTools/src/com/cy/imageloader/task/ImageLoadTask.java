@@ -24,7 +24,8 @@ public class ImageLoadTask implements Runnable {
     }
 
     public void run() {
-        Log.e("cyTest", Thread.currentThread().getName() + "线程被调用了。" + "主线程："+Looper.getMainLooper().getThread().getName()); 
+//        Log.e("cyTest", Thread.currentThread().getName() + "线程被调用了。" + "主线程："+Looper.getMainLooper().getThread().getName()); 
+    	Log.e("cyTest", "--> mUrl:"+mUrl);
         final ImageLoader imageLoader = mImageLoaderWeakRef.get();
         if (null == imageLoader) {
             return;

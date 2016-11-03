@@ -32,14 +32,15 @@ public class PhotoWallAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.photo_layout, null);
+            holder.imageView = (ImageView) convertView.findViewById(R.id.photo);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.imageView = (ImageView) convertView.findViewById(R.id.photo);
+        
         mImageLoader.displayImage(Images.imageThumbUrls[position], holder.imageView, R.drawable.default_icon);
         
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
         return convertView;
     }
 
