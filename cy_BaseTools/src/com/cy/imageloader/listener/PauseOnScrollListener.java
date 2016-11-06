@@ -94,7 +94,7 @@ public class PauseOnScrollListener implements OnScrollListener {
             Log.e("cyTest", "-->停止滚动");
             
             imageLoader.setPauseLoad(false);
-            imageLoader.reDisplayImage();  // 为毛要加这个??
+            imageLoader.reDisplayImage();   
 
             break;
         case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
@@ -108,7 +108,7 @@ public class PauseOnScrollListener implements OnScrollListener {
         	Log.e("cyTest", "-->甩动");
             if (pauseOnFling) {
             	imageLoader.setPauseLoad(true);
-                imageLoader.removeCheckTask();
+//                imageLoader.removeCheckTask();
             }
             break;
         }
@@ -125,9 +125,10 @@ public class PauseOnScrollListener implements OnScrollListener {
         
 //        Log.e("cyTest", "firstVisibleItem:"+firstVisibleItem+", visibleItemCount"+visibleItemCount+", totalItemCount"+totalItemCount);
         
-//        if (visibleItemCount == 0) {
-//            return;
-//        }
+        if (visibleItemCount == 0) {
+            return;
+        }
+        
 //        if (!(listView instanceof ListView)) {
 //            return;
 //        }

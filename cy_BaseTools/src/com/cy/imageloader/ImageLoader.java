@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,7 +31,6 @@ import com.cy.global.WatchDog;
 import com.cy.imageloader.listener.ImageLoadingListener;
 import com.cy.imageloader.task.ImageLoadTask;
 import com.cy.imageloader.ui.AlphaAnimImageView;
-import com.cy.imageloader.ui.ImageViewAware;
 import com.cy.threadpool.ImageLoadThreadPool;
 import com.cy.tracer.Tracer;
 import com.cy.utils.bitmap.BitmapUtils;
@@ -52,7 +52,7 @@ public enum ImageLoader {
     private Context mContext;
     private MemoryCache mMemoryCache;
     private DiskCache mDiskCache;
-    private boolean mPauseLoad = false; // 是否暂停加载
+    private AtomicBoolean mPauseLoad = new AtomicBoolean(false); // 是否暂停加载
     private static final int IMAGE_LOAD_DELAY = 200;
     private int mTaskDelay = IMAGE_LOAD_DELAY;
     private static final int IMAGE_LOAD_DELAY_STEP = 40;
@@ -214,7 +214,7 @@ public enum ImageLoader {
     }
 
     public void displayImage(String iconUrl, ImageView view, int defBitmapId, ImageLoadingListener imageLoadingListener) {
-        Log.e("cyTest", "加载");
+        Log.e("cyTest", "加载 iconUrl:"+iconUrl);
         if (TextUtils.isEmpty(iconUrl)) {
             view.setImageResource(defBitmapId);
             return;
@@ -252,8 +252,7 @@ public enum ImageLoader {
     public Bitmap loadBitmap(String iconUrl, View view, ImageLoadingListener imageLoadingListener) {
         Bitmap bitmap = mMemoryCache.get(hashKeyForDisk(iconUrl)); // 缓存
         if (null != bitmap) {
-//            Log.e("cyTest", "应该这里就返回啊");
-        	Log.e("cyTest", "--> mUrl00:"+iconUrl);
+        	Log.e("cyTest", "--> 有缓存的url:"+iconUrl);
             return bitmap;
         }
         
@@ -321,9 +320,9 @@ public enum ImageLoader {
      * @param iconUrl
      */
     private void startLoadBitmapTask(String iconUrl, View view, ImageLoadingListener imageLoadingListener) {
-        if (mPauseLoad) {  // 这里如果滑动太多的话，需要加载的数据就越多，其实没意义
+        if (mPauseLoad.get()) {  // 这里如果滑动太多的话，需要加载的数据就越多，其实没意义
             mViewNeedToLoad.put(view, iconUrl);
-            Log.e("cyTest", "--> iconUrl:"+iconUrl);
+//            Log.e("cyTest", "--> 待加载url:"+iconUrl);
             return;
         }
         
@@ -351,7 +350,7 @@ public enum ImageLoader {
      * @param pauseLoad
      */
     public void setPauseLoad(boolean pauseLoad) {
-        mPauseLoad = pauseLoad;
+        mPauseLoad.set(pauseLoad);
     }
 
     public void updateTaskDelay() {
@@ -367,13 +366,10 @@ public enum ImageLoader {
         mTaskDelay = IMAGE_LOAD_DELAY;
     }
     
-    /**
-     * 这个方法是搞什么飞机的
-     */
     public void reDisplayImage() {
     	Log.e("cyTest", "----------------- > mViewNeedToLoad.size:"+mViewNeedToLoad.size());
         if(mViewNeedToLoad.size() > 0 ) { // mViewNeedToLoad 要不要同步
-            removeCheckTask();
+//            removeCheckTask();
             Iterator<Entry<View, String>> iter = mViewNeedToLoad.entrySet().iterator();
             int counts = 0;
             while(iter.hasNext()) {
@@ -396,7 +392,7 @@ public enum ImageLoader {
     }
 
     public void recycle() {
-        mPauseLoad = false;
+        mPauseLoad.set(false);
         // synchronized (mIconsArray) {
         // int size = mIconsArray.size();
         // for (int i = 0; i < size; i++) {
