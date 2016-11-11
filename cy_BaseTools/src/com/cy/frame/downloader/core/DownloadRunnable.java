@@ -94,11 +94,6 @@ public class DownloadRunnable implements Runnable {
             DownloadUrlUtils.getDownloadUrl(mDownloadInfo);
         }
 
-        if (mDownloadInfo.mIsXunlei) {
-            // XunleiManager.getInstance().resumeDownload(mDownloadInfo);
-            return;
-        }
-
         initFile();
         startDownload();
     }

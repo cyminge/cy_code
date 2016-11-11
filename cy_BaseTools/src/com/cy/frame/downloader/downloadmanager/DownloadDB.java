@@ -157,10 +157,6 @@ public class DownloadDB extends SQLiteOpenHelper {
     }
 
     public void update(final DownloadInfo info) {
-        if (info.mIsXunlei) {
-            return;
-        }
-
         NomalThreadPool.getInstance().post(new Runnable() {
             @Override
             public void run() {
@@ -278,7 +274,6 @@ public class DownloadDB extends SQLiteOpenHelper {
         info.mIsSilentDownload = cursor.getInt(cursor.getColumnIndex(COLUMN_IS_SILENT_DOWNLOAD)) == 1;
         info.mVersionCode = cursor.getInt(cursor.getColumnIndex(COLUMN_VERSION_CODE));
         info.mRawDownloadUrl = cursor.getString(cursor.getColumnIndex(COLUMN_RAW_DOWNLOAD_URL));
-        info.mIsXunlei = false;
         info.mInitTime = cursor.getLong(cursor.getColumnIndex(COLUMN_INIT_TIME));
         if (info.mInitTime == 0) {
             info.mInitTime = info.mStartTime;
@@ -309,10 +304,6 @@ public class DownloadDB extends SQLiteOpenHelper {
                 try {
                     database = getWritableDatabase();
                     for (DownloadInfo info : mInfos) {
-                        if (info.mIsXunlei) {
-                            continue;
-                        }
-
                         if (info.mStatus == DownloadStatusMgr.TASK_STATUS_DOWNLOADING || info.mNeedUpdateDB) {
                             ContentValues values = new ContentValues();
                             values.put(COLUMN_STATUS, info.mStatus);

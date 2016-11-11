@@ -107,8 +107,6 @@ public class DownloadInfoMgr {
                 downloadingCount = initRunningTask(downloadingCount, hasNetwork, sdCardMounted, info);
             }
 
-            if (info.mIsXunlei) {
-            }
             putToMap(info);
         }
     }
@@ -119,8 +117,6 @@ public class DownloadInfoMgr {
             info.mStatus = DownloadStatusMgr.TASK_STATUS_PAUSED;
             info.mReason = sdCardMounted ? getPauseReason() : DownloadStatusMgr.PAUSE_DEVICE_NOT_FOUND;
             DownloadDB.getInstance().update(info);
-            if (info.mIsXunlei) {
-            }
         } else if (info.isDownloading() && downloadingCount < DownloadStatusMgr.MAX_DOWNLOADING_TASK) {
 //            DownloadRunnable task = mIsSilent ? new SilentDownloadRunnable(info) : new DownloadRunnable(info); // cyminge modify
             DownloadRunnable task = new DownloadRunnable(info);
@@ -240,10 +236,7 @@ public class DownloadInfoMgr {
     }
 
     private void deleteDB(String pkgName, DownloadInfo info) {
-        if (info.mIsXunlei) {
-        } else {
-            DownloadDB.getInstance().delete(pkgName);
-        }
+        DownloadDB.getInstance().delete(pkgName);
     }
 
     private void downloadCountChange() {
@@ -279,8 +272,6 @@ public class DownloadInfoMgr {
         notifyChange();
         if (updateDb) {
             DownloadDB.getInstance().update(info);
-        }
-        if (info.mIsXunlei) {
         }
     }
 

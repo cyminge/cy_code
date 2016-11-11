@@ -302,7 +302,7 @@ public class DownloadStatusMgr {
         ArrayList<String> packageList = getSortPkgList();
         for (String pkg : packageList) {
             DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(pkg);
-            if (info.isDownloading() && info.mIsXunlei) {
+            if (info.isDownloading()) {
             }
         }
     }
@@ -365,10 +365,10 @@ public class DownloadStatusMgr {
         ArrayList<String> packageList = getSortPkgList();
         for (String pkg : packageList) {
             DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(pkg);
-            if (info.mIsXunlei) {
-                info.mXunleiNeedRedownload = true;
-                mDownloadInfoMgr.updateDownloadInfo(info, false);
-            }
+//            if (info.mIsXunlei) {
+//                info.mXunleiNeedRedownload = true;
+//                mDownloadInfoMgr.updateDownloadInfo(info, false);
+//            }
         }
     }
 
@@ -456,12 +456,12 @@ public class DownloadStatusMgr {
     }
 
     private void checkNeedRedownload(DownloadInfo info) {
-        if (info.mXunleiNeedRedownload) {
-            // XunleiManager.getInstance().delete(info.mDownId);
-            // long newId = XunleiManager.getInstance().download(info);
-            // info.mDownId = newId;
-            // info.mXunleiNeedRedownload = false;
-        }
+//        if (info.mXunleiNeedRedownload) {
+//            // XunleiManager.getInstance().delete(info.mDownId);
+//            // long newId = XunleiManager.getInstance().download(info);
+//            // info.mDownId = newId;
+//            // info.mXunleiNeedRedownload = false;
+//        }
     }
 
     protected void showToastByReason(int reason) {

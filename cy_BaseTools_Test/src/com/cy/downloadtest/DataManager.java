@@ -10,7 +10,6 @@ import android.text.TextUtils;
 
 import com.cy.frame.downloader.download.DownloadArgsFactory;
 import com.cy.frame.downloader.entity.GameListData;
-import com.cy.frame.downloader.entity.GameListDataCategory;
 import com.cy.frame.downloader.util.JsonConstant;
 import com.cy.frame.downloader.util.JsonUtils;
 

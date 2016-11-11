@@ -21,8 +21,8 @@ public final class DownloadInfo extends DownloadRequest implements Cloneable {
 
     private static final int MIN_APK_SIZE = 10 * 1024;
 
-    public long mDownId = -1;
-    public int mStatus = DownloadStatusMgr.TASK_STATUS_PENDING;
+    public long mDownId = -1; // 下载ID
+    public int mStatus = DownloadStatusMgr.TASK_STATUS_PENDING; // 下载状态
     public int mReason = DownloadStatusMgr.REASON_NONE;
     private long mCompleteTime = 0;
     private String mCompleteByMinute = Constant.EMPTY;
@@ -32,10 +32,8 @@ public final class DownloadInfo extends DownloadRequest implements Cloneable {
     public boolean mNeedUpdateDB = false;
     public long mStartTime = 0;
     public String mRawDownloadUrl = Constant.EMPTY;
-    public boolean mIsXunlei = false;
     public int mLastStatus = DownloadStatusMgr.TASK_STATUS_DOWNLOADING;
     public long mInitTime = 0;
-    public boolean mXunleiNeedRedownload = false;
 
     public DownloadInfo() {
     }

@@ -1,4 +1,4 @@
-package com.cy.frame.downloader.entity;
+package com.cy.downloadtest;
 
 /**
  * 封装了一个ListData

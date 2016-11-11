@@ -19,7 +19,6 @@ import com.cy.frame.downloader.controller.DownloadClickHelper.DownloadClickCallb
 import com.cy.frame.downloader.controller.SingleDownloadManager.SingleDownloadListener;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.entity.GameListData;
-import com.cy.frame.downloader.entity.GameListDataCategory;
 import com.cy.frame.downloader.entity.ListData;
 import com.cy.frame.downloader.ui.IProgressButton;
 import com.cy.global.WatchDog;

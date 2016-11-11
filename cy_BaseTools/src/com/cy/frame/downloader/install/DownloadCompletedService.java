@@ -27,7 +27,7 @@ public abstract class DownloadCompletedService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         long downId = getDownId(intent);
-        if (!mDownIdSet.contains(downId) && downId != DownloadDB.NO_DOWN_ID && mDownIdSet.add(downId)) {
+        if (downId != DownloadDB.NO_DOWN_ID && !mDownIdSet.contains(downId) && mDownIdSet.add(downId)) {
             NomalThreadPool.getInstance().post(getHandleRunnable(downId));
         } else {
             tryStopService();

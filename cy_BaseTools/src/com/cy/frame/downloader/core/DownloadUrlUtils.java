@@ -58,11 +58,7 @@ public class DownloadUrlUtils {
             if (!TextUtils.isEmpty(gameUrl) && !gameUrl.equals(info.mRawDownloadUrl)) {
                 info.mRawDownloadUrl = gameUrl;
                 info.mDownloadUrl = gameUrl;
-                if (info.mIsXunlei) {
-//                    XunleiManager.getInstance().updateDownloadUrl(info);
-                } else {
-                    DownloadDB.getInstance().update(info);
-                }
+                DownloadDB.getInstance().update(info);
             }
         } catch (JSONException e) {
         }

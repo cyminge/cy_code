@@ -12,7 +12,6 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
-import com.cy.frame.downloader.entity.GameListDataCategory;
 import com.cy.test.R;
 
 public class DownloadActivity extends Activity {

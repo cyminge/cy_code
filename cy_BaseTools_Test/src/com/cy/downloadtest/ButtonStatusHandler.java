@@ -6,7 +6,6 @@ import android.widget.ListView;
 import com.cy.downloadtest.GameListAdapter.GameViewHolder;
 import com.cy.frame.downloader.core.DownloadInfoMgr;
 import com.cy.frame.downloader.core.DownloadInfoMgr.DownloadChangeListener;
-import com.cy.frame.downloader.entity.GameListDataCategory;
 
 /**
  * 下载按钮状态的处理
