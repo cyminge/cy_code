@@ -42,12 +42,12 @@ public class SlideViewHelper extends AbstractSlideViewHelper<AdItem> {
 
 	private ArrayList<AdItem> mslideNewData = new ArrayList<AdItem>();
 
-	public SlideViewHelper(SlideView2 slideView, Context context) {
+	public SlideViewHelper(SlideView slideView, Context context) {
 		super(context, slideView);
 	}
 
 	@Override
-	String getSlideSharePrefName() {
+	protected String getSlideSharePrefName() {
 		return SP_NAME;
 	}
 
@@ -129,6 +129,7 @@ public class SlideViewHelper extends AbstractSlideViewHelper<AdItem> {
 		return mSlideShowingList.contains(slideData);
 	}
 
+	@Override
 	protected void initSlideBitmap() {
 		if (mSlideView.getViewWidth() == 0 || mSlideView.getViewHeight() == 0) {
 			return;
@@ -181,6 +182,7 @@ public class SlideViewHelper extends AbstractSlideViewHelper<AdItem> {
 	}
 
 	private void downBitmap(AdItem item) {
+		Tracer.e("cyTest", "downBitmap");
 		ImageLoader.INSTANCE.loadBitmap(item.mImageUrl, null, mImageLoadingListene);
 	}
 
@@ -222,20 +224,24 @@ public class SlideViewHelper extends AbstractSlideViewHelper<AdItem> {
 		return slideList;
 	}
 
+	@Override
 	protected Bitmap getDefaultBitmap() {
 		return mDefaultBmp;
 	}
 
+	@Override
 	protected Bitmap getSlideBitmap(int index) {
+		Tracer.e("cyTest", "getSlideBitmap");
 		return ImageLoader.INSTANCE.loadBitmap(getItem(index).mImageUrl, null, mImageLoadingListene);
 	}
 
+	@Override
 	protected void onItemClick() {
 		AdItem adItem = getItem(mCurrIndex);
 		String type = adItem.mViewType;
 		String param = adItem.mParam;
 //		ViewTypeUtil.onClickNavigations(mContext, type, param, createSource(adItem.mId));
-		Tracer.e("cyTest", this.getClass().getName() + "--onItemClick--");
+		Tracer.e("cyTest", ""+this.getClass().getName() + "--onItemClick--");
 	}
 
 	protected String createSource(String adid) {

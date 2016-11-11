@@ -14,6 +14,7 @@ import android.os.Message;
 import com.cy.frame.downloader.downloadmanager.DownloadService;
 import com.cy.imageloader.ImageLoader;
 import com.cy.threadpool.AbstractThreadPool;
+import com.cy.tracer.Tracer;
 import com.cy.utils.sharepref.SharePrefUtil;
 
 /**
@@ -102,6 +103,7 @@ public enum WatchDog {
         context = context.getApplicationContext();
         mContext = context;
 
+        Tracer.init(context);
         SharePrefUtil.init(context);
         ImageLoader.initialize(context, 0);
         

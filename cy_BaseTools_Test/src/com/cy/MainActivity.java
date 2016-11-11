@@ -7,6 +7,7 @@ import android.view.View;
 import com.cy.downloadtest.DownloadActivity;
 import com.cy.global.BaseActivity;
 import com.cy.imageloadertest.ImageLoaderActivity;
+import com.cy.slide.SlideViewActivity;
 import com.cy.test.R;
 
 public class MainActivity extends BaseActivity {
@@ -28,6 +29,12 @@ public class MainActivity extends BaseActivity {
     public void showDownload(View view) {
         Intent intent = new Intent();
         intent.setClass(this, DownloadActivity.class);
+        startActivity(intent);
+    }
+    
+    public void showSlideView(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, SlideViewActivity.class);
         startActivity(intent);
     }
 

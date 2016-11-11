@@ -44,6 +44,10 @@
             android:name="com.cy.downloadtest.DownloadActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.cy.slide.SlideViewActivity"
+            android:label="@string/app_name" >
+        </activity>
         
         <service android:name="com.cy.frame.downloader.downloadmanager.DownloadService" >
             <intent-filter>

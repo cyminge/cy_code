@@ -17,5 +17,12 @@
         android:layout_marginTop="5dp"
         android:onClick="showDownload"
         android:text="文件下载演示" />
+    
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:onClick="showSlideView"
+        android:text="广告演示" />
 
 </LinearLayout>

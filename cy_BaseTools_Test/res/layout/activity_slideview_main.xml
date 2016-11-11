@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dip" >
+
+    <com.cy.slide.SlideView
+        android:id="@+id/slide_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dip" />
+    <!--
+        slide:canDownload="false"
+        slide:paddingBottom="@dimen/chosen_slide_view_padding_bottom"
+    -->
+
+</FrameLayout>

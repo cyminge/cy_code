@@ -1,34 +1,47 @@
 package com.cy.slide;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.text.format.DateUtils;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.animation.DecelerateInterpolator;
 
 import com.cy.slide.AnimationComputer.OnAnimFinishListener;
 import com.cy.utils.bitmap.BitmapUtils;
 
-public class SlideView2 extends RecyclableView implements ISlideView {
+@SuppressLint("ClickableViewAccessibility") 
+public class SlideView extends RecyclableView implements ISlideView {
 	
 	public static final int ANIMATION_EFFECTS_TYPE_1 = 1;
 	public static final int ANIMATION_EFFECTS_TYPE_2 = 2;
 	
 	
 	private static final long NEXT_SWITCH_DELAY = DateUtils.SECOND_IN_MILLIS * 4;
+	private static final int SWITCH_ANIMATION_TIME = 500;
 
 	private SlideViewEventAdapter mSlideViewEventAdapter;
-	private SlideViewHelper mSlideViewHelper;
+	private AbstractSlideViewHelper<?> mSlideViewHelper;
 	private AnimationComputer mAnimationComputer;
 	
-	private int mAnimationEffectsType;
+    private int mWidth;
+    private int mHeight;
 	
-	public SlideView2(Context context) {
+	private int mAnimationEffectsType; // 为了展示不同滑动效果
+	
+	public SlideView(Context context) {
 		super(context);
 	}
 	
-	public void init(Context context, int effectsType) {
-		mSlideViewHelper = new SlideViewHelper(this, context);
+	public SlideView(Context context, AttributeSet set) {
+		super(context, set);
+	}
+	
+	public void init(Context context, AbstractSlideViewHelper<?> slideViewHelper, int effectsType) {
+		mSlideViewHelper = slideViewHelper;
 		mAnimationEffectsType = effectsType;
 		mAnimationComputer = new AnimationComputer(new DecelerateInterpolator(), mAnimFinishListener);
 		mSlideViewEventAdapter = new SlideViewEventAdapter(context, this, true, mAnimationComputer);
@@ -38,24 +51,25 @@ public class SlideView2 extends RecyclableView implements ISlideView {
 
         @Override
         public void onFinish(float curPosition) {
-//            postDelayed(mSwitchCommand, NEXT_SWITCH_DELAY);
+        	postDelayed(mSwitchCommand, NEXT_SWITCH_DELAY);
         }
     };
     
-    private OnAnimFinishListener mFinishListener = new OnAnimFinishListener() {
-        @Override
-        public void onFinish(float curPosition) {
-            postDelayed(mSwitchCommand, NEXT_SWITCH_DELAY);
-        }
-    };
-
     private Runnable mSwitchCommand = new Runnable() {
 
         @Override
         public void run() {
-//            startAnimation();
+            startAnimation();
         }
     };
+    
+    private void startAnimation() {
+    	synchronized (this) {
+            mSlideViewHelper.switchNext();
+            mAnimationComputer.start(mWidth, 0, SWITCH_ANIMATION_TIME);
+        }
+        invalidate();
+    }
     
     protected void prepareAnimation() {
         removeCallbacks(mSwitchCommand);
@@ -66,14 +80,20 @@ public class SlideView2 extends RecyclableView implements ISlideView {
         postDelayed(mSwitchCommand, NEXT_SWITCH_DELAY);
     }
     
-    private int mWidth;
-    private int mHeight;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+    	if (mSlideViewEventAdapter.onTouchEvent(event)) {
+            return true;
+        }
+    	return super.onTouchEvent(event);
+    }
     
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
     	super.onLayout(changed, left, top, right, bottom);
         mWidth = right - left;
         mHeight = bottom - top;
         mSlideViewHelper.initSlideBitmap();
+        Log.e("cyTest", "onLayout");
     };
     
     @Override

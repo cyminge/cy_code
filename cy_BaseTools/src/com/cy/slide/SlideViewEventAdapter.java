@@ -45,6 +45,7 @@ public class SlideViewEventAdapter {
 
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
+            	Log.e("cyTest", "onSingleTapUp");
                 mIsGestureSliding = false;
                 mTargetView.onSingleTapUp();
                 return true;

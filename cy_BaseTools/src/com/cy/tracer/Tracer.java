@@ -741,7 +741,7 @@ public class Tracer {
      */
     public static void appendSimpleLog(char level, String tag, String msg) {
         String timeStr = new SimpleDateFormat("HH:mm:ss").format(new Date());
-        Log.e("cyTest", "33 logStringBuilder = "+logStringBuilder);
+//        Log.e("cyTest", "33 logStringBuilder = "+logStringBuilder);
         logStringBuilder.append(String.format("%s %c\\%-20s\t%s\n", timeStr, level, tag, msg));
         logStringCount++;
         // if (logStringCount > MAX_FILEBUF_CAP) {
