@@ -99,6 +99,7 @@ public class SlideView extends RecyclableView implements ISlideView {
     @Override
     protected void onDraw(Canvas canvas) {
     	super.onDraw(canvas);
+    	Log.e("cyTest", "======= onDraw ==============");
     	if (mWidth == 0 || mHeight == 0 || mSlideViewHelper.isEmpty()) {
             return;
         }

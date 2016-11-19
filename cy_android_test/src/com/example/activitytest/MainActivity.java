@@ -297,6 +297,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
             }
         }
     }
+    
+    /**
+     * 测试子线程post消息到主线程执行时，主线程的运行机制
+     * @param view
+     */
+    public void testSingleThreadRun(View view) {
+    	Intent intent = new Intent();
+    	intent.setClass(this, Activity_TestSingleThreadRun.class);
+    	startActivity(intent);
+	}
 
     public Resources getResources(final float fontScale) {
         Resources res = super.getResources();
