@@ -308,6 +308,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     	startActivity(intent);
 	}
 
+    /**
+     * 测试AlertDialog传入应用context时是否会报错
+     * @param view
+     */
+    public void testDialog(View view) {
+    	Intent intent = new Intent();
+    	intent.setClass(this, Activity_TestDialogWithContext.class);
+    	startActivity(intent);
+    	
+    	
+    }
+
     public Resources getResources(final float fontScale) {
         Resources res = super.getResources();
         Configuration config = res.getConfiguration();
