@@ -9,6 +9,7 @@ import com.cy.global.BaseActivity;
 import com.cy.imageloadertest.ImageLoaderActivity;
 import com.cy.slide.SlideViewActivity;
 import com.cy.test.R;
+import com.cy.uiframetest.UIFrameActivity;
 
 public class MainActivity extends BaseActivity {
 
@@ -36,6 +37,12 @@ public class MainActivity extends BaseActivity {
         Intent intent = new Intent();
         intent.setClass(this, SlideViewActivity.class);
         startActivity(intent);
+    }
+    
+    public void showRecycleView(View view) {
+    	Intent intent = new Intent();
+    	intent.setClass(this, UIFrameActivity.class);
+    	startActivity(intent);
     }
 
 }

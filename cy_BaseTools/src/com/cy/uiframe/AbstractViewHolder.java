@@ -1,19 +1,18 @@
 package com.cy.uiframe;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-public abstract class AbstractViewHolder {
+public abstract class AbstractViewHolder<T> extends RecyclerView.ViewHolder {
 
-	public abstract void initItemView(View convertView, View.OnClickListener onClickListener);
-
-	public abstract void setItemView(int position, Object data);
-
-	public int getHolderPosition() {
-		return 0;
+	public AbstractViewHolder(View itemView) {
+		super(itemView);
+		
+		initItemView(itemView);
 	}
-
-	public void setButtonState(Object listData) {
-
-	}
+	
+	public abstract void initItemView(View itemView);
+	
+	public abstract void setItemView(T t);
 
 }
