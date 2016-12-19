@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <View
+        android:id="@+id/foot_margin_top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero_dip" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/foot_margin_top"
+        android:layout_marginTop="@dimen/header_footer_top_padding"
+        android:gravity="center"
+        android:paddingBottom="@dimen/header_footer_bottom_padding" >
+
+        <ImageView
+            android:id="@+id/footer_refreshing_anim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pulltorefresh_footer_loading"
+            android:contentDescription="@string/app_name"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/footer_loading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/footer_text_margin_left"
+            android:layout_marginStart="@dimen/footer_text_margin_left"
+            android:layout_toRightOf="@id/footer_refreshing_anim"
+            android:layout_toEndOf="@id/footer_refreshing_anim"
+            android:includeFontPadding="false"
+            android:text="@string/loading"
+            android:textColor="@color/loading_text"
+            android:textSize="@dimen/footer_text_size"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/footer_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/foot_margin_top"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/header_footer_top_padding"
+        android:includeFontPadding="false"
+        android:paddingBottom="@dimen/header_footer_bottom_padding"
+        android:text="@string/pulltorefresh_bottomtips"
+        android:textColor="@color/loading_text"
+        android:textSize="@dimen/footer_text_size"
+        android:visibility="gone" />
+
+</RelativeLayout>

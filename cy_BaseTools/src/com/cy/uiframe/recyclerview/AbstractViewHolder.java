@@ -1,4 +1,4 @@
-package com.cy.uiframe;
+package com.cy.uiframe.recyclerview;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

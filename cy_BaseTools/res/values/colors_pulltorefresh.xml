@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+	<color name="loading_text">#FFC2C2C2</color>
+	<color name="chosen_status_bar_color">#30000000</color>
+    
+</resources>

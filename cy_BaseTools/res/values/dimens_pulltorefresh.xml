@@ -1,0 +1,11 @@
+<resources>
+	<dimen name="zero_dip">0dip</dimen>
+	<dimen name="header_footer_top_padding">10dip</dimen>
+    <dimen name="header_footer_bottom_padding">10dip</dimen>
+    <dimen name="footer_text_margin_left">7dip</dimen>
+    <dimen name="footer_text_size">13.5dip</dimen>
+    <dimen name="ball_icon_size">50dip</dimen>
+    <dimen name="refreshing_content_height">82dip</dimen>
+    <dimen name="status_bar_height">0dip</dimen>
+
+</resources>

@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cy.test.R;
-import com.cy.uiframe.AbstractAdapter;
-import com.cy.uiframe.AbstractViewHolder;
+import com.cy.uiframe.recyclerview.AbstractAdapter;
+import com.cy.uiframe.recyclerview.AbstractViewHolder;
 
 public class TestRecycleViewAdapter extends AbstractAdapter<BaseBean> {
 	
@@ -26,16 +26,15 @@ public class TestRecycleViewAdapter extends AbstractAdapter<BaseBean> {
 	@Override
 	public int getAdvanceViewType(int position) {
 		BaseBean bean = getItemData(position);
-		if(null == bean && getHeaderViewsCount() > 0) {
+		if(null == bean) { //?
 			return 1;
 		}
-		Log.e("cyTest", "bean.mItemType:"+bean.mItemType);
+		
 		return bean.mItemType;
 	}
 
 	@Override
 	public AbstractViewHolder<BaseBean> createHeaderHolder(ViewGroup parent, int viewType) {
-		Log.e("cyTest", "createHeaderHolder");
 		return new Holder(getHeaderView(viewType));
 	}
 	
@@ -47,9 +46,7 @@ public class TestRecycleViewAdapter extends AbstractAdapter<BaseBean> {
 
 	@Override
 	public AbstractViewHolder<BaseBean> createDefaultViewHolder(ViewGroup parent, int viewType) {
-		Log.e("cyTest", "createDefaultViewHolder");
 		return new Holder(LayoutInflater.from(mContext).inflate(getItemLayoutId(viewType), null, false));
-//		return new Holder(getHeaderView());
 	}
 	
 	protected int getItemLayoutId(int viewType) {
@@ -64,10 +61,8 @@ public class TestRecycleViewAdapter extends AbstractAdapter<BaseBean> {
 	}
 	
 	class Holder extends AbstractViewHolder<BaseBean> {
-
 		TextView name;
 		TextView age;
-		
 		
 		public Holder(View itemView) {
 			super(itemView);

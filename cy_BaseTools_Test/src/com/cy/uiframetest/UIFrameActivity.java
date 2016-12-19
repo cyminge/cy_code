@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.cy.frame.downloader.util.JsonConstant;
 import com.cy.global.BaseActivity;
@@ -19,7 +18,7 @@ import com.cy.slide.SlideView;
 import com.cy.slide.SlideViewHelper;
 import com.cy.slide.SlideViewHelper.DataParsedListener;
 import com.cy.test.R;
-import com.cy.uiframe.AbstractRecycleView;
+import com.cy.uiframe.recyclerview.AbstractRecycleView;
 
 public class UIFrameActivity extends BaseActivity {
 

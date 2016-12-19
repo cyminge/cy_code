@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="content_desription">contentDescription</string>
+	<string name="loading">加载中…</string>
+	<string name="pulltorefresh_bottomtips">已经到底了，去其他页面看看吧</string>
+
+</resources>

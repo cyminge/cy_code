@@ -1,20 +1,22 @@
-package com.cy.uiframe;
+package com.cy.uiframe.recyclerview;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * 可以添加多个透视图、尾视图的适配器 只需重写简单方法即可 需要 DmlViewHolder 配合 Created by WangGang on
- * 2015/6/27.
+ * 可以添加多个头视图、尾视图的适配器
+ * @author zf
+ * @param <T>
  */
 public abstract class AbstractAdapter<T> extends RecyclerView.Adapter<AbstractViewHolder<T>> {
 
+	private static final int HEAD_OR_FOOT_POSITION_RIDE = 1000;
+	
 	protected Context mContext;
 	protected List<T> mDatas;
 
@@ -37,17 +39,17 @@ public abstract class AbstractAdapter<T> extends RecyclerView.Adapter<AbstractVi
 	@Override
 	public int getItemViewType(int position) {
 		if (position < getHeaderViewsCount()) {
-			mHeaderViewTypes.add(position * 1000);
-			return position * 1000;
+			mHeaderViewTypes.add(position * HEAD_OR_FOOT_POSITION_RIDE);
+			return position * HEAD_OR_FOOT_POSITION_RIDE;
 		}
 
 		if (getFooterViewsCount() > 0 && position >= getItemCount() - getFooterViewsCount()) {
-			mFooterViewTypes.add(position * 1000);
-			return position * 1000;
+			mFooterViewTypes.add(position * HEAD_OR_FOOT_POSITION_RIDE);
+			return position * HEAD_OR_FOOT_POSITION_RIDE;
 		}
 
 		if (getHeaderViewsCount() > 0) {
-			return getAdvanceViewType(position - mHeaderViews.size());
+			return getAdvanceViewType(position - getHeaderViewsCount());
 		}
 
 		return getAdvanceViewType(position);
@@ -96,6 +98,11 @@ public abstract class AbstractAdapter<T> extends RecyclerView.Adapter<AbstractVi
 		viewholder.setItemView(getItemData(position));
 	}
 
+	/**
+	 * 去掉头尾视图数据
+	 * @param position
+	 * @return
+	 */
 	public T getItemData(int position) {
 		if (position < getHeaderViewsCount() || position >= getItemCount()-getFooterViewsCount()) {
 			return null;
@@ -140,7 +147,7 @@ public abstract class AbstractAdapter<T> extends RecyclerView.Adapter<AbstractVi
 	}
 
 	/**
-	 * 返回第一个FoView
+	 * 返回第一个FooterView
 	 * 
 	 * @return
 	 */
@@ -168,11 +175,11 @@ public abstract class AbstractAdapter<T> extends RecyclerView.Adapter<AbstractVi
 	}
 	
 	public View getHeaderView(int viewType) {
-		View view = getHeaderViewsCount() > 0 ? mHeaderViews.get(viewType/1000) : null;
+		View view = getHeaderViewsCount() > 0 ? mHeaderViews.get(viewType/HEAD_OR_FOOT_POSITION_RIDE) : null;
 		return view;
 	}
 	
 	public View getFooterView(int viewType) {
-		return getFooterViewsCount() > 0 ? mFooterViews.get(viewType/1000) : null;
+		return getFooterViewsCount() > 0 ? mFooterViews.get(viewType/HEAD_OR_FOOT_POSITION_RIDE) : null;
 	}
 }
