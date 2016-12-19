@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -62,21 +63,21 @@ public abstract class AbstractAdapter<T> extends RecyclerView.Adapter<AbstractVi
 	@Override
 	public AbstractViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
 		if (mHeaderViewTypes.contains(viewType)) {
-			return createHeaderHolder(viewType);
+			return createHeaderHolder(parent, viewType);
 		}
 
 		if (mFooterViewTypes.contains(viewType)) {
-			return createFootHolder(viewType);
+			return createFootHolder(parent, viewType);
 		}
 
-		return createDefaultViewHolder(viewType);
+		return createDefaultViewHolder(parent, viewType);
 	}
 
-	public abstract AbstractViewHolder<T> createHeaderHolder(int viewType);
+	public abstract AbstractViewHolder<T> createHeaderHolder(ViewGroup parent, int viewType);
 
-	public abstract AbstractViewHolder<T> createFootHolder(int viewType);
+	public abstract AbstractViewHolder<T> createFootHolder(ViewGroup parent, int viewType);
 
-	public abstract AbstractViewHolder<T> createDefaultViewHolder(int viewType);
+	public abstract AbstractViewHolder<T> createDefaultViewHolder(ViewGroup parent, int viewType);
 
 	@Override
 	public void onBindViewHolder(AbstractViewHolder<T> viewholder, int position) {
@@ -167,7 +168,8 @@ public abstract class AbstractAdapter<T> extends RecyclerView.Adapter<AbstractVi
 	}
 	
 	public View getHeaderView(int viewType) {
-		return getHeaderViewsCount() > 0 ? mHeaderViews.get(viewType/1000) : null;
+		View view = getHeaderViewsCount() > 0 ? mHeaderViews.get(viewType/1000) : null;
+		return view;
 	}
 	
 	public View getFooterView(int viewType) {

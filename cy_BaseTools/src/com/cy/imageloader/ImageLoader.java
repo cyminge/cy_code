@@ -214,7 +214,7 @@ public enum ImageLoader {
     }
 
     public void displayImage(String iconUrl, ImageView view, int defBitmapId, ImageLoadingListener imageLoadingListener) {
-        Log.e("cyTest", "加载 iconUrl:"+iconUrl);
+//        Log.e("cyTest", "加载 iconUrl:"+iconUrl);
         if (TextUtils.isEmpty(iconUrl)) {
             view.setImageResource(defBitmapId);
             return;
@@ -252,7 +252,7 @@ public enum ImageLoader {
     public Bitmap loadBitmap(String iconUrl, View view, ImageLoadingListener imageLoadingListener) {
         Bitmap bitmap = mMemoryCache.get(hashKeyForDisk(iconUrl)); // 缓存
         if (null != bitmap) {
-        	Log.e("cyTest", "--> 有缓存的url:"+iconUrl);
+//        	Log.e("cyTest", "--> 有缓存的url:"+iconUrl);
             return bitmap;
         }
         
@@ -367,7 +367,7 @@ public enum ImageLoader {
     }
     
     public void reDisplayImage() {
-    	Log.e("cyTest", "----------------- > mViewNeedToLoad.size:"+mViewNeedToLoad.size());
+//    	Log.e("cyTest", "----------------- > mViewNeedToLoad.size:"+mViewNeedToLoad.size());
         if(mViewNeedToLoad.size() > 0 ) { // mViewNeedToLoad 要不要同步
 //            removeCheckTask();
             Iterator<Entry<View, String>> iter = mViewNeedToLoad.entrySet().iterator();

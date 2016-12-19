@@ -3,8 +3,11 @@ package com.cy.uiframetest;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.cy.test.R;
 import com.cy.uiframe.AbstractAdapter;
@@ -18,8 +21,6 @@ public class TestRecycleViewAdapter extends AbstractAdapter<BaseBean> {
     
 	public TestRecycleViewAdapter(Context context, List<BaseBean> datas) {
 		super(context, datas);
-//		SlideView slideView = new SlideView(context);
-//		addHeaderView(slideView);
 	}
 
 	@Override
@@ -28,23 +29,27 @@ public class TestRecycleViewAdapter extends AbstractAdapter<BaseBean> {
 		if(null == bean && getHeaderViewsCount() > 0) {
 			return 1;
 		}
-		
+		Log.e("cyTest", "bean.mItemType:"+bean.mItemType);
 		return bean.mItemType;
 	}
 
 	@Override
-	public AbstractViewHolder<BaseBean> createHeaderHolder(int viewType) {
+	public AbstractViewHolder<BaseBean> createHeaderHolder(ViewGroup parent, int viewType) {
+		Log.e("cyTest", "createHeaderHolder");
 		return new Holder(getHeaderView(viewType));
 	}
 	
 	@Override
-	public AbstractViewHolder<BaseBean> createFootHolder(int viewType) {
+	public AbstractViewHolder<BaseBean> createFootHolder(ViewGroup parent, int viewType) {
+		Log.e("cyTest", "createFootHolder");
 		return null;
 	}
 
 	@Override
-	public AbstractViewHolder<BaseBean> createDefaultViewHolder(int viewType) {
-		return new Holder(LayoutInflater.from(mContext).inflate(getItemLayoutId(viewType), null));
+	public AbstractViewHolder<BaseBean> createDefaultViewHolder(ViewGroup parent, int viewType) {
+		Log.e("cyTest", "createDefaultViewHolder");
+		return new Holder(LayoutInflater.from(mContext).inflate(getItemLayoutId(viewType), null, false));
+//		return new Holder(getHeaderView());
 	}
 	
 	protected int getItemLayoutId(int viewType) {
@@ -60,18 +65,25 @@ public class TestRecycleViewAdapter extends AbstractAdapter<BaseBean> {
 	
 	class Holder extends AbstractViewHolder<BaseBean> {
 
+		TextView name;
+		TextView age;
+		
+		
 		public Holder(View itemView) {
 			super(itemView);
 		}
 
 		@Override
 		public void initItemView(View itemView) {
-			
+			name = (TextView) itemView.findViewById(R.id.name);
+			age = (TextView) itemView.findViewById(R.id.age);
 		}
 
 		@Override
 		public void setItemView(BaseBean t) {
-			
+			name.setText(t.mName);
+			age.setText(t.mAge);
+			Log.e("cyTest", "name width:"+name.getWidth());
 		}
 	}
 }

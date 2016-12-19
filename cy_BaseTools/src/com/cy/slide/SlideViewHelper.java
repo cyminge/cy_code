@@ -51,7 +51,7 @@ public class SlideViewHelper extends AbstractSlideViewHelper<AdItem> {
 		return SP_NAME;
 	}
 
-	protected boolean setDataSource(String slideSharePrefKey, JSONObject json, DataParsedListener listener) {
+	public boolean setDataSource(String slideSharePrefKey, JSONObject json, DataParsedListener listener) {
 		mDataParsedlistener = listener;
 
 		resetState();
@@ -182,7 +182,7 @@ public class SlideViewHelper extends AbstractSlideViewHelper<AdItem> {
 	}
 
 	private void downBitmap(AdItem item) {
-		Tracer.e("cyTest", "downBitmap");
+//		Tracer.e("cyTest", "downBitmap");
 		ImageLoader.INSTANCE.loadBitmap(item.mImageUrl, null, mImageLoadingListene);
 	}
 
@@ -231,7 +231,7 @@ public class SlideViewHelper extends AbstractSlideViewHelper<AdItem> {
 
 	@Override
 	protected Bitmap getSlideBitmap(int index) {
-		Tracer.e("cyTest", "getSlideBitmap");
+//		Tracer.e("cyTest", "getSlideBitmap");
 		return ImageLoader.INSTANCE.loadBitmap(getItem(index).mImageUrl, null, mImageLoadingListene);
 	}
 

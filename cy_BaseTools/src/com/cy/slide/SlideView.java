@@ -93,13 +93,13 @@ public class SlideView extends RecyclableView implements ISlideView {
         mWidth = right - left;
         mHeight = bottom - top;
         mSlideViewHelper.initSlideBitmap();
-        Log.e("cyTest", "onLayout");
+        Log.e("cyTest", "onLayout mWidth:"+mWidth+", mHeight:"+mHeight);
     };
     
     @Override
     protected void onDraw(Canvas canvas) {
     	super.onDraw(canvas);
-    	Log.e("cyTest", "======= onDraw ==============");
+//    	Log.e("cyTest", "======= onDraw ==============");
     	if (mWidth == 0 || mHeight == 0 || mSlideViewHelper.isEmpty()) {
             return;
         }

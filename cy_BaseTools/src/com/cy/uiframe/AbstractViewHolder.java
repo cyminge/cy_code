@@ -7,7 +7,8 @@ public abstract class AbstractViewHolder<T> extends RecyclerView.ViewHolder {
 
 	public AbstractViewHolder(View itemView) {
 		super(itemView);
-		
+		RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+        itemView.setLayoutParams(lp);
 		initItemView(itemView);
 	}
 	
