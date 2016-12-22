@@ -8,24 +8,24 @@ import com.cy.global.WatchDog;
 
 import android.os.Handler;
 
-public class NomalThreadPool extends AbstractThreadPool {
-	private static volatile NomalThreadPool mInstance;
-	
-	public NomalThreadPool() {
+public class NormalThreadPool extends AbstractThreadPool {
+	private static volatile NormalThreadPool mInstance;
+
+	public NormalThreadPool() {
 		super();
 	}
-	
-	public static NomalThreadPool getInstance() {
-    	if(null == mInstance) {
-    		synchronized (NomalThreadPool.class) {
-    			if (null == mInstance) {
-    				mInstance = new NomalThreadPool();
-    	        }
+
+	public static NormalThreadPool getInstance() {
+		if (null == mInstance) {
+			synchronized (NormalThreadPool.class) {
+				if (null == mInstance) {
+					mInstance = new NormalThreadPool();
+				}
 			}
-    	}
-        
-        return mInstance;
-    }
+		}
+
+		return mInstance;
+	}
 
 	@Override
 	protected ThreadPoolExecutor createThreadPool() {

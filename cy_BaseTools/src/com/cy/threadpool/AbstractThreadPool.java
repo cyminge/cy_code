@@ -19,7 +19,7 @@ public abstract class AbstractThreadPool {
 		mThreadPoolMap = new SparseArray<AbstractThreadPool>();
 		mThreadPoolMap.put(THREAD_POOL_TYPE_IMAGELOAD, ImageLoadThreadPool.getInstance());
 		mThreadPoolMap.put(THREAD_POOL_TYPE_BACKGROUND_TASK, BackgroundTaskThreadPool.getInstance());
-		mThreadPoolMap.put(THREAD_POOL_TYPE_NOMAL, NomalThreadPool.getInstance());
+		mThreadPoolMap.put(THREAD_POOL_TYPE_NOMAL, NormalThreadPool.getInstance());
 	}
 	
     private ThreadPoolExecutor sThreadPool;

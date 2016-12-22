@@ -20,7 +20,7 @@ import com.cy.frame.downloader.downloadmanager.DownloadService;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.util.GameActionUtil;
 import com.cy.global.BaseApplication;
-import com.cy.threadpool.NomalThreadPool;
+import com.cy.threadpool.NormalThreadPool;
 import com.cy.utils.Utils;
 import com.cy.utils.storage.GNStorageUtils;
 
@@ -180,7 +180,7 @@ public class DownloadStatusMgr {
             return;
         }
 
-        NomalThreadPool.getInstance().postDelayed(new Runnable() {
+        NormalThreadPool.getInstance().postDelayed(new Runnable() {
             @Override
             public void run() {
                 enqueue(info);

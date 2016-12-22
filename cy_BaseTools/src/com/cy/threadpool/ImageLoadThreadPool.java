@@ -11,26 +11,26 @@ import android.os.Handler;
 public class ImageLoadThreadPool extends AbstractThreadPool {
 
 	private static volatile ImageLoadThreadPool mInstance;
-	
+
 	public ImageLoadThreadPool() {
 		super();
 	}
-	
+
 	public static ImageLoadThreadPool getInstance() {
-    	if(null == mInstance) {
-    		synchronized (ImageLoadThreadPool.class) {
-    			if (null == mInstance) {
-    				mInstance = new ImageLoadThreadPool();
-    	        }
+		if (null == mInstance) {
+			synchronized (ImageLoadThreadPool.class) {
+				if (null == mInstance) {
+					mInstance = new ImageLoadThreadPool();
+				}
 			}
-    	}
-        
-        return mInstance;
-    }
-	
+		}
+
+		return mInstance;
+	}
+
 	@Override
 	protected ThreadPoolExecutor createThreadPool() {
-		return new ThreadPoolExecutor(Thread.NORM_PRIORITY, Thread.NORM_PRIORITY, 30L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+		return new ThreadPoolExecutor(4, 4, 30L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 	}
 
 	@Override

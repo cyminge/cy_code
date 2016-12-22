@@ -15,7 +15,7 @@ import com.cy.frame.downloader.core.DownloadInfoMgr;
 import com.cy.frame.downloader.core.DownloadRunnable;
 import com.cy.frame.downloader.download.DownloadUtils;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
-import com.cy.threadpool.NomalThreadPool;
+import com.cy.threadpool.NormalThreadPool;
 
 @SuppressLint("HandlerLeak")
 public class DownloadService extends Service {
@@ -97,7 +97,7 @@ public class DownloadService extends Service {
 
     public static synchronized void postTask(String pkgName, DownloadRunnable downloadRunnable) {
         mDownloadingTask.put(pkgName, downloadRunnable);
-        NomalThreadPool.getInstance().post(downloadRunnable);
+        NormalThreadPool.getInstance().post(downloadRunnable);
     }
 
     public static synchronized void removeTask(DownloadInfo info, int targetStatus) {

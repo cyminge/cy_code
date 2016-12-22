@@ -16,7 +16,7 @@ import com.cy.constant.Constant;
 import com.cy.frame.downloader.statis.StatisValue;
 import com.cy.global.BaseApplication;
 import com.cy.global.WatchDog;
-import com.cy.threadpool.NomalThreadPool;
+import com.cy.threadpool.NormalThreadPool;
 import com.cy.utils.Utils;
 import com.cy.utils.sharepref.SharePrefUtil;
 
@@ -35,7 +35,7 @@ public class GameActionUtil {
 //            return;
 //        }
 
-        NomalThreadPool.getInstance().post(new Runnable() {
+        NormalThreadPool.getInstance().post(new Runnable() {
             @Override
             public void run() {
                 if (!Utils.hasNetwork()) {
@@ -81,8 +81,8 @@ public class GameActionUtil {
     }
 
     public static void startCacheCheck() {
-    	NomalThreadPool.getInstance().removeCallbacks(sTask);
-    	NomalThreadPool.getInstance().postDelayed(sTask, Constant.SECOND_30);
+    	NormalThreadPool.getInstance().removeCallbacks(sTask);
+    	NormalThreadPool.getInstance().postDelayed(sTask, Constant.SECOND_30);
     }
 
     private static synchronized void checkGameActionCache() {
@@ -160,7 +160,7 @@ public class GameActionUtil {
 
             final String title = data.optString(JsonConstant.TITLE);
             final String source = data.optString(JsonConstant.SOURCE);
-            NomalThreadPool.getInstance().post(new Runnable() {
+            NormalThreadPool.getInstance().post(new Runnable() {
                 @Override
                 public void run() {
                     sendNotify(packageName, title, source);

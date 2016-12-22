@@ -24,7 +24,7 @@ import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager.UpgradeAppInfo;
 import com.cy.listener.GameListener;
 import com.cy.listener.GameListenerManager;
-import com.cy.threadpool.NomalThreadPool;
+import com.cy.threadpool.NormalThreadPool;
 import com.cy.utils.Utils;
 
 @SuppressLint("NewApi") public class DownloadHelper {
@@ -153,7 +153,7 @@ import com.cy.utils.Utils;
 
     public void onResume() {
         if (isViewShow()) {
-        	NomalThreadPool.getInstance().post(new Runnable() {
+        	NormalThreadPool.getInstance().post(new Runnable() {
                 @Override
                 public void run() {
                     final int status = getCurrentStatus();

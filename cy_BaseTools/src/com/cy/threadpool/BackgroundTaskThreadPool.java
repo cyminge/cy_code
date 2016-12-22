@@ -11,26 +11,26 @@ import android.os.Handler;
 public class BackgroundTaskThreadPool extends AbstractThreadPool {
 
 	private static volatile BackgroundTaskThreadPool mInstance;
-	
+
 	public BackgroundTaskThreadPool() {
 		super();
 	}
-	
+
 	public static BackgroundTaskThreadPool getInstance() {
-    	if(null == mInstance) {
-    		synchronized (BackgroundTaskThreadPool.class) {
-    			if (null == mInstance) {
-    				mInstance = new BackgroundTaskThreadPool();
-    	        }
+		if (null == mInstance) {
+			synchronized (BackgroundTaskThreadPool.class) {
+				if (null == mInstance) {
+					mInstance = new BackgroundTaskThreadPool();
+				}
 			}
-    	}
-        
-        return mInstance;
-    }
-	
+		}
+
+		return mInstance;
+	}
+
 	@Override
 	protected ThreadPoolExecutor createThreadPool() {
-		return new ThreadPoolExecutor(Thread.NORM_PRIORITY, Thread.NORM_PRIORITY, 30L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+		return new ThreadPoolExecutor(4, 4, 30L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 	}
 
 	@Override

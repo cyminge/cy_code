@@ -12,7 +12,7 @@ import com.cy.constant.Constant;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.frame.downloader.downloadmanager.DownloadDB;
 import com.cy.frame.downloader.util.GameInstaller;
-import com.cy.threadpool.NomalThreadPool;
+import com.cy.threadpool.NormalThreadPool;
 import com.cy.utils.Utils;
 
 @SuppressLint("NewApi") 
@@ -28,7 +28,7 @@ public abstract class DownloadCompletedService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         long downId = getDownId(intent);
         if (downId != DownloadDB.NO_DOWN_ID && !mDownIdSet.contains(downId) && mDownIdSet.add(downId)) {
-            NomalThreadPool.getInstance().post(getHandleRunnable(downId));
+            NormalThreadPool.getInstance().post(getHandleRunnable(downId));
         } else {
             tryStopService();
         }

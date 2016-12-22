@@ -19,7 +19,7 @@ import com.cy.frame.downloader.util.JsonConstant;
 import com.cy.frame.downloader.util.JsonUtils;
 import com.cy.frame.downloader.util.UrlConstant;
 import com.cy.global.WatchDog;
-import com.cy.threadpool.NomalThreadPool;
+import com.cy.threadpool.NormalThreadPool;
 import com.cy.utils.Utils;
 
 @SuppressLint("NewApi")
@@ -105,7 +105,7 @@ public class DownloadArgsFactory {
     private void startGet() {
         if (Utils.hasNetwork()) {
             mThreadStop = false;
-            NomalThreadPool.getInstance().post(mDownloadArgsRunnable);
+            NormalThreadPool.getInstance().post(mDownloadArgsRunnable);
         }
     }
 

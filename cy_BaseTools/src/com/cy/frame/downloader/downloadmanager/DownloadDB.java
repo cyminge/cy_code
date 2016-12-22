@@ -16,7 +16,7 @@ import com.cy.constant.Constant;
 import com.cy.frame.downloader.core.DownloadStatusMgr;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.global.BaseApplication;
-import com.cy.threadpool.NomalThreadPool;
+import com.cy.threadpool.NormalThreadPool;
 import com.cy.utils.Utils;
 
 /**
@@ -140,7 +140,7 @@ public class DownloadDB extends SQLiteOpenHelper {
     }
 
     public void delete(final String pkgName) {
-    	NomalThreadPool.getInstance().post(new Runnable() {
+    	NormalThreadPool.getInstance().post(new Runnable() {
             @Override
             public void run() {
                 synchronized (sInstance) {
@@ -157,7 +157,7 @@ public class DownloadDB extends SQLiteOpenHelper {
     }
 
     public void update(final DownloadInfo info) {
-        NomalThreadPool.getInstance().post(new Runnable() {
+        NormalThreadPool.getInstance().post(new Runnable() {
             @Override
             public void run() {
                 synchronized (sInstance) {

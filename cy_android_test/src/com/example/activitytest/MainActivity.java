@@ -319,6 +319,17 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     	
     	
     }
+    
+    public void testToGameHallHome(View view) {
+    	Intent intent = new Intent();
+    	intent.setAction("gn.com.android.gamehall.action.HOME");
+    	intent.putExtra("from", "测试包");
+    	intent.putExtra("source", "测试包");
+    	intent.putExtra("packageName", "com.cy.test");
+    	startActivity(intent);
+    	
+    	
+    }
 
     public Resources getResources(final float fontScale) {
         Resources res = super.getResources();

@@ -21,7 +21,7 @@ import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.install.InstallManager;
 import com.cy.global.BaseApplication;
 import com.cy.global.WatchDog;
-import com.cy.threadpool.NomalThreadPool;
+import com.cy.threadpool.NormalThreadPool;
 import com.cy.utils.Utils;
 import com.cy.utils.storage.GNStorageUtils;
 
@@ -45,7 +45,7 @@ import com.cy.utils.storage.GNStorageUtils;
 
     public static void silentInstall(final Context context, final String homeDir,
             final DownloadArgs downloadArgs, final String fileName, final boolean fromActivity) {
-    	NomalThreadPool.getInstance().post(new Runnable() {
+    	NormalThreadPool.getInstance().post(new Runnable() {
             @Override
             public void run() {
                 DownloadArgs args = fromActivity ? (DownloadArgs) downloadArgs.clone() : downloadArgs;
