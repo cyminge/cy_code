@@ -14,6 +14,9 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.RelativeLayout;
 
+import com.cy.R;
+import com.cy.utils.Utils;
+
 public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
 	
 	public static final int MILLIS_500 = 500;
@@ -469,11 +472,14 @@ public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
 
     private void callRefreshListener() {
         if (null != mOnRefreshListener) {
-            mOnRefreshListener.onRefresh(this);
-            pullRefreshBegin();
-            if (hasNetwork()) {
+            if (Utils.hasNetwork()) {
+                mOnRefreshListener.onRefresh(this);
                 sendStatis();
+            } else {
+//                ToastUtils.showLimited(R.string.str_no_net_msg);
+                onRefreshComplete();
             }
+            pullRefreshBegin();
         }
     }
     

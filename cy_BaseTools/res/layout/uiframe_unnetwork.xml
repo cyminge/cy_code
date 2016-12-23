@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/unnetwork"
+    android:id="@+id/rl_unnetwork"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dip"
+        android:layout_marginTop="@dimen/unnetwork_margin_top"
         android:background="@drawable/uiframe_no_content"
         android:contentDescription="4" />
 
@@ -21,9 +21,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/unnetwork_icon"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="7dip"
-        android:text="@string/no_net_msg"
-        android:textColor="#FFCDD0D3"
-        android:textSize="16sp" />
+        android:layout_marginTop="@dimen/exception_description_margin_top"
+        android:text="@string/str_no_net_msg"
+        android:textColor="@color/exception_description_word_color"
+        android:textSize="@dimen/exception_description_word_size" />
+
+    <include
+        android:id="@+id/unnetwork_shadow"
+        layout="@layout/uiframe_shadow_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -1,0 +1,6 @@
+<resources>
+
+    <dimen name="unnetwork_margin_top">100dip</dimen>
+<dimen name="exception_description_margin_top">7dip</dimen>
+<dimen name="exception_description_word_size">16dip</dimen>
+</resources>

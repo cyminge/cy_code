@@ -18,7 +18,7 @@ import com.cy.utils.Utils;
  * 
  */
 @SuppressLint("NewApi")
-public abstract class AbstractViewHelper implements IViewHelper {
+public abstract class AbstractLoadDataHelper {
 
 	private boolean mHasLoad = false; // 是否已经加载过
 	private boolean mNeedReset = false; // 是否重置数据
@@ -29,11 +29,10 @@ public abstract class AbstractViewHelper implements IViewHelper {
 
 	private static final int DEFULAT_DATA_EXPIRED_TIME = Constant.HOUR_1;
 
-	private AbstractViewHelper(IUrlBean urlBean) {
+	public AbstractLoadDataHelper(IUrlBean urlBean) {
 		mUrlBean = urlBean;
 	}
 
-	@Override
 	public void initLoad() {
 		if (mHasLoad) {
 			return;
@@ -78,9 +77,13 @@ public abstract class AbstractViewHelper implements IViewHelper {
 	}
 	
 	/**
-	 * 展示进度条
+	 * 展示进度条 or others
 	 */
 	protected abstract void onCheckDataByLoading();
+	
+	public void checkDataByPull() {
+		startCheck();
+    }
 	
 	private void startCheck() {
 		NormalThreadPool.getInstance().post(new Runnable() {
@@ -249,7 +252,6 @@ public abstract class AbstractViewHelper implements IViewHelper {
 	protected void onParseDataResult(final boolean success) {
 	}
 
-	@Override
 	public void exit() {
 		unregisterListener();
 	}

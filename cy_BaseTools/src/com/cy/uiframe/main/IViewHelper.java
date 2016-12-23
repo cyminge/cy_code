@@ -1,6 +1,11 @@
 package com.cy.uiframe.main;
 
 public interface IViewHelper {
-	public void initLoad();
-    public void exit();
+	
+	public void checkDataByPull();
+	public void pullRefreshBegin();
+	public void pullRefreshComplete();
+	public boolean isReadyForPullStart();
+	
+	
 }
