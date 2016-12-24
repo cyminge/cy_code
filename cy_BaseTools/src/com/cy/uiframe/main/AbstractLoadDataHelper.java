@@ -97,7 +97,7 @@ public abstract class AbstractLoadDataHelper {
                     WatchDog.post(new Runnable() {
                         @Override
                         public void run() {
-                        	onNetworkError();
+                        	onLoadDataError();
                         }
                     });
                 }
@@ -105,7 +105,7 @@ public abstract class AbstractLoadDataHelper {
         });
 	}
 	
-	protected abstract void onNetworkError();
+	protected abstract void onLoadDataError();
 	
 	protected String doPost() {
 		return mUrlBean.postData(getPostMap());
@@ -116,7 +116,8 @@ public abstract class AbstractLoadDataHelper {
     }
 	
 	/**
-	 * 是否请求数据有效
+	 * 是否请求数据有效， 对请求数据的结构进行解析。
+	 * 比如是否有数据，是否来自正确的请求地址。
 	 * @param result
 	 * @return
 	 */

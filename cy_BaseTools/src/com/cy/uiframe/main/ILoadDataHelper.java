@@ -5,10 +5,10 @@ public interface ILoadDataHelper {
 //    public void exit();
     public void showNoNetworkView();
     public void onCheckDataByLoading();
-    public void onNetworkError();
-    public boolean isRequestDataSuccess();
+    public void onLoadDataError();
+    public boolean isRequestDataSuccess(String data);
     public boolean isCacheAssociatedWithAccount();
     public String getCurrentAccount();
-    public String startPullRefresh();
-    public boolean onParseData();
+    public void startPullRefresh();
+    public boolean onParseData(String data);
 }

@@ -20,7 +20,8 @@ public class ViewHelper {
 
     private TextView mExceptionDescriptionView;
     protected View mProgressBar;
-    protected View mUnnetworkView;
+    protected View mUnnetworkLayout;
+    protected View mUnnetworkShadow;
     protected View mContentView;
     protected View mShadowView;
     protected ImageView mExceptionIcon;
@@ -29,22 +30,23 @@ public class ViewHelper {
     public ViewHelper(View rootView, View contentView) {
         mProgressBar = rootView.findViewById(R.id.page_loading);
         mShadowView = rootView.findViewById(R.id.helper_shadow);
-        mUnnetworkView = rootView.findViewById(R.id.rl_unnetwork);
+        mUnnetworkLayout = rootView.findViewById(R.id.rl_unnetwork);
         mExceptionIcon = (ImageView) rootView.findViewById(R.id.unnetwork_icon);
         mExceptionDescriptionView = (TextView) rootView.findViewById(R.id.exception_description);
+        mUnnetworkShadow = rootView.findViewById(R.id.unnetwork_shadow);
         mContentView = contentView;
     }
 
     public void showContent() {
         setContentViewVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
-        mUnnetworkView.setVisibility(View.GONE);
+        mUnnetworkLayout.setVisibility(View.GONE);
     }
 
     public void showLoadingView() {
         setContentViewVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
-        mUnnetworkView.setVisibility(View.GONE);
+        mUnnetworkLayout.setVisibility(View.GONE);
     }
 
     public void hideShadowView() {
@@ -56,10 +58,10 @@ public class ViewHelper {
     }
 
     public boolean isShowException() {
-        return mUnnetworkView.getVisibility() == View.VISIBLE;
+        return mUnnetworkLayout.getVisibility() == View.VISIBLE;
     }
 
-    public void showExceptionView(final int type) {
+    public void showExceptionView(int type, boolean isNeedShadowAtTopWhenUnnet) {
         int resId = R.string.str_no_net_msg;
         int iconId = R.drawable.uiframe_no_content;
         if (type == TYPE_NO_DATA) {
@@ -69,26 +71,27 @@ public class ViewHelper {
             resId = R.string.str_no_upgrade;
             iconId = R.drawable.uiframe_no_content;
         }
-        showExceptionView(Utils.getResources().getString(resId), iconId);
+        showExceptionView(Utils.getResources().getString(resId), iconId, isNeedShadowAtTopWhenUnnet);
     }
 
     protected int getNoDataStr() {
         return R.string.uiframe_no_data;
     }
 
-    public void showExceptionView(String tips, int iconId) {
+    public void showExceptionView(String tips, int iconId, boolean isNeedShadowAtTopWhenUnnet) {
         setContentViewVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);
-        mUnnetworkView.setVisibility(View.VISIBLE);
+        mUnnetworkLayout.setVisibility(View.VISIBLE);
         if (iconId != DEFAULT_ICON_ID && !mInTask) {
             mExceptionIcon.setBackgroundResource(iconId);
         }
         mExceptionDescriptionView.setText(tips);
+        mUnnetworkShadow.setVisibility(isNeedShadowAtTopWhenUnnet? View.VISIBLE : View.GONE);
     }
 
     public void hideAllView() {
         mProgressBar.setVisibility(View.GONE);
-        mUnnetworkView.setVisibility(View.GONE);
+        mUnnetworkLayout.setVisibility(View.GONE);
         setContentViewVisibility(View.GONE);
     }
 

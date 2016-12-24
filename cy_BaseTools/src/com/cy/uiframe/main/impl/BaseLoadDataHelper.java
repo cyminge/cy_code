@@ -24,13 +24,13 @@ public class BaseLoadDataHelper extends AbstractLoadDataHelper {
 	}
 
 	@Override
-	protected void onNetworkError() {
-		mILoadDataHelper.onNetworkError();
+	protected void onLoadDataError() {
+		mILoadDataHelper.onLoadDataError();
 	}
 
 	@Override
 	protected boolean isRequestDataSuccess(String result) {
-		return mILoadDataHelper.isRequestDataSuccess();
+		return mILoadDataHelper.isRequestDataSuccess(result);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class BaseLoadDataHelper extends AbstractLoadDataHelper {
 
 	@Override
 	protected boolean onParseData(String data) {
-		return mILoadDataHelper.onParseData();
+		return mILoadDataHelper.onParseData(data);
 	}
 
 }
