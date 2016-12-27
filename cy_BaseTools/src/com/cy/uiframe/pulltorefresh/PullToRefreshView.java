@@ -4,57 +4,49 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import com.cy.uiframe.main.ContentView;
-import com.cy.uiframe.main.IViewHelper;
+import com.cy.uiframe.main.IpullToRefreshCallBack;
 
 public class PullToRefreshView extends PullToRefreshBase<ContentView> {
 	
-	private IViewHelper mViewHelper;
+	private IpullToRefreshCallBack mCallBack;
 
 	private OnRefreshListener<ContentView> mOnRefreshListener = new OnRefreshListener<ContentView>() {
 		@Override
 		public void onRefresh(PullToRefreshBase<ContentView> refreshView) {
-			// if (Utils.hasNetwork()) {
-			// AbstractGameView gameView = refreshView.getRefreshableView();
-			// gameView.checkDataByPull();
-			// } else {
-			// ToastUtils.showLimited(R.string.str_no_net_msg);
-			// onRefreshComplete();
-			// }
-			mViewHelper.checkDataByPull();
+			mCallBack.checkDataByPull();
 		}
 
 	};
 
-	public PullToRefreshView(Context context, ContentView contentView, IViewHelper viewHelper) {
+	public PullToRefreshView(Context context, ContentView contentView, IpullToRefreshCallBack viewHelper) {
 		super(context, null, contentView);
 		setOnRefreshListener(mOnRefreshListener);
-		mViewHelper = viewHelper;
+		mCallBack = viewHelper;
 	}
 
-	public ContentView getGameView() {
+	public ContentView getContentView() {
 		return getRefreshableView();
 	}
 
 	@Override
 	protected ContentView createRefreshableView(Context context, AttributeSet attrs) {
-		return mRefreshableView;
+		return getContentView();
 	}
 
 	@Override
-	protected void pullRefreshBegin() {
-		// mRefreshableView.pullRefreshBegin();
-		mViewHelper.pullRefreshBegin();
+	protected void onPullRefreshBegin() {
+		mCallBack.onPullRefreshBegin();
 	}
 
 	@Override
-	protected void pullRefreshComplete() {
+	protected void onPullRefreshComplete() {
 		// mRefreshableView.pullRefreshComplete();
-		mViewHelper.pullRefreshComplete();
+		mCallBack.onPullRefreshComplete();
 	}
 
 	@Override
-	protected boolean isReadyForPullStart() {
-		return mPullRefreshEnable && mViewHelper.isReadyForPullStart();
+	protected boolean isReadyToBeginPull() {
+		return mPullRefreshEnable && mCallBack.isReadyToBeginPull();
 	}
 
 }

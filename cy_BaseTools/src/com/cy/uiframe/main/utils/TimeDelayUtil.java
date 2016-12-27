@@ -7,13 +7,12 @@ public class TimeDelayUtil {
         public void onTimeOut();
     }
 	
-	private static Runnable mRunnable = new Runnable() {
-		@Override
-		public void run() {
-			
-		}
-	};
-
+	/**
+	 * 延时展示数据
+	 * @param startMs
+	 * @param delayMs
+	 * @param callback
+	 */
     public static void start(long startMs, long delayMs, final Callback callback) {
         long deltaTime = Math.abs(System.currentTimeMillis() - startMs);
         long remainTime = delayMs - deltaTime;
@@ -25,6 +24,5 @@ public class TimeDelayUtil {
                 callback.onTimeOut();
             }
         }, remainTime);
-        WatchDog.post(mRunnable);
     }
 }

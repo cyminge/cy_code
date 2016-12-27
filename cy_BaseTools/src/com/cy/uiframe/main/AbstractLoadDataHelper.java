@@ -9,6 +9,7 @@ import com.cy.frame.downloader.util.TimeUtils;
 import com.cy.global.WatchDog;
 import com.cy.threadpool.NormalThreadPool;
 import com.cy.uiframe.main.cache.UIDataCache;
+import com.cy.uiframe.main.utils.TimeDelayUtil;
 import com.cy.utils.Utils;
 
 /**
@@ -28,9 +29,13 @@ public abstract class AbstractLoadDataHelper {
 	private static final String TIME_DIVIDER = "@_@"; // 上次拉取数据时间戳分隔符
 
 	private static final int DEFULAT_DATA_EXPIRED_TIME = Constant.HOUR_1;
+	
+	private long mStartTime;
+	private static final long PARSE_DATA_MIN_TIME = 300;
 
 	public AbstractLoadDataHelper(IUrlBean urlBean) {
 		mUrlBean = urlBean;
+		mStartTime = System.currentTimeMillis();
 	}
 
 	public void initLoad() {
@@ -72,14 +77,14 @@ public abstract class AbstractLoadDataHelper {
 	protected abstract void showNoNetworkView();
 
 	private void checkDataByLoading() {
-		onCheckDataByLoading();
+		showLoadingView();
 		startCheck();
 	}
 	
 	/**
 	 * 展示进度条 or others
 	 */
-	protected abstract void onCheckDataByLoading();
+	protected abstract void showLoadingView();
 	
 	public void checkDataByPull() {
 		startCheck();
@@ -91,7 +96,7 @@ public abstract class AbstractLoadDataHelper {
             @Override
             public void run() {
                 String data = doPost();
-                if (isRequestDataSuccess(data)) {
+                if (isRequestDataSucc(data)) {
                     onLoadDataSucc(data);
                 } else {
                     WatchDog.post(new Runnable() {
@@ -105,7 +110,22 @@ public abstract class AbstractLoadDataHelper {
         });
 	}
 	
-	protected abstract void onLoadDataError();
+	protected void onLoadDataError() {
+		if(isShowingLoadingView()) {
+			showNetTimeoutOrDataErrorView();
+		} else {
+			showContentView();
+		}
+	}
+	
+	protected abstract boolean isShowingLoadingView();
+	
+	/**
+	 * 数据加载超时或者服务器数据有误
+	 */
+	protected abstract void showNetTimeoutOrDataErrorView();
+	
+	
 	
 	protected String doPost() {
 		return mUrlBean.postData(getPostMap());
@@ -116,12 +136,12 @@ public abstract class AbstractLoadDataHelper {
     }
 	
 	/**
-	 * 是否请求数据有效， 对请求数据的结构进行解析。
+	 * 是否请求数据有效， 对请求数据的通用结构进行解析。
 	 * 比如是否有数据，是否来自正确的请求地址。
 	 * @param result
 	 * @return
 	 */
-	protected abstract boolean isRequestDataSuccess(String result);
+	protected abstract boolean isRequestDataSucc(String result);
 	
 	protected void onLoadDataSucc(final String data) {
         WatchDog.post(new Runnable() {
@@ -220,7 +240,7 @@ public abstract class AbstractLoadDataHelper {
 
 	private void onCacheValid(String cacheData) {
 		String realCacheData = getRealCacheData(cacheData);
-		boolean valid = onGetRealCacheData(realCacheData); // 如果缓存有效，有限展示数据
+		boolean valid = onGetRealCacheData(realCacheData); // 如果缓存有效，优先展示数据
 		
 		if(!isDataExpired(cacheData) || !Utils.hasNetwork()) {
 			return;
@@ -251,7 +271,36 @@ public abstract class AbstractLoadDataHelper {
 	protected abstract boolean onParseData(String data);
 
 	protected void onParseDataResult(final boolean success) {
+		TimeDelayUtil.start(mStartTime, PARSE_DATA_MIN_TIME, new TimeDelayUtil.Callback() {
+            @Override
+            public void onTimeOut() {
+                parseResult(success);
+            }
+        });
 	}
+	
+	private void parseResult(boolean success) {
+        if (success) {
+        	showContentView();
+        } else {
+            onDataEmpty();
+        }
+    }
+
+    protected abstract void showContentView();
+
+    protected void onDataEmpty() {
+        if (isNeedCache()) {
+            clearCacheData();
+        }
+
+        showNoDataView();
+    }
+    
+    /**
+     * 数据的主体部分解析出错，数据有误，需要展示给用户??
+     */
+    protected abstract void showNoDataView();
 
 	public void exit() {
 		unregisterListener();

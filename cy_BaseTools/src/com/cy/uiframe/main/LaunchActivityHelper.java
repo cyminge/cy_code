@@ -10,7 +10,7 @@ import com.cy.uiframe.main.impl.BaseLoadDataHelper;
 import com.cy.uiframe.pulltorefresh.PullToRefreshView;
 
 @SuppressLint("NewApi") 
-public class LaunchActivityHelper implements IViewHelper, ILoadDataHelper {
+public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHelper {
 
 	private Context mContext;
 	private AbstractLoadDataHelper mAbstractLoadDataHelper;
@@ -19,7 +19,7 @@ public class LaunchActivityHelper implements IViewHelper, ILoadDataHelper {
 	private PullToRefreshView mPullToRefreshView;
 	private ContentView mContentView;
 
-	private ViewHelper mViewHelper;
+	private PullToRefreshViewHelper mViewHelper;
 
 	protected LaunchActivityHelper(Context context, String url) {
 		this(context, url, Constant.NULL_LAYOUT_ID);
@@ -46,7 +46,7 @@ public class LaunchActivityHelper implements IViewHelper, ILoadDataHelper {
 		mPullToRefreshView = new PullToRefreshView(context, mContentView, this);
 		mViewContainer.addPullView(mPullToRefreshView);
 
-		mViewHelper = new ViewHelper(getRootView(), mContentView);
+		mViewHelper = new PullToRefreshViewHelper(getRootView(), mPullToRefreshView);
 	}
 
 	public View getRootView() {
@@ -61,23 +61,35 @@ public class LaunchActivityHelper implements IViewHelper, ILoadDataHelper {
 		mAbstractLoadDataHelper.exit();
 	}
 
+	/**
+	 * 下拉开始，获取数据
+	 */
 	@Override
 	public void checkDataByPull() {
 		mAbstractLoadDataHelper.checkDataByPull();
 	}
 
+	/**
+	 * 刷新开始
+	 */
 	@Override
-	public void pullRefreshBegin() {
+	public void onPullRefreshBegin() {
 
 	}
 
+	/**
+	 * 刷新结束
+	 */
 	@Override
-	public void pullRefreshComplete() {
+	public void onPullRefreshComplete() {
 
 	}
 
+	/**
+	 * 是否响应下拉刷新动画
+	 */
 	@Override
-	public boolean isReadyForPullStart() {
+	public boolean isReadyToBeginPull() {
 		return mContentView.getScrollY() == 0;
 	}
 
@@ -90,29 +102,6 @@ public class LaunchActivityHelper implements IViewHelper, ILoadDataHelper {
 		return false;
 	}
 
-	@Override
-	public void onCheckDataByLoading() {
-		mViewHelper.showLoadingView();
-	}
-
-	@Override
-	public void onLoadDataError() {
-		if (mViewHelper.isLoading()) {
-			showNoNetworkView();
-		} else {
-			mViewHelper.showContent();
-		}
-	}
-
-	@Override
-	public boolean isRequestDataSuccess(String data) {
-		if(null == data || data.isEmpty()) {
-			return false;
-		}
-		
-		return hasSign(data);
-	}
-	
 	/**
 	 * 需要重写
 	 * @param data
@@ -137,13 +126,43 @@ public class LaunchActivityHelper implements IViewHelper, ILoadDataHelper {
 		WatchDog.postDelayed(new Runnable() {
             @Override
             public void run() {
-            	mPullToRefreshView.startPullRefreshing();
+            	mViewHelper.startPullRefreshing();
             }
         }, Constant.SECOND_1);
 	}
 
 	@Override
 	public boolean onParseData(String data) {
+		return false;
+	}
+
+	@Override
+	public boolean isRequestDataSucc(String data) {
+		return false;
+	}
+
+	@Override
+	public void showContentView() {
+		
+	}
+
+	@Override
+	public void showNoDataView() {
+		
+	}
+
+	@Override
+	public void showLoadingView() {
+		
+	}
+
+	@Override
+	public void showNetTimeoutOrDataErrorView() {
+		
+	}
+
+	@Override
+	public boolean isShowingLoadingView() {
 		return false;
 	}
 }

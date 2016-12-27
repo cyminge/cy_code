@@ -14,7 +14,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.RelativeLayout;
 
-import com.cy.R;
 import com.cy.utils.Utils;
 
 public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
@@ -29,9 +28,6 @@ public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
     private float mLastMotionY;
     private float mInitialMotionY;
     private float mDownMotionY;
-//    private float mRefreshingDownScrollY;
-//    private float mRefreshingDownY;
-//    private boolean mRefreshingScrolling = false;
 
     protected boolean mPullRefreshEnable = true;
 
@@ -87,14 +83,11 @@ public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
         int action = event.getAction();
         if (action == MotionEvent.ACTION_DOWN) {
             mDownMotionY = event.getY();
-            // onRefreshingDownEvent(event);
         } else if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
-            // onRefreshingUpEvent();
         }
 
         if (action == MotionEvent.ACTION_MOVE && isRefreshing()) {
-            // onRefreshingMoveEvent(event);
-        } else if (isReadyForPullStart() && isReadyForPull(event)) {
+        } else if (isReadyToBeginPull() && isReadyForPull(event)) {
             mLastMotionY = mDownMotionY;
             onInterceptTouchEvent(event);
         } else if (mIsBeingDragged) {
@@ -103,65 +96,6 @@ public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
 
         return super.dispatchTouchEvent(event);
     }
-
-//    private void onRefreshingDownEvent(MotionEvent event) {
-//        if (isRefreshing()) {
-//            mRefreshingDownScrollY = mHeaderLayout.getScrollY();
-//            mRefreshingDownY = event.getY();
-//            mHeaderLayout.checkRefreshing();
-//        }
-//        mRefreshingScrolling = false;
-//    }
-//
-//    private void onRefreshingUpEvent() {
-//        if (!isRefreshing()) {
-//            return;
-//        }
-//
-//        if (!isReadyForPullStart()) {
-//            postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    setHeaderScroll(0);
-//                }
-//            }, Constant.MILLIS_100);
-//        } else if (mHeaderLayout.getScrollY() < 0) {
-//            smoothScrollTo(-getHeaderSize());
-//        }
-//    }
-//
-//    private void onRefreshingMoveEvent(MotionEvent event) {
-//        int distance = (int) (mRefreshingDownY - event.getY());
-//        if (!isRefreshingScrolling(distance)) {
-//            return;
-//        }
-//        if (distance - getHeaderSize() >= 0) {
-//            setHeaderScroll(0);
-//            return;
-//        }
-//
-//        final int maxPullScroll = getMaxPullScroll();
-//        float curScrollY = mRefreshingDownScrollY;
-//        if (curScrollY <= -getHeaderSize() || curScrollY == 0) {
-//            if (distance < -curScrollY - maxPullScroll) {
-//                mRefreshingDownY = event.getY() - curScrollY - maxPullScroll;
-//                setHeaderScroll(-maxPullScroll);
-//                return;
-//            } else if (!isReadyForPullStart()) {
-//                mRefreshingDownY = event.getY() - curScrollY;
-//                return;
-//            }
-//
-//            setHeaderScroll(distance + (int) curScrollY);
-//        }
-//    }
-//
-//    private boolean isRefreshingScrolling(int distance) {
-//        if (Math.abs(distance) > mTouchSlop) {
-//            mRefreshingScrolling = true;
-//        }
-//        return mRefreshingScrolling;
-//    }
 
     private boolean isReadyForPull(MotionEvent event) {
         int action = event.getAction();
@@ -188,7 +122,7 @@ public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
                 if (isRefreshing()) {
                     return false;
                 }
-                if (isReadyForPullStart()) {
+                if (isReadyToBeginPull()) {
                     final float y = event.getY();
                     final float x = event.getX();
                     final float diff;
@@ -207,7 +141,7 @@ public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
                 }
                 break;
             case MotionEvent.ACTION_DOWN:
-                if (isReadyForPullStart()) {
+                if (isReadyToBeginPull()) {
                     mLastMotionY = mInitialMotionY = event.getY();
                     mLastMotionX = event.getX();
                     mIsBeingDragged = false;
@@ -226,7 +160,7 @@ public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
 
                 @Override
                 public void run() {
-                    pullRefreshComplete();
+                    onPullRefreshComplete();
                 }
             }, getCompletedDelay());
         }
@@ -258,7 +192,7 @@ public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
             }
 
             case MotionEvent.ACTION_DOWN: {
-                if (isReadyForPullStart()) {
+                if (isReadyToBeginPull()) {
                     mInitialMotionY = event.getY();
                     mLastMotionY = mInitialMotionY;
                     mLastMotionX = event.getX();
@@ -343,11 +277,11 @@ public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
         return MILLIS_200;
     }
 
-    protected abstract boolean isReadyForPullStart();
+    protected abstract boolean isReadyToBeginPull();
 
-    protected abstract void pullRefreshBegin();
+    protected abstract void onPullRefreshBegin();
 
-    protected abstract void pullRefreshComplete();
+    protected abstract void onPullRefreshComplete();
 
     protected void onPullToRefresh() {
         mHeaderLayout.pullToRefresh();
@@ -479,7 +413,7 @@ public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
 //                ToastUtils.showLimited(R.string.str_no_net_msg);
                 onRefreshComplete();
             }
-            pullRefreshBegin();
+            onPullRefreshBegin();
         }
     }
     
@@ -497,7 +431,7 @@ public abstract class PullToRefreshBase<T extends View> extends RelativeLayout {
     }
 
     /**
-     * 什么飞机???????
+     * 统计用
      */
     private void sendStatis() {
 //        String pageNum = StatisValue.PAGE_COUNT + 1;

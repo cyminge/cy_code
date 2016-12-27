@@ -4,6 +4,11 @@ import com.cy.uiframe.main.AbstractLoadDataHelper;
 import com.cy.uiframe.main.ILoadDataHelper;
 import com.cy.uiframe.main.IUrlBean;
 
+/**
+ * 父类的方法有的可能用不着，可能需要拓展和重写。可以重新定义对外的接口
+ * @author JLB6088
+ *
+ */
 public class BaseLoadDataHelper extends AbstractLoadDataHelper {
 	
 	private ILoadDataHelper mILoadDataHelper;
@@ -11,26 +16,12 @@ public class BaseLoadDataHelper extends AbstractLoadDataHelper {
 	public BaseLoadDataHelper(IUrlBean urlBean, ILoadDataHelper loadDataHelper) {
 		super(urlBean);
 		mILoadDataHelper = loadDataHelper;
+		
 	}
 
 	@Override
-	protected void showNoNetworkView() {
-		mILoadDataHelper.showNoNetworkView();
-	}
-
-	@Override
-	protected void onCheckDataByLoading() {
-		mILoadDataHelper.onCheckDataByLoading();
-	}
-
-	@Override
-	protected void onLoadDataError() {
-		mILoadDataHelper.onLoadDataError();
-	}
-
-	@Override
-	protected boolean isRequestDataSuccess(String result) {
-		return mILoadDataHelper.isRequestDataSuccess(result);
+	protected boolean isRequestDataSucc(String result) {
+		return mILoadDataHelper.isRequestDataSucc(result);
 	}
 
 	@Override
@@ -53,4 +44,35 @@ public class BaseLoadDataHelper extends AbstractLoadDataHelper {
 		return mILoadDataHelper.onParseData(data);
 	}
 
+	@Override
+	protected void showContentView() {
+		mILoadDataHelper.showContentView();
+	}
+
+	@Override
+	protected void showNoDataView() {
+		mILoadDataHelper.showNoDataView();
+	}
+
+	@Override
+	protected void showNoNetworkView() {
+		mILoadDataHelper.showNoNetworkView();
+	}
+
+	@Override
+	protected void showLoadingView() {
+		mILoadDataHelper.showLoadingView();
+	}
+	
+	@Override
+	protected void showNetTimeoutOrDataErrorView() {
+		mILoadDataHelper.showNetTimeoutOrDataErrorView();
+	}
+
+	@Override
+	protected boolean isShowingLoadingView() {
+		return mILoadDataHelper.isShowingLoadingView();
+	}
+
+	
 }
