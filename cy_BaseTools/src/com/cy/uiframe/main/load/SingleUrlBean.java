@@ -1,4 +1,4 @@
-package com.cy.uiframe.main;
+package com.cy.uiframe.main.load;
 
 import java.util.HashMap;
 

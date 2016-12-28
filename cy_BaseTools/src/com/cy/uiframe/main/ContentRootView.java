@@ -3,9 +3,9 @@ package com.cy.uiframe.main;
 import android.content.Context;
 import android.widget.FrameLayout;
 
-public class ContentView extends FrameLayout {
+public class ContentRootView extends FrameLayout {
 
-	public ContentView(Context context) {
+	public ContentRootView(Context context) {
 		super(context);
 	}
 

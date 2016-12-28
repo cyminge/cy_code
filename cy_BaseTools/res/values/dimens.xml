@@ -10,7 +10,7 @@
     <dimen name="slide_default_image_size">60dip</dimen>
     
     <!-- download progress button -->
-        <dimen name="game_download_width">57dip</dimen>
+    <dimen name="game_download_width">57dip</dimen>
     <dimen name="game_download_height">23dip</dimen>
     <dimen name="game_button_text_size">12dip</dimen>
     <dimen name="progress_button_margin_right">15dip</dimen>

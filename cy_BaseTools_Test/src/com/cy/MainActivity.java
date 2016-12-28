@@ -9,7 +9,8 @@ import com.cy.global.BaseActivity;
 import com.cy.imageloadertest.ImageLoaderActivity;
 import com.cy.slide.SlideViewActivity;
 import com.cy.test.R;
-import com.cy.uiframetest.UIFrameActivity;
+import com.cy.uiframetest.main.UIFrameMainActivity;
+import com.cy.uiframetest.receclerview.RececlerViewActivity;
 
 public class MainActivity extends BaseActivity {
 
@@ -41,7 +42,13 @@ public class MainActivity extends BaseActivity {
     
     public void showRecycleView(View view) {
     	Intent intent = new Intent();
-    	intent.setClass(this, UIFrameActivity.class);
+    	intent.setClass(this, RececlerViewActivity.class);
+    	startActivity(intent);
+    }
+    
+    public void showUIFrame(View view) {
+    	Intent intent = new Intent();
+    	intent.setClass(this, UIFrameMainActivity.class);
     	startActivity(intent);
     }
 

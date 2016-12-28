@@ -1,4 +1,4 @@
-package com.cy.uiframe.main;
+package com.cy.uiframe.main.load;
 
 import java.util.HashMap;
 
@@ -74,8 +74,6 @@ public abstract class AbstractLoadDataHelper {
 		checkDataByLoading();
 	}
 	
-	protected abstract void showNoNetworkView();
-
 	private void checkDataByLoading() {
 		showLoadingView();
 		startCheck();
@@ -118,15 +116,6 @@ public abstract class AbstractLoadDataHelper {
 		}
 	}
 	
-	protected abstract boolean isShowingLoadingView();
-	
-	/**
-	 * 数据加载超时或者服务器数据有误
-	 */
-	protected abstract void showNetTimeoutOrDataErrorView();
-	
-	
-	
 	protected String doPost() {
 		return mUrlBean.postData(getPostMap());
 	}
@@ -134,14 +123,6 @@ public abstract class AbstractLoadDataHelper {
 	protected HashMap<String, String> getPostMap() {
         return new HashMap<String, String>();
     }
-	
-	/**
-	 * 是否请求数据有效， 对请求数据的通用结构进行解析。
-	 * 比如是否有数据，是否来自正确的请求地址。
-	 * @param result
-	 * @return
-	 */
-	protected abstract boolean isRequestDataSucc(String result);
 	
 	protected void onLoadDataSucc(final String data) {
         WatchDog.post(new Runnable() {
@@ -169,8 +150,6 @@ public abstract class AbstractLoadDataHelper {
 		return UIDataCache.INSTANCE.getString(mUrlBean.getCacheKey(), Constant.EMPTY);
 	}
 	
-	protected abstract boolean isCacheAssociatedWithAccount();
-
 	private boolean isCacheInvalid(String cacheData) {
 		if (cacheData.isEmpty()) {
 			return true;
@@ -221,20 +200,13 @@ public abstract class AbstractLoadDataHelper {
 		return !cacheUUID.equals(currentUUID);
 	}
 
-	/**
-	 * 获取当前账号的UUID
-	 * 
-	 * @return
-	 */
-	protected abstract String getCurrentAccount();
-
 	private void onCacheEmptyOrInvalide() {
 		mNeedReset = false;
 		clearCacheData();
 		checkNet();
 	}
 
-	private void clearCacheData() {
+	protected void clearCacheData() {
 		UIDataCache.INSTANCE.remove(mUrlBean.getCacheKey());
 	}
 
@@ -253,11 +225,6 @@ public abstract class AbstractLoadDataHelper {
 		}
 	}
 	
-	/**
-	 * 需要加载新的数据
-	 */
-	protected abstract void startPullRefresh();
-
 	private String getRealCacheData(String cacheData) {
 		return cacheData.substring(cacheData.indexOf(TIME_DIVIDER) + TIME_DIVIDER.length());
 	}
@@ -267,8 +234,6 @@ public abstract class AbstractLoadDataHelper {
 		onParseDataResult(succ);
 		return succ;
 	}
-
-	protected abstract boolean onParseData(String data);
 
 	protected void onParseDataResult(final boolean success) {
 		TimeDelayUtil.start(mStartTime, PARSE_DATA_MIN_TIME, new TimeDelayUtil.Callback() {
@@ -287,8 +252,6 @@ public abstract class AbstractLoadDataHelper {
         }
     }
 
-    protected abstract void showContentView();
-
     protected void onDataEmpty() {
         if (isNeedCache()) {
             clearCacheData();
@@ -297,11 +260,6 @@ public abstract class AbstractLoadDataHelper {
         showNoDataView();
     }
     
-    /**
-     * 数据的主体部分解析出错，数据有误，需要展示给用户??
-     */
-    protected abstract void showNoDataView();
-
 	public void exit() {
 		unregisterListener();
 	}
@@ -313,5 +271,64 @@ public abstract class AbstractLoadDataHelper {
 	protected void unregisterListener() {
 
 	}
+	
+    /**
+     * 数据的主体部分解析出错，数据有误，需要展示给用户??
+     */
+    protected abstract void showNoDataView();
+
+    /**
+	 * 需要加载新的数据
+	 */
+	protected abstract void startPullRefresh();
+	
+	/**
+	 * 是否请求数据有效， 对请求数据的通用结构进行解析。
+	 * 比如是否有数据，是否来自正确的请求地址。
+	 * @param result
+	 * @return
+	 */
+	protected abstract boolean isRequestDataSucc(String result);
+	
+	/**
+	 * 数据加载超时或者服务器数据有误
+	 */
+	protected abstract void showNetTimeoutOrDataErrorView();
+	
+	/**
+	 * 是否正在展示loadingView
+	 * @return
+	 */
+	protected abstract boolean isShowingLoadingView();
+	
+	/**
+	 * 缓存数据是否关联账号信息
+	 * @return
+	 */
+	protected abstract boolean isCacheAssociatedWithAccount();
+	
+	/**
+	 * 获取当前账号的UUID或者账号的唯一标示
+	 * 
+	 * @return
+	 */
+	protected abstract String getCurrentAccount();
+	
+	/**
+	 * 主体数据解析
+	 * @param data
+	 * @return
+	 */
+	protected abstract boolean onParseData(String data);
+	
+	/**
+	 * 显示内容view
+	 */
+	protected abstract void showContentView();
+	
+	/**
+	 * 显示无网络view
+	 */
+	protected abstract void showNoNetworkView();
 
 }

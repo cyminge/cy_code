@@ -1,4 +1,4 @@
-package com.cy.uiframetest;
+package com.cy.uiframetest.receclerview;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +18,11 @@ import com.cy.slide.SlideView;
 import com.cy.slide.SlideViewHelper;
 import com.cy.slide.SlideViewHelper.DataParsedListener;
 import com.cy.test.R;
-import com.cy.uiframe.recyclerview.AbstractRecycleView;
+import com.cy.uiframe.recyclerview.AbstractRecyclerView;
 
-public class UIFrameActivity extends BaseActivity {
+public class RececlerViewActivity extends BaseActivity {
 
-	private AbstractRecycleView mAbstractRecycleView;
+	private AbstractRecyclerView mAbstractRecycleView;
 	private SlideViewHelper mSlideViewHelper;
 	
 	private static final String SLIDE_VIEW_SHARE_PREF_KEY = "from_SlideViewActivity";
@@ -32,8 +32,8 @@ public class UIFrameActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.activity_uiframe_main);
-		mAbstractRecycleView = (AbstractRecycleView) findViewById(R.id.recycle_view);
+		setContentView(R.layout.activity_recyclerview_main);
+		mAbstractRecycleView = (AbstractRecyclerView) findViewById(R.id.recycle_view);
 		mAbstractRecycleView.setLayoutManager(new LinearLayoutManager(this));
 		
 		List<BaseBean> list = new ArrayList<BaseBean>();

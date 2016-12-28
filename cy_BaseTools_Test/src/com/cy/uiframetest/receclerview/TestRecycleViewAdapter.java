@@ -1,4 +1,4 @@
-package com.cy.uiframetest;
+package com.cy.uiframetest.receclerview;
 
 import java.util.List;
 
@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cy.test.R;
-import com.cy.uiframe.recyclerview.AbstractAdapter;
-import com.cy.uiframe.recyclerview.AbstractViewHolder;
+import com.cy.uiframe.recyclerview.AbstractRececlerAdapter;
+import com.cy.uiframe.recyclerview.AbstractRecyclerViewHolder;
 
-public class TestRecycleViewAdapter extends AbstractAdapter<BaseBean> {
+public class TestRecycleViewAdapter extends AbstractRececlerAdapter<BaseBean> {
 	
 	public static final int LIST_TYPE_FIRST = 0x1;
     public static final int LIST_TYPE_SECOND = 0x2;
@@ -34,18 +34,18 @@ public class TestRecycleViewAdapter extends AbstractAdapter<BaseBean> {
 	}
 
 	@Override
-	public AbstractViewHolder<BaseBean> createHeaderHolder(ViewGroup parent, int viewType) {
+	public AbstractRecyclerViewHolder<BaseBean> createHeaderHolder(ViewGroup parent, int viewType) {
 		return new Holder(getHeaderView(viewType));
 	}
 	
 	@Override
-	public AbstractViewHolder<BaseBean> createFootHolder(ViewGroup parent, int viewType) {
+	public AbstractRecyclerViewHolder<BaseBean> createFootHolder(ViewGroup parent, int viewType) {
 		Log.e("cyTest", "createFootHolder");
 		return null;
 	}
 
 	@Override
-	public AbstractViewHolder<BaseBean> createDefaultViewHolder(ViewGroup parent, int viewType) {
+	public AbstractRecyclerViewHolder<BaseBean> createDefaultViewHolder(ViewGroup parent, int viewType) {
 		return new Holder(LayoutInflater.from(mContext).inflate(getItemLayoutId(viewType), null, false));
 	}
 	
@@ -60,7 +60,7 @@ public class TestRecycleViewAdapter extends AbstractAdapter<BaseBean> {
 		}
 	}
 	
-	class Holder extends AbstractViewHolder<BaseBean> {
+	class Holder extends AbstractRecyclerViewHolder<BaseBean> {
 		TextView name;
 		TextView age;
 		

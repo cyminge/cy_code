@@ -1,8 +1,8 @@
-package com.cy.uiframe.main;
+package com.cy.uiframe.pulltorefresh;
 
 import android.view.View;
 
-import com.cy.uiframe.pulltorefresh.PullToRefreshBase;
+import com.cy.uiframe.main.ViewHelper;
 
 public class PullToRefreshViewHelper extends ViewHelper {
 

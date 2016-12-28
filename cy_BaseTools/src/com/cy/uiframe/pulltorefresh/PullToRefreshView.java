@@ -3,33 +3,32 @@ package com.cy.uiframe.pulltorefresh;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.cy.uiframe.main.ContentView;
-import com.cy.uiframe.main.IpullToRefreshCallBack;
+import com.cy.uiframe.main.ContentRootView;
 
-public class PullToRefreshView extends PullToRefreshBase<ContentView> {
+public class PullToRefreshView extends PullToRefreshBase<ContentRootView> {
 	
 	private IpullToRefreshCallBack mCallBack;
 
-	private OnRefreshListener<ContentView> mOnRefreshListener = new OnRefreshListener<ContentView>() {
+	private OnRefreshListener<ContentRootView> mOnRefreshListener = new OnRefreshListener<ContentRootView>() {
 		@Override
-		public void onRefresh(PullToRefreshBase<ContentView> refreshView) {
+		public void onRefresh(PullToRefreshBase<ContentRootView> refreshView) {
 			mCallBack.checkDataByPull();
 		}
 
 	};
 
-	public PullToRefreshView(Context context, ContentView contentView, IpullToRefreshCallBack viewHelper) {
+	public PullToRefreshView(Context context, ContentRootView contentView, IpullToRefreshCallBack callback) {
 		super(context, null, contentView);
 		setOnRefreshListener(mOnRefreshListener);
-		mCallBack = viewHelper;
+		mCallBack = callback;
 	}
 
-	public ContentView getContentView() {
+	public ContentRootView getContentView() {
 		return getRefreshableView();
 	}
 
 	@Override
-	protected ContentView createRefreshableView(Context context, AttributeSet attrs) {
+	protected ContentRootView createRefreshableView(Context context, AttributeSet attrs) {
 		return getContentView();
 	}
 
@@ -40,7 +39,6 @@ public class PullToRefreshView extends PullToRefreshBase<ContentView> {
 
 	@Override
 	protected void onPullRefreshComplete() {
-		// mRefreshableView.pullRefreshComplete();
 		mCallBack.onPullRefreshComplete();
 	}
 

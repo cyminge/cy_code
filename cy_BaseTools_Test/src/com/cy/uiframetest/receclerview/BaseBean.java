@@ -1,4 +1,4 @@
-package com.cy.uiframetest;
+package com.cy.uiframetest.receclerview;
 
 public class BaseBean {
 	public String mName;

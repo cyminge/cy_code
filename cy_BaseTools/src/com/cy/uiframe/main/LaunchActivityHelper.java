@@ -2,12 +2,18 @@ package com.cy.uiframe.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.cy.constant.Constant;
 import com.cy.global.WatchDog;
-import com.cy.uiframe.main.impl.BaseLoadDataHelper;
+import com.cy.uiframe.main.load.AbstractLoadDataHelper;
+import com.cy.uiframe.main.load.ILoadDataHelper;
+import com.cy.uiframe.main.load.IUrlBean;
+import com.cy.uiframe.main.load.SingleUrlBean;
+import com.cy.uiframe.pulltorefresh.IpullToRefreshCallBack;
 import com.cy.uiframe.pulltorefresh.PullToRefreshView;
+import com.cy.uiframe.pulltorefresh.PullToRefreshViewHelper;
 
 @SuppressLint("NewApi") 
 public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHelper {
@@ -17,36 +23,50 @@ public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHe
 
 	private ViewContainer mViewContainer;
 	private PullToRefreshView mPullToRefreshView;
-	private ContentView mContentView;
+	private ContentRootView mContentRootView;
 
 	private PullToRefreshViewHelper mViewHelper;
 
-	protected LaunchActivityHelper(Context context, String url) {
+	public LaunchActivityHelper(Context context, String url) {
 		this(context, url, Constant.NULL_LAYOUT_ID);
 	}
 
-	protected LaunchActivityHelper(Context context, String url, int layoutId) {
+	public LaunchActivityHelper(Context context, String url, int layoutId) {
 		IUrlBean urlBean = new SingleUrlBean(url);
 		init(context, urlBean, layoutId);
 	}
 
-	protected LaunchActivityHelper(Context context, IUrlBean urlBean, int layoutId) {
+	public LaunchActivityHelper(Context context, IUrlBean urlBean, int layoutId) {
 		init(context, urlBean, layoutId);
 	}
 
 	private void init(Context context, IUrlBean urlBean, int layoutId) {
 		mContext = context;
-		mAbstractLoadDataHelper = new BaseLoadDataHelper(urlBean, this);
-		initLayout(context);
+		mAbstractLoadDataHelper = createLoadDataHelper(urlBean, this);
+		initLayout(context, layoutId);
+	}
+	
+	protected AbstractLoadDataHelper createLoadDataHelper(IUrlBean urlBean, ILoadDataHelper iLoadDataHelper) {
+		return new BaseLoadDataHelper(urlBean, this);
 	}
 
-	private void initLayout(Context context) {
+	private void initLayout(Context context, int layoutId) {
 		mViewContainer = new ViewContainer(context);
-		mContentView = new ContentView(context);
-		mPullToRefreshView = new PullToRefreshView(context, mContentView, this);
+		mContentRootView = new ContentRootView(context);
+		
+		if (layoutId != Constant.NULL_LAYOUT_ID) {
+            View contentView = LayoutInflater.from(context).inflate(layoutId, mContentRootView, true); //??
+            prepareView(contentView);
+//            mContentRootView.addView(contentView, 0);
+        }
+		
+		mPullToRefreshView = new PullToRefreshView(context, mContentRootView, this);
 		mViewContainer.addPullView(mPullToRefreshView);
-
 		mViewHelper = new PullToRefreshViewHelper(getRootView(), mPullToRefreshView);
+	}
+	
+	protected void prepareView(View contentView) {
+		
 	}
 
 	public View getRootView() {
@@ -61,36 +81,24 @@ public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHe
 		mAbstractLoadDataHelper.exit();
 	}
 
-	/**
-	 * 下拉开始，获取数据
-	 */
 	@Override
 	public void checkDataByPull() {
 		mAbstractLoadDataHelper.checkDataByPull();
 	}
 
-	/**
-	 * 刷新开始
-	 */
 	@Override
 	public void onPullRefreshBegin() {
 
 	}
-
-	/**
-	 * 刷新结束
-	 */
+	
 	@Override
 	public void onPullRefreshComplete() {
 
 	}
 
-	/**
-	 * 是否响应下拉刷新动画
-	 */
 	@Override
 	public boolean isReadyToBeginPull() {
-		return mContentView.getScrollY() == 0;
+		return mContentRootView.getScrollY() == 0;
 	}
 
 	@Override
@@ -153,7 +161,7 @@ public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHe
 
 	@Override
 	public void showLoadingView() {
-		
+		mViewHelper.showLoadingView();
 	}
 
 	@Override
