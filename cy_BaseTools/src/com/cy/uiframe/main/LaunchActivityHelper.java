@@ -146,7 +146,7 @@ public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHe
 
 	@Override
 	public boolean isRequestDataSucc(String data) {
-		return false;
+		return null != data && !data.isEmpty();
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHe
 
 	@Override
 	public void showNoDataView() {
-		
+		mViewHelper.showExceptionView(ViewHelper.TYPE_NO_DATA, isNeedShadowAtTopWhenUnnet());
 	}
 
 	@Override
@@ -166,11 +166,11 @@ public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHe
 
 	@Override
 	public void showNetTimeoutOrDataErrorView() {
-		
+		mViewHelper.showExceptionView(ViewHelper.TYPE_NO_NETWORK, isNeedShadowAtTopWhenUnnet());
 	}
 
 	@Override
 	public boolean isShowingLoadingView() {
-		return false;
+		return mViewHelper.isLoading();
 	}
 }
