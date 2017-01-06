@@ -19,7 +19,7 @@ public abstract class AbstractRececlerAdapter<T> extends RecyclerView.Adapter<Ab
 	private static final int HEAD_OR_FOOT_POSITION_RIDE = 1000;
 	
 	protected Context mContext;
-	protected List<T> mDatas;
+	protected List<T> mDatas = new ArrayList<T>();
 
 	private ArrayList<View> mHeaderViews = new ArrayList<>();
 	private ArrayList<View> mFooterViews = new ArrayList<>();
@@ -27,9 +27,8 @@ public abstract class AbstractRececlerAdapter<T> extends RecyclerView.Adapter<Ab
 	private ArrayList<Integer> mHeaderViewTypes = new ArrayList<>();
 	private ArrayList<Integer> mFooterViewTypes = new ArrayList<>();
 	
-	public AbstractRececlerAdapter(Context context, List<T> datas) {
+	public AbstractRececlerAdapter(Context context) {
 		mContext = context;
-		mDatas = datas;
 	}
 	
 	@Override

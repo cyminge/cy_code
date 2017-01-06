@@ -70,5 +70,21 @@
         android:background="@drawable/common_33"
         android:onClick="testToGameHallHome"
         android:text="测试跳转到游戏大厅首页" />
+    
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/common_33"
+        android:onClick="testToGameHallSearch"
+        android:text="测试跳转到游戏大厅搜索页" />
+    
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/common_33"
+        android:onClick="testToGameHallTagList"
+        android:text="测试跳转到游戏大厅标签列表页" />
 
 </LinearLayout>

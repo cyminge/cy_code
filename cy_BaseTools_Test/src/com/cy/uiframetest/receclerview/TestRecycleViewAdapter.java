@@ -1,7 +1,5 @@
 package com.cy.uiframetest.receclerview;
 
-import java.util.List;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +17,8 @@ public class TestRecycleViewAdapter extends AbstractRececlerAdapter<BaseBean> {
     public static final int LIST_TYPE_SECOND = 0x2;
     public static final int BRICK_LIST_TYPE_COUNT = LIST_TYPE_SECOND;
     
-	public TestRecycleViewAdapter(Context context, List<BaseBean> datas) {
-		super(context, datas);
+	public TestRecycleViewAdapter(Context context) {
+		super(context);
 	}
 
 	@Override

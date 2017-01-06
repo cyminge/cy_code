@@ -88,7 +88,7 @@ public abstract class AbstractLoadDataHelper {
 		startCheck();
     }
 	
-	private void startCheck() {
+	protected void startCheck() {
 		NormalThreadPool.getInstance().post(new Runnable() {
 
             @Override
@@ -253,11 +253,11 @@ public abstract class AbstractLoadDataHelper {
     }
 
     protected void onDataEmpty() {
-        if (isNeedCache()) {
+    	showNoDataView();
+    	
+        if (isNeedCache()) { //??
             clearCacheData();
         }
-
-        showNoDataView();
     }
     
 	public void exit() {

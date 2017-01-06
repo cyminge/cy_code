@@ -7,6 +7,11 @@ import android.widget.FrameLayout;
 
 import com.cy.R;
 
+/**
+ * 装载整个View结构的容器，提供rootView
+ * @author JLB6088
+ *
+ */
 public class ViewContainer {
 	private FrameLayout mRootView;
 	

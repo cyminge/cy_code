@@ -42,8 +42,6 @@ public class RececlerViewActivity extends BaseActivity {
 		list.add(bean1);
 		list.add(bean2);
 		
-		TestRecycleViewAdapter adapter = new TestRecycleViewAdapter(this, list);
-		
 		FrameLayout frameLayout = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.activity_slideview_main, null, false);
 		final SlideView slideView = (SlideView) frameLayout.findViewById(R.id.slide_view);
 		mSlideViewHelper = new SlideViewHelper(slideView, this);
@@ -64,8 +62,6 @@ public class RececlerViewActivity extends BaseActivity {
 			}
 		});
 		
-		adapter.addHeaderView(frameLayout);
-		
-		mAbstractRecycleView.setAdapter(adapter);
+		mAbstractRecycleView.addHeaderView(frameLayout);
 	}
 }

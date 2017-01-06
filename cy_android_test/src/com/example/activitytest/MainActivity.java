@@ -1,8 +1,11 @@
 package com.example.activitytest;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
+import java.util.regex.Pattern;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -103,6 +106,41 @@ public class MainActivity extends BaseActivity implements OnClickListener {
             }
         });
         mAnimationView.startAnimation(animationSet);
+        
+    }
+    
+    private void getCPUCounts() {
+    	Log.e("cyTest", "cpu-1 : "+Runtime.getRuntime().availableProcessors());
+    	Log.e("cyTest", "cpu-2 : "+getNumCores());
+    }
+    
+  //CPU个数
+    private int getNumCores() {
+        //Private Class to display only CPU devices in the directory listing
+        class CpuFilter implements FileFilter {
+            @Override
+            public boolean accept(File pathname) {
+                //Check if filename is "cpu", followed by a single digit number
+                if(Pattern.matches("cpu[0-9]", pathname.getName())) {
+                    return true;
+                }
+                return false;
+            }      
+        }
+
+        try {
+            //Get directory containing CPU info
+            File dir = new File("/sys/devices/system/cpu/");
+            //Filter to only list the devices we care about
+            File[] files = dir.listFiles(new CpuFilter());
+            //Return the number of cores (virtual CPU devices)
+            return files.length;
+        } catch(Exception e) {
+            //Print exception
+            e.printStackTrace();
+            //Default to return 1 core
+            return 1;
+        }
     }
 
     @Override
@@ -252,6 +290,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         
         mHandler.sendEmptyMessageDelayed(22, 4000);
         
+        getCPUCounts();
+        
     }
 
     Object s1 = new String("abcdef");
@@ -327,8 +367,22 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     	intent.putExtra("source", "测试包");
     	intent.putExtra("packageName", "com.cy.test");
     	startActivity(intent);
-    	
-    	
+    }
+    
+    public void testToGameHallSearch(View view) {
+    	Intent intent = new Intent();
+    	intent.setAction("gn.com.android.gamehall.action.external.JUMP");
+    	String value = "from:globalSearch2,source:globalSearch2,searchKeyWord:大话西游,action:gn.com.android.gamehall.action.SEARCH";
+    	intent.putExtra("jumpParams", value);
+    	startActivity(intent);
+    }
+    
+    public void testToGameHallTagList(View view) {
+    	Intent intent = new Intent();
+    	intent.setAction("gn.com.android.gamehall.action.external.JUMP");
+    	String value = "from:globalSearch2,source:globalSearch2,contentId:163,viewType:TagGameListView,title:腾讯游戏,action:gn.com.android.gamehall.action.TAG_GAME_LIST";
+    	intent.putExtra("jumpParams", value);
+    	startActivity(intent);
     }
 
     public Resources getResources(final float fontScale) {

@@ -2,6 +2,7 @@ package com.cy.uiframe.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -27,15 +28,35 @@ public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHe
 
 	private PullToRefreshViewHelper mViewHelper;
 
+	/**
+	 * layout's parent View is FrameLaout. 
+	 * if your layout tag is not <merge>, you should override isAttachToRoot()
+	 * @param context
+	 * @param url
+	 */
 	public LaunchActivityHelper(Context context, String url) {
 		this(context, url, Constant.NULL_LAYOUT_ID);
 	}
 
+	/**
+	 * layout's parent View is FrameLaout. 
+	 * if your layout tag is not merge, you should override isAttachToRoot()
+	 * @param context
+	 * @param url
+	 * @param layoutId
+	 */
 	public LaunchActivityHelper(Context context, String url, int layoutId) {
 		IUrlBean urlBean = new SingleUrlBean(url);
 		init(context, urlBean, layoutId);
 	}
 
+	/**
+	 * layout's parent View is FrameLaout. 
+	 * if your layout tag is not merge, you should override isAttachToRoot()
+	 * @param context
+	 * @param urlBean
+	 * @param layoutId
+	 */
 	public LaunchActivityHelper(Context context, IUrlBean urlBean, int layoutId) {
 		init(context, urlBean, layoutId);
 	}
@@ -46,6 +67,12 @@ public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHe
 		initLayout(context, layoutId);
 	}
 	
+	/**
+	 * 创建加载数据的Helper类
+	 * @param urlBean
+	 * @param iLoadDataHelper
+	 * @return
+	 */
 	protected AbstractLoadDataHelper createLoadDataHelper(IUrlBean urlBean, ILoadDataHelper iLoadDataHelper) {
 		return new BaseLoadDataHelper(urlBean, this);
 	}
@@ -55,14 +82,24 @@ public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHe
 		mContentRootView = new ContentRootView(context);
 		
 		if (layoutId != Constant.NULL_LAYOUT_ID) {
-            View contentView = LayoutInflater.from(context).inflate(layoutId, mContentRootView, true); //??
+			View contentView = null;
+			if(isAttachToRoot()) {
+				contentView = LayoutInflater.from(context).inflate(layoutId, mContentRootView, true);
+			} else {
+				contentView = LayoutInflater.from(context).inflate(layoutId, null);
+	            mContentRootView.addView(contentView, 0);
+			}
+			
             prepareView(contentView);
-//            mContentRootView.addView(contentView, 0);
         }
 		
 		mPullToRefreshView = new PullToRefreshView(context, mContentRootView, this);
-		mViewContainer.addPullView(mPullToRefreshView);
 		mViewHelper = new PullToRefreshViewHelper(getRootView(), mPullToRefreshView);
+		mViewContainer.addPullView(mPullToRefreshView);
+	}
+	
+	protected boolean isAttachToRoot() {
+		return true;
 	}
 	
 	protected void prepareView(View contentView) {
@@ -141,12 +178,12 @@ public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHe
 
 	@Override
 	public boolean onParseData(String data) {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isRequestDataSucc(String data) {
-		return null != data && !data.isEmpty();
+		return !TextUtils.isEmpty(data);
 	}
 
 	@Override
