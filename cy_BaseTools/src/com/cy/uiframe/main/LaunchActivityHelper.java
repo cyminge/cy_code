@@ -19,7 +19,7 @@ import com.cy.uiframe.pulltorefresh.PullToRefreshViewHelper;
 @SuppressLint("NewApi") 
 public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHelper {
 
-	private Context mContext;
+	protected Context mContext;
 	private AbstractLoadDataHelper mAbstractLoadDataHelper;
 
 	private ViewContainer mViewContainer;
@@ -188,7 +188,7 @@ public class LaunchActivityHelper implements IpullToRefreshCallBack, ILoadDataHe
 
 	@Override
 	public void showContentView() {
-		
+		mViewHelper.showContent();
 	}
 
 	@Override
