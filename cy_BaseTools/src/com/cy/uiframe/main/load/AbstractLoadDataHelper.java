@@ -32,7 +32,7 @@ public abstract class AbstractLoadDataHelper {
 	
 	private long mStartTime;
 	private static final long PARSE_DATA_MIN_TIME = 300;
-
+	
 	public AbstractLoadDataHelper(IUrlBean urlBean) {
 		mUrlBean = urlBean;
 		mStartTime = System.currentTimeMillis();
@@ -93,8 +93,8 @@ public abstract class AbstractLoadDataHelper {
 
             @Override
             public void run() {
-                String data = doPost();
-                if (isRequestDataSucc(data)) {
+                String data = doPost(); 
+                if (isRequestDataSucc(data)) { //?? 这里是否需要把解析的工作交给Parser??.
                     onLoadDataSucc(data);
                 } else {
                     WatchDog.post(new Runnable() {
@@ -285,6 +285,7 @@ public abstract class AbstractLoadDataHelper {
 	/**
 	 * 是否请求数据有效， 对请求数据的通用结构进行解析。
 	 * 比如是否有数据，是否来自正确的请求地址。
+	 * （为了防公共wifi、运营商网络劫持，一般数据会加一个sign表示这是来自哪里的数据，如果没有这个sign就应该是被劫持了。）
 	 * @param result
 	 * @return
 	 */

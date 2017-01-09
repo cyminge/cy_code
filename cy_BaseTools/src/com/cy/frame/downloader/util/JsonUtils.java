@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.SecureRandom;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
@@ -17,6 +18,8 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
@@ -27,6 +30,7 @@ import com.cy.constant.Constant;
 import com.cy.frame.downloader.httpsutil.MyHostnameVerifier;
 import com.cy.frame.downloader.httpsutil.MyTrustManager;
 import com.cy.global.BaseApplication;
+import com.cy.tracer.Tracer;
 import com.cy.utils.Utils;
 
 @SuppressLint("NewApi") 
@@ -88,6 +92,7 @@ public class JsonUtils {
         OutputStream op = null;
         try {
             String finalUrl = UrlTranslator.translateUrl(actionUrl);
+            finalUrl = finalUrl+"?puuid=95E7D365C3BC4F9F837B9E00DDBAAE9F&clientId=1b80f251f8a402bc6cc7b6fa2645ac60&serverId=0CA6E364EA9F8878D21F4900AB173737EAFF4C04EA1781EC08CB197D596D217E&client_pkg=gn.com.android.gamehall&imei=FD34645D0CF3A18C9FC4E2C49F11C510&brand=GIONEE&sp=GN3001_1.6.8.g_5.1.16_Android5.1_720*1280_U99999_wifi_FD34645D0CF3A18C9FC4E2C49F11C510&version=1.6.8.g&uname=13662882127";
             URL url = new URL(finalUrl);
             byte[] data = getRequestData(params, finalUrl).getBytes(Constant.UTF_8);
             if (url.getProtocol().equalsIgnoreCase(Constant.HTTPS)) {
@@ -153,16 +158,16 @@ public class JsonUtils {
     public static final String ACCOUNT_USER_NAME = "uname";
     
     private static void addCommonParam(Map<String, String> params, String url) {
-        params.put(JsonConstant.IMEI, Utils.getIMEI(BaseApplication.getAppContext()));
-        params.put(JsonConstant.VERSION, Utils.getVersionCode(BaseApplication.getAppContext()));
-        params.put(JsonConstant.SP, Utils.getPublicStatisArgs(false));
+//        params.put(JsonConstant.IMEI, Utils.getIMEI(BaseApplication.getAppContext()));
+//        params.put(JsonConstant.VERSION, Utils.getVersionCode(BaseApplication.getAppContext()));
+//        params.put(JsonConstant.SP, Utils.getPublicStatisArgs(false));
 //        params.put(StatisKey.CLIENT_PKG, "com.cy.frame.imageloader"); // 统计用的，去掉  cyminge modify
 //        params.put(StatisKey.BRAND, "");
 //        if (Utils.isLogin()) {
-            params.put(ACCOUNT_USER_NAME, "cyminge");
-            params.put(JsonConstant.PUUID, UUID.randomUUID().toString());
-            params.put(JsonConstant.CLIENT_ID, TimeUtils.getClientId());
-            params.put(JsonConstant.SERVER_ID, TimeUtils.getServerId(url));
+//            params.put(ACCOUNT_USER_NAME, "cyminge");
+//            params.put(JsonConstant.PUUID, UUID.randomUUID().toString());
+//            params.put(JsonConstant.CLIENT_ID, TimeUtils.getClientId());
+//            params.put(JsonConstant.SERVER_ID, TimeUtils.getServerId(url));
 //        }
     }
     
@@ -192,6 +197,79 @@ public class JsonUtils {
             }
         }
         return GAMEHALL_FAIL;
+    }
+    
+    public static String mergeRequestResult(String[] requestResults) {
+        JSONObject totalObject = new JSONObject();
+        for (String result : requestResults) {
+            if (isRequestDataFail(result)) {
+                return result;
+            }
+
+            if (!JsonUtils.hasGioneeSign(result) || isResultFailed(result)) {
+                continue;
+            }
+            try {
+                JSONObject subObject = new JSONObject(result);
+                totalObject = mergeJsonObject(totalObject, subObject);
+            } catch (JSONException e) {
+            }
+        }
+        return totalObject.toString();
+    }
+    
+    public static boolean isResultFailed(String result) {
+        boolean success = false;
+        try {
+            success = new JSONObject(result).getBoolean("success");
+        } catch (JSONException e) {
+        } catch (Exception e) {
+        }
+        return !success;
+    }
+
+    private static JSONObject mergeJsonObject(JSONObject totalObject, JSONObject subObject) {
+        try {
+            Iterator<String> subKeysIter = subObject.keys();
+            while (subKeysIter.hasNext()) {
+                String subKeyStr = subKeysIter.next();
+                Object subValue = subObject.opt(subKeyStr);
+                if (totalObject.has(subKeyStr)) {
+                    tryMergeValue(totalObject, subKeyStr, subValue);
+                } else {
+                    totalObject.put(subKeyStr, subValue);
+                }
+            }
+        } catch (JSONException e) {
+        }
+        return totalObject;
+    }
+
+    private static void tryMergeValue(JSONObject totalObject, String subKeyStr, Object subValue)
+            throws JSONException {
+        Object totalValue = totalObject.opt(subKeyStr);
+        if (totalValue != null && subValue != null && totalValue.getClass() != subValue.getClass()) {
+            Tracer.e("cyTest", "Json object merge ERROR, have different type at key: \"" + subKeyStr + "\"");
+            return;
+        }
+        if (totalValue instanceof JSONArray) {
+            JSONArray jsonArray = mergeJsonArray((JSONArray) totalValue, (JSONArray) subValue);
+            totalObject.put(subKeyStr, jsonArray);
+        } else if (totalValue instanceof JSONObject) {
+            JSONObject jsonObject = mergeJsonObject((JSONObject) totalValue, (JSONObject) subValue);
+            totalObject.put(subKeyStr, jsonObject);
+        }
+    }
+
+    private static JSONArray mergeJsonArray(JSONArray totalArray, JSONArray subArray) {
+        int length = subArray.length();
+        for (int i = 0; i < length; i++) {
+            try {
+                totalArray.put(subArray.get(i));
+            } catch (JSONException e) {
+            }
+        }
+        return totalArray;
     }
 
 }
