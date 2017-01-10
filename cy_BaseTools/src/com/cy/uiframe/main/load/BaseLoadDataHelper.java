@@ -1,8 +1,5 @@
-package com.cy.uiframe.main;
+package com.cy.uiframe.main.load;
 
-import com.cy.uiframe.main.load.AbstractLoadDataHelper;
-import com.cy.uiframe.main.load.ILoadDataHelper;
-import com.cy.uiframe.main.load.IUrlBean;
 
 /**
  * 父类的方法有的可能用不着，可能需要拓展和重写。可以重新定义对外的接口
@@ -16,11 +13,6 @@ public class BaseLoadDataHelper extends AbstractLoadDataHelper {
 	public BaseLoadDataHelper(IUrlBean urlBean, ILoadDataHelper loadDataHelper) {
 		super(urlBean);
 		mILoadDataHelper = loadDataHelper;
-	}
-
-	@Override
-	protected boolean isRequestDataSucc(String result) {
-		return mILoadDataHelper.isRequestDataSucc(result);
 	}
 
 	@Override
@@ -39,8 +31,8 @@ public class BaseLoadDataHelper extends AbstractLoadDataHelper {
 	}
 
 	@Override
-	protected boolean onParseData(String data) {
-		return mILoadDataHelper.onParseData(data);
+	protected boolean parseData(String data) {
+		return mILoadDataHelper.parseData(data);
 	}
 
 	@Override

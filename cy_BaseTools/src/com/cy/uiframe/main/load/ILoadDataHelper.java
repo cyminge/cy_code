@@ -2,18 +2,11 @@ package com.cy.uiframe.main.load;
 
 public interface ILoadDataHelper {
 	/**
-	 * 主体数据解析
+	 * 数据解析
 	 * @param data
 	 * @return
 	 */
-    public boolean onParseData(String data);
-    /**
-	 * 是否请求数据有效， 对请求数据的通用结构进行解析。
-	 * 比如是否有数据，是否来自正确的请求地址。
-	 * @param result
-	 * @return
-	 */
-    public boolean isRequestDataSucc(String data);
+    public boolean parseData(String data);
     /**
 	 * 缓存数据是否关联账号信息
 	 * @return

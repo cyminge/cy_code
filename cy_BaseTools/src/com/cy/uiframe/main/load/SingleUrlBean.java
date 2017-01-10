@@ -2,6 +2,8 @@ package com.cy.uiframe.main.load;
 
 import java.util.HashMap;
 
+import com.cy.frame.downloader.util.JsonUtils;
+
 public class SingleUrlBean implements IUrlBean {
 	
 	private String mUrl;
@@ -16,8 +18,13 @@ public class SingleUrlBean implements IUrlBean {
 	}
 
 	@Override
-	public String postData(HashMap<String, String> map) {
-		return null;
+	public String postData(HashMap<String, String> params) {
+		String requestData = JsonUtils.postData(mUrl, params);
+		return checkRequestData(requestData);
+	}
+	
+	private String checkRequestData(String requestData) {
+		return requestData;
 	}
 
 }
