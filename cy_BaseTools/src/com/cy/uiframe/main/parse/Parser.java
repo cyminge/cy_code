@@ -108,6 +108,12 @@ public class Parser<T> {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param data
+	 * @return
+	 * @throws JSONException
+	 */
 	protected JSONArray createJSONArray(String data) throws JSONException {
 		JSONObject json = new JSONObject(data);
 		JSONObject dataJson = new JSONObject(json.getString("data"));
