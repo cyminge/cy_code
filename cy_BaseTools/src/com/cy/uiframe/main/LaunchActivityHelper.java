@@ -88,6 +88,14 @@ public class LaunchActivityHelper<T> implements IpullToRefreshCallBack, ILoadDat
 	public void onParse(ArrayList<T> list, int exceptionType) {
 		
 	}
+	
+	public boolean isLastPage() {
+		return mParser.isLastPage();
+	}
+
+	public boolean isFirstPageData() {
+		return mParser.isFirstPageData();
+	}
 
 	private void initLayout(Context context, int layoutId) {
 		mViewContainer = new ViewContainer(context);

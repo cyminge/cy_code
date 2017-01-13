@@ -1,6 +1,6 @@
 package com.cy.uiframetest.bean;
 
-public class BrickListData {
+public class ChunkListData {
 
 	public int mListType;  // 对应的是RecyclerView or ListView 的一个ItemViewType ， 自定义
     public Param param; // 跳转所需参数

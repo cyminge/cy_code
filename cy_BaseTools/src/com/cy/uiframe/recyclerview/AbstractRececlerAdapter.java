@@ -183,4 +183,17 @@ public abstract class AbstractRececlerAdapter<T> extends RecyclerView.Adapter<Ab
 	public View getFooterView(int viewType) {
 		return getFooterViewsCount() > 0 ? mFooterViews.get(viewType/HEAD_OR_FOOT_POSITION_RIDE) : null;
 	}
+	
+	public void clearData() {
+    	mDatas.clear();
+    }
+
+    public void updateData(ArrayList<T> data) {
+    	mDatas.clear();
+    	addData(data);
+    }
+
+    public void addData(ArrayList<T> data) {
+    	mDatas.addAll(data);
+    }
 }

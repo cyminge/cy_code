@@ -1,14 +1,14 @@
 package com.cy.uiframetest.main;
 
+import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-
 import com.cy.frame.downloader.util.JsonConstant;
 import com.cy.slide.SlideView;
 import com.cy.slide.SlideViewHelper;
@@ -21,13 +21,14 @@ import com.cy.uiframe.main.load.IUrlBean;
 import com.cy.uiframe.main.load.SingleUrlBean;
 import com.cy.uiframe.main.parse.Parser;
 import com.cy.uiframe.recyclerview.AbstractRecyclerView;
+import com.cy.uiframetest.bean.ChunkListData;
 import com.cy.uiframetest.receclerview.BaseBean;
 
-@SuppressWarnings("unchecked")
-public class UIFrameLaunchActivityHelper extends LaunchActivityHelper {
+@SuppressLint("InflateParams") @SuppressWarnings("unchecked")
+public class UIFrameLaunchActivityHelper extends LaunchActivityHelper<ChunkListData> {
 	
 	private static final String SLIDE_VIEW_SHARE_PREF_KEY = "from_UIFrameLaunchActivityHelper";
-	private AbstractRecyclerView<BaseBean> mAbstractRecyclerView;
+	private AbstractRecyclerView<ChunkListData> mAbstractRecyclerView;
 	private SlideViewHelper mSlideViewHelper;
 	SlideView mSlideView;
 
@@ -46,7 +47,7 @@ public class UIFrameLaunchActivityHelper extends LaunchActivityHelper {
 	
 	@Override
 	protected void prepareView(View contentView) {
-		mAbstractRecyclerView = (AbstractRecyclerView<BaseBean>) contentView.findViewById(R.id.recycle_view);
+		mAbstractRecyclerView = (AbstractRecyclerView<ChunkListData>) contentView.findViewById(R.id.recycle_view);
 		mAbstractRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 		View headerView = prepareHeaderView();
 		if(null != headerView) {
@@ -69,8 +70,13 @@ public class UIFrameLaunchActivityHelper extends LaunchActivityHelper {
 	}
 	
 	@Override
-	protected Parser createParser() {
-		return super.createParser();
+	protected Parser<ChunkListData> createParser() {
+		return new UIFrameParser(this);
+	}
+	
+	@Override
+	public void onParse(ArrayList<ChunkListData> list, int exceptionType) {
+		mAbstractRecyclerView.updateList(list, exceptionType);
 	}
 	
 	protected boolean setData2SlideView(String slideJsonStr) {

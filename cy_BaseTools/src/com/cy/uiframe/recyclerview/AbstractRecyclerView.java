@@ -1,6 +1,9 @@
 package com.cy.uiframe.recyclerview;
 
 import java.util.ArrayList;
+
+import com.cy.uiframe.main.LaunchActivityHelper;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,9 +12,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-@SuppressLint("NewApi") public abstract class AbstractRecyclerView<T> extends RecyclerView {
+@SuppressLint("NewApi") 
+public abstract class AbstractRecyclerView<T> extends RecyclerView {
 
 	private static final String TAG = "AbstractRecyclerView";
+	
+	private LaunchActivityHelper<T> mLaunchActivityHelper;
 	
 	protected AbstractRececlerAdapter<T> mAdapter;
 
@@ -40,17 +46,23 @@ import android.view.View;
 		mAdapter.addFooterView(view);
 	}
 	
+	public void setLaunchActivityHelper(LaunchActivityHelper<T> launchActivityHelper) {
+		mLaunchActivityHelper = launchActivityHelper;
+	}
+	
 	public void updateList(final ArrayList<T> list, final int exceptionType) {
         if (list == null || list.isEmpty()) {
-//            onDataException(exceptionType);
+//            onDataException(exceptionType); //??
             return;
         }
 
-//        if (mDataManager.isFirstPageData()) {
-//            recycleIconsManager();
-//        }
-//
-//        updateList(list);
+        if (mLaunchActivityHelper.isFirstPageData()) {
+            mAdapter.updateData(list);
+        } else {
+            mAdapter.addData(list);
+        }
+        requestLayout();
+        mAdapter.notifyDataSetChanged();
     }
 	
 	@Override

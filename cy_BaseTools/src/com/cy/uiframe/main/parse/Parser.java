@@ -31,6 +31,10 @@ public class Parser<T> {
 	}
 	
 	public Parser(ParserCallBack<T> callback) {
+		init(callback);
+	}
+	
+	private void init(ParserCallBack<T> callback) {
 		mParserCallBack = callback;
 	}
 	
@@ -159,6 +163,10 @@ public class Parser<T> {
 
 	public boolean isFirstPageData() {
 		return mCurPage == 1;
+	}
+	
+	public void deInit() {
+		mParserCallBack = null;
 	}
 	
 }

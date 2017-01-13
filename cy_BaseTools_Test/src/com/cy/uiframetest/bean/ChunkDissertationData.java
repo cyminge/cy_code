@@ -1,6 +1,6 @@
 package com.cy.uiframetest.bean;
 
-public class BrickDissertationData extends BrickItemData<GameBean> {
+public class ChunkDissertationData extends ChunkItemData<GameBean> {
 	public float mX = 0f;
 	public String mSource = "dissertation";
 	
