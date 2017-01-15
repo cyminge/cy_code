@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dissertation_list_item_height" >
+
+    <com.cy.uiframetest.receclerview.ParallaxScrollView
+        android:id="@+id/home_dissertation_image_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/general_list_item_divide_height"
+        android:overScrollMode="never"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="@dimen/home_dissertation_bg_width"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/dissertation_bg_view"
+                android:layout_width="@dimen/home_dissertation_bg_width"
+                android:layout_height="@dimen/home_dissertation_bg_height"
+                android:scaleType="fitXY" />
+        </LinearLayout>
+    </com.cy.uiframetest.receclerview.ParallaxScrollView>
+
+    <View
+        android:id="@+id/divide_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/general_list_item_divide_height"
+        android:background="@color/general_list_item_divide" />
+
+    <com.cy.uiframetest.receclerview.ParallaxScrollView
+        android:id="@+id/home_dissertation_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dissertation_scrollview_height"
+        android:layout_marginTop="37dp"
+        android:overScrollMode="never"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:id="@+id/dissertation_info_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="21dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingRight="@dimen/dissertaion_item_list_padding_right" >
+        </LinearLayout>
+    </com.cy.uiframetest.receclerview.ParallaxScrollView>
+
+    <RelativeLayout
+        android:id="@+id/chosen_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dissertation_list_item_title_layout_height" >
+
+        <RelativeLayout
+            android:id="@+id/view_more"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dissertation_list_item_title_layout_height"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/view_more_margin_right" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:includeFontPadding="false"
+                android:text="@string/str_look_view_more"
+                android:textColor="@color/dissertation_view_more_color"
+                android:textSize="@dimen/view_more_text_size" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/chosen_item_title_margin_horizon"
+            android:layout_marginRight="@dimen/chosen_item_title_margin_horizon"
+            android:layout_toLeftOf="@id/view_more"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:textColor="@color/dissertation_item_title_color"
+            android:textSize="@dimen/chosen_item_title_size" />
+    </RelativeLayout>
+
+</RelativeLayout>

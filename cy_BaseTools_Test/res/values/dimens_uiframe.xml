@@ -1,0 +1,51 @@
+<resources>
+
+    <dimen name="simple_banner_height">141dip</dimen>
+    <dimen name="simple_banner_title_margin_bottom">10dip</dimen>
+    <dimen name="slide_textview_size">12dip</dimen>
+    <dimen name="banner_download_wrap_margin_right">15dip</dimen>
+    <dimen name="game_list_horizon_icon_size">63dip</dimen>
+    <dimen name="chosen_game_download_margin_top">7dip</dimen>
+    
+    <dimen name="download_button_corners">17dp</dimen>
+    
+    <dimen name="chosen_dissertation_game_info_width">83dip</dimen>
+    <dimen name="chosen_dissertation_game_info_height">141dip</dimen>
+    <dimen name="dissertation_list_item_height">240dip</dimen>
+    <dimen name="dissertation_scrollview_height">196dip</dimen>
+    <dimen name="dissertaion_item_icon_margin_top">11dip</dimen>
+    <dimen name="dissertaion_item_list_padding_right">14dip</dimen>
+    
+    <dimen name="game_list_subscript_width">40dip</dimen>
+    <dimen name="game_list_subscript_height">40dip</dimen>
+    <dimen name="game_list_subscript_margin_left">-3dip</dimen>
+    <dimen name="game_list_subscript_margin_top">-3dip</dimen>
+    <dimen name="game_list_gift_size">21dip</dimen>
+    <dimen name="game_list_gift_margin_top">-3dip</dimen>
+    <dimen name="game_list_gift_margin_right">-3dip</dimen>
+    <dimen name="game_list_name_margin_top">13dip</dimen>
+    <dimen name="game_list_name_margin_left">10dip</dimen>
+    <dimen name="game_list_name_margin_right">50dip</dimen>
+    
+    <dimen name="chosen_game_name_margin_top">8dip</dimen>
+    
+    <dimen name="home_dissertation_item_name_margin">4dip</dimen>
+    <dimen name="chosen_game_text_max_width">83dip</dimen>
+    
+    <dimen name="chosen_game_name_size">13dip</dimen>
+    
+    <dimen name="general_list_item_divide_height">6dp</dimen>
+    <dimen name="home_dissertation_bg_height">234dip</dimen>
+    <dimen name="home_dissertation_bg_width">400dp</dimen>
+    <dimen name="chosen_dissertation_place_holder_view_width">119dip</dimen>
+    <dimen name="dissertation_list_item_title_layout_height">57dip</dimen>
+    <dimen name="view_more_margin_right">14dip</dimen>
+    <dimen name="view_more_text_size">14dip</dimen>
+    
+        <dimen name="chosen_item_title_margin_horizon">14dip</dimen>
+    
+    <dimen name="chosen_item_title_size">16dip</dimen>
+    
+    
+    
+</resources>

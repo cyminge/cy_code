@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/game_list_icon"
+        android:layout_width="@dimen/game_list_horizon_icon_size"
+        android:layout_height="@dimen/game_list_horizon_icon_size"
+        layout="@layout/alpha_anim_imageview" />
+
+    <include
+        android:layout_width="@dimen/game_download_width"
+        android:layout_height="@dimen/game_download_height"
+        android:layout_marginTop="@dimen/chosen_game_download_margin_top"
+        layout="@layout/uiframe_chunk_progress_button" />
+</LinearLayout>

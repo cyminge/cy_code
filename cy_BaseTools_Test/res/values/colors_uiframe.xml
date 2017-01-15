@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="default_bitmap_text_color">#FF9E9E9E</color>
+    <color name="download_button_text_subscribe">#41ACFF</color>
+    
+    <color name="chosen_game_name_color">#FF404040</color>
+    
+    <color name="general_list_item_divide">#f2f2f2</color> 
+    
+        <color name="dissertation_view_more_color">#FFFFFFFF</color>
+    <color name="dissertation_item_title_color">#FFFFFFFF</color>
+    
+</resources>

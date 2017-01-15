@@ -8,41 +8,68 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.SparseArray;
+import android.util.SparseIntArray;
 
+import com.cy.test.R;
 import com.cy.uiframe.main.parse.Parser;
 import com.cy.uiframetest.bean.ChunkDissertationData;
 import com.cy.uiframetest.bean.ChunkListData;
 import com.cy.uiframetest.bean.ChunkSimpleBanner;
+import com.cy.uiframetest.receclerview.ChunkBannerViewHolder;
+import com.cy.uiframetest.receclerview.ChunkDissertationViewHolder;
 import com.google.gson.Gson;
 
 public class UIFrameParser extends Parser<ChunkListData> {
 	
-	public enum LIST_TYPE {
-		simpleBanner,
-		Dissertation;
-		
-		public int toInt() {
-			return ordinal();
-	    }
-	}
-	
 	public static final String ITEM_TYPE_BANNER = "SimpleBanner";
 	public static final String ITEM_TYPE_HOME_DISSERTATION_GAMES = "DissertationGames";
 			
-	private static final SparseArray<Class<?>> mBrickArray;
+	private static final SparseArray<Class<?>> mChunkDataArray;
+	private static final HashMap<String, Integer> mChunkListItemTypeArray;
+	private static final SparseIntArray mChunkItemLayoutArray;
+	private static final SparseArray<Class<?>> mChunkViewHolderArray;
 	
-	private static final HashMap<String, Integer> mListItemTypeArray;
+	public enum CHUNK_LIST_TYPE {
+		SimpleBanner(1),
+		Dissertation(2);
+		
+		private int mListType;
+		
+		private CHUNK_LIST_TYPE(int type) {
+			mListType = type;
+		}
+		
+		public int getListType() {
+			return mListType;
+	    }
+	}
 	
 	static {
-		mBrickArray = new SparseArray<Class<?>>();
-		mBrickArray.put(LIST_TYPE.simpleBanner.toInt(), ChunkSimpleBanner.class);
-		mBrickArray.put(LIST_TYPE.Dissertation.toInt(), ChunkDissertationData.class);
+		mChunkDataArray = new SparseArray<Class<?>>();
+		mChunkDataArray.put(CHUNK_LIST_TYPE.SimpleBanner.getListType(), ChunkSimpleBanner.class);
+		mChunkDataArray.put(CHUNK_LIST_TYPE.Dissertation.getListType(), ChunkDissertationData.class);
 		
-		mListItemTypeArray = new HashMap<String, Integer>();
-		mListItemTypeArray.put(ITEM_TYPE_BANNER, LIST_TYPE.simpleBanner.toInt());
-		mListItemTypeArray.put(ITEM_TYPE_HOME_DISSERTATION_GAMES, LIST_TYPE.Dissertation.toInt());
+		mChunkListItemTypeArray = new HashMap<String, Integer>();
+		mChunkListItemTypeArray.put(ITEM_TYPE_BANNER, CHUNK_LIST_TYPE.SimpleBanner.getListType());
+		mChunkListItemTypeArray.put(ITEM_TYPE_HOME_DISSERTATION_GAMES, CHUNK_LIST_TYPE.Dissertation.getListType());
+		
+		mChunkItemLayoutArray = new SparseIntArray();
+		mChunkItemLayoutArray.put(CHUNK_LIST_TYPE.SimpleBanner.getListType(), R.layout.uiframe_chunk_banner_layout);
+		mChunkItemLayoutArray.put(CHUNK_LIST_TYPE.Dissertation.getListType(), R.layout.uiframe_chunk_dissertation_layout);
+		
+		mChunkViewHolderArray = new SparseArray<Class<?>>();
+		mChunkViewHolderArray.put(CHUNK_LIST_TYPE.SimpleBanner.getListType(), ChunkBannerViewHolder.class);
+		mChunkViewHolderArray.put(CHUNK_LIST_TYPE.Dissertation.getListType(), ChunkDissertationViewHolder.class);
 	}
-
+	
+	public static int getChunkItemLayoutId(int listType) {
+		return mChunkItemLayoutArray.get(listType);
+	}
+	
+	public static Class<?> getChunkViewHolder(int listType) {
+		return mChunkViewHolderArray.get(listType);
+	}
+	
 	public UIFrameParser(ParserCallBack<ChunkListData> callback) {
 		super(callback);
 	}
@@ -59,7 +86,7 @@ public class UIFrameParser extends Parser<ChunkListData> {
 	}
 	
 	private void addListItem(ArrayList<ChunkListData> dataList, JSONObject item, String itemType) {
-		Integer listType = mListItemTypeArray.get(itemType);
+		Integer listType = mChunkListItemTypeArray.get(itemType);
 		if(null == listType) {
 			return;
 		}
@@ -75,7 +102,7 @@ public class UIFrameParser extends Parser<ChunkListData> {
 	public ChunkListData createItemData(int listType, JSONObject item) {
 		try {
 			Gson gson = new Gson();
-			return (ChunkListData) gson.fromJson(item.toString(), mBrickArray.get(listType));
+			return (ChunkListData) gson.fromJson(item.toString(), mChunkDataArray.get(listType));
 		} catch (Exception e) {
 			return null;
 		}

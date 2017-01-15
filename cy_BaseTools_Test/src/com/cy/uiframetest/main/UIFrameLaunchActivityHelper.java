@@ -1,14 +1,17 @@
 package com.cy.uiframetest.main;
 
 import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+
 import com.cy.frame.downloader.util.JsonConstant;
 import com.cy.slide.SlideView;
 import com.cy.slide.SlideViewHelper;
@@ -22,7 +25,6 @@ import com.cy.uiframe.main.load.SingleUrlBean;
 import com.cy.uiframe.main.parse.Parser;
 import com.cy.uiframe.recyclerview.AbstractRecyclerView;
 import com.cy.uiframetest.bean.ChunkListData;
-import com.cy.uiframetest.receclerview.BaseBean;
 
 @SuppressLint("InflateParams") @SuppressWarnings("unchecked")
 public class UIFrameLaunchActivityHelper extends LaunchActivityHelper<ChunkListData> {

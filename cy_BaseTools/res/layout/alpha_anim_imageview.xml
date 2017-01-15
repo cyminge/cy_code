@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/security_image_view_game_list" />
 
-    <gn.com.android.gamehall.ui.AlphaAnimImageView
+    <com.cy.imageloader.ui.AlphaAnimImageView
         android:id="@+id/alpha_anim_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

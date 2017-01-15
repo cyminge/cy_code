@@ -5,8 +5,9 @@ import android.util.AttributeSet;
 
 import com.cy.uiframe.recyclerview.AbstractRececlerAdapter;
 import com.cy.uiframe.recyclerview.AbstractRecyclerView;
+import com.cy.uiframetest.bean.ChunkListData;
 
-public class TestRecyclerView extends AbstractRecyclerView<BaseBean> {
+public class TestRecyclerView extends AbstractRecyclerView<ChunkListData> {
 
 	public TestRecyclerView(Context context) {
 		super(context);
@@ -21,7 +22,7 @@ public class TestRecyclerView extends AbstractRecyclerView<BaseBean> {
 	}
 
 	@Override
-	protected AbstractRececlerAdapter<BaseBean> initAdapter() {
+	protected AbstractRececlerAdapter<ChunkListData> initAdapter() {
 		return new TestRecycleViewAdapter(getContext());
 	}
 

@@ -28,6 +28,7 @@ import android.os.StatFs;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
+import android.util.DisplayMetrics;
 import android.widget.RemoteViews;
 
 import com.cy.R;
@@ -67,6 +68,11 @@ public class Utils {
     
     private static final boolean TEST_ENV;
     private static final String TEST_FILE = "game1234567890test"; // test page
+    
+    private static final int MIN_WVGA_HEIGHT = 700;
+    private static final int WVGA_HEIGHT = 800;
+    private static final int MIN_HD_HEIGHT = 1180;
+    private static final int HD_HEIGHT = 1280;
     
     static { // cyminge modify
 //        String brand = FrameworkUtil.getPhoneBrand();
@@ -714,6 +720,19 @@ public class Utils {
             return false;
         }
         return FileUtils.delete(file);
+    }
+    
+    public static int[] getPhonePixels() {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int curWidth = metrics.widthPixels;
+        int curHeight = metrics.heightPixels;
+        if (curHeight >= MIN_WVGA_HEIGHT && curHeight <= WVGA_HEIGHT) {
+            curHeight = WVGA_HEIGHT;
+        }
+        if (curHeight >= MIN_HD_HEIGHT && curHeight <= HD_HEIGHT) {
+            curHeight = HD_HEIGHT;
+        }
+        return new int[]{curWidth, curHeight};
     }
 
 }

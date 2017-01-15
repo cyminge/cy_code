@@ -57,7 +57,7 @@ public abstract class AbstractRececlerAdapter<T> extends RecyclerView.Adapter<Ab
 
 	/**
 	 * @param position
-	 * @return need not be zero
+	 * @return need not be zero ??
 	 */
 	public abstract int getAdvanceViewType(int position);
 	
@@ -188,11 +188,19 @@ public abstract class AbstractRececlerAdapter<T> extends RecyclerView.Adapter<Ab
     	mDatas.clear();
     }
 
+	/**
+	 * best to call on main thread
+	 * @param data
+	 */
     public void updateData(ArrayList<T> data) {
     	mDatas.clear();
     	addData(data);
     }
 
+    /**
+	 * best to call on main thread
+	 * @param data
+	 */
     public void addData(ArrayList<T> data) {
     	mDatas.addAll(data);
     }

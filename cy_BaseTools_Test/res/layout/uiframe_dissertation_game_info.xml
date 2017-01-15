@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/chosen_dissertation_game_info_width"
+    android:layout_height="@dimen/chosen_dissertation_game_info_height"
+    android:orientation="vertical"
+    android:visibility="gone"
+    android:background="@drawable/uiframe_dissertaion_game_layout_bg" >
+
+    <include
+        android:id="@+id/game_list_icon"
+        android:layout_width="@dimen/game_list_horizon_icon_size"
+        android:layout_height="@dimen/game_list_horizon_icon_size"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dissertaion_item_icon_margin_top"
+        layout="@layout/alpha_anim_imageview" />
+
+    <com.cy.imageloader.ui.SecurityImageView
+        android:id="@+id/game_list_subscript"
+        android:layout_width="@dimen/game_list_subscript_width"
+        android:layout_height="@dimen/game_list_subscript_height"
+        android:layout_alignLeft="@id/game_list_icon"
+        android:layout_alignTop="@id/game_list_icon"
+        android:layout_marginLeft="@dimen/game_list_subscript_margin_left"
+        android:layout_marginTop="@dimen/game_list_subscript_margin_top" />
+
+    <ImageView
+        android:id="@+id/game_list_gift"
+        android:layout_width="@dimen/game_list_gift_size"
+        android:layout_height="@dimen/game_list_gift_size"
+        android:layout_alignRight="@id/game_list_icon"
+        android:layout_alignTop="@id/game_list_icon"
+        android:layout_marginRight="@dimen/game_list_gift_margin_right"
+        android:layout_marginTop="@dimen/game_list_gift_margin_top"
+        android:contentDescription="@string/str_empty_message" />
+
+    <TextView
+        android:id="@+id/game_list_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/game_list_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/chosen_game_name_margin_top"
+        android:layout_marginRight="@dimen/home_dissertation_item_name_margin"
+        android:layout_marginLeft="@dimen/home_dissertation_item_name_margin"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxWidth="@dimen/chosen_game_text_max_width"
+        android:singleLine="true"
+        android:textColor="@color/chosen_game_name_color"
+        android:textSize="@dimen/chosen_game_name_size" />
+
+    <include
+        android:layout_width="@dimen/game_download_width"
+        android:layout_height="@dimen/game_download_height"
+        android:layout_below="@id/game_list_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/chosen_game_download_margin_top"
+        layout="@layout/progress_button" />
+
+</RelativeLayout>

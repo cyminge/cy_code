@@ -36,12 +36,6 @@ public class RececlerViewActivity extends BaseActivity {
 		mAbstractRecycleView = (AbstractRecyclerView) findViewById(R.id.recycle_view);
 		mAbstractRecycleView.setLayoutManager(new LinearLayoutManager(this));
 		
-		List<BaseBean> list = new ArrayList<BaseBean>();
-		BaseBean bean1 = new BaseBean("我是敏哥你有意见?", "30", TestRecycleViewAdapter.LIST_TYPE_FIRST);
-		BaseBean bean2 = new BaseBean("我是芬姐你有意见?", "29", TestRecycleViewAdapter.LIST_TYPE_SECOND);
-		list.add(bean1);
-		list.add(bean2);
-		
 		FrameLayout frameLayout = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.activity_slideview_main, null, false);
 		final SlideView slideView = (SlideView) frameLayout.findViewById(R.id.slide_view);
 		mSlideViewHelper = new SlideViewHelper(slideView, this);

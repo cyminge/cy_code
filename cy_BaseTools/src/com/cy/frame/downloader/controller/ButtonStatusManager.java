@@ -27,6 +27,7 @@ public class ButtonStatusManager {
     public static final int BUTTON_STATUS_GAME_SUBSCRIBE = 0xb;
     public static final int BUTTON_STATUS_GAME_SUBSCRIBED = 0xc;
     public static final int BUTTON_STATUS_OPEN_TEST_DOWNLOAD = 0xd;
+    public static final int BUTTON_STATUS_GAME_SUBSCRIBE_DOWNLOAD = 0xe;
     private static final float MAX_PROGRESS = 0.99f;
     private static final int FLAG_OPEN_TEST_TEST = 1 << 3;
 
@@ -36,6 +37,17 @@ public class ButtonStatusManager {
     static {
         initDownloadedAPK(); // 初始化已下载到的apk
         initInstalledApp(); // 初始化所有已安装的应用
+    }
+    
+    public static int convertOpenTestStatus(DownloadArgs args, int status) {
+        if (isOpenTest(args, status)) {
+            if (BUTTON_STATUS_DOWNLOAD == status) {
+                status = BUTTON_STATUS_REWARD_DOWNLOAD;
+            } else if (BUTTON_STATUS_UPGRADE == status) {
+                status = BUTTON_STATUS_REWARD_UPGRADE;
+            }
+        }
+        return status;
     }
 
     /**
