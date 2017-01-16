@@ -22,4 +22,5 @@ public class ChunkListData {
     	public String title; // "title": "睡什么，起来HIGH！"	
     	public String gamePackage; // "package": "com.dxxd1.am",
     }
+    
 }
