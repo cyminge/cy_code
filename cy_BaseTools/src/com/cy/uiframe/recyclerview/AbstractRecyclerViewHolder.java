@@ -15,7 +15,7 @@ public abstract class AbstractRecyclerViewHolder<T> extends RecyclerView.ViewHol
 	
 	public abstract void initItemView(View itemView);
 	
-	public abstract void setItemView(T t);
+	public abstract void setItemView(T data);
 	
 	protected View.OnClickListener mHolderClickListener = new OnClickListener() {
         @Override

@@ -3,11 +3,11 @@ package com.cy.uiframetest.receclerview;
 import android.view.View;
 
 import com.cy.uiframe.recyclerview.AbstractRecyclerViewHolder;
-import com.cy.uiframetest.bean.ChunkListData;
+import com.cy.uiframetest.bean.ChunkData;
 
-public class ChunkBannerViewHolder extends AbstractRecyclerViewHolder<ChunkListData> {
+public class ChunkSimpleBannerViewHolder extends AbstractRecyclerViewHolder<ChunkData> {
 
-	public ChunkBannerViewHolder(View itemView) {
+	public ChunkSimpleBannerViewHolder(View itemView) {
 		super(itemView);
 		
 	}
@@ -18,7 +18,7 @@ public class ChunkBannerViewHolder extends AbstractRecyclerViewHolder<ChunkListD
 	}
 
 	@Override
-	public void setItemView(ChunkListData t) {
+	public void setItemView(ChunkData data) {
 		
 	}
 

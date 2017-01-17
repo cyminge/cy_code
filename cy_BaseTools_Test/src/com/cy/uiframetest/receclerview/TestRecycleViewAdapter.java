@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 
 import com.cy.uiframe.recyclerview.AbstractRececlerAdapter;
 import com.cy.uiframe.recyclerview.AbstractRecyclerViewHolder;
-import com.cy.uiframetest.bean.ChunkListData;
+import com.cy.uiframetest.bean.ChunkData;
 import com.cy.uiframetest.main.UIFrameParser;
 
-public class TestRecycleViewAdapter extends AbstractRececlerAdapter<ChunkListData> {
+public class TestRecycleViewAdapter extends AbstractRececlerAdapter<ChunkData> {
 	
 	public TestRecycleViewAdapter(Context context) {
 		super(context);
@@ -22,7 +22,7 @@ public class TestRecycleViewAdapter extends AbstractRececlerAdapter<ChunkListDat
 
 	@Override
 	public int getAdvanceViewType(int position) {
-		ChunkListData listData = getItemData(position);
+		ChunkData listData = getItemData(position);
 		if(null == listData) { //?
 			return 1;
 		}
@@ -41,20 +41,20 @@ public class TestRecycleViewAdapter extends AbstractRececlerAdapter<ChunkListDat
 //	}
 
 	@Override
-	public AbstractRecyclerViewHolder<ChunkListData> createHeaderHolder(ViewGroup parent, int viewType) {
+	public AbstractRecyclerViewHolder<ChunkData> createHeaderHolder(ViewGroup parent, int viewType) {
 		return new DefaultHolder(getHeaderView(viewType));
 	}
 	
 	@Override
-	public AbstractRecyclerViewHolder<ChunkListData> createFootHolder(ViewGroup parent, int viewType) {
+	public AbstractRecyclerViewHolder<ChunkData> createFootHolder(ViewGroup parent, int viewType) {
 		Log.e("cyTest", "createFootHolder");
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public AbstractRecyclerViewHolder<ChunkListData> createDefaultViewHolder(ViewGroup parent, int viewType) {
-		Class<?> c = (Class<AbstractRecyclerViewHolder<ChunkListData>>) UIFrameParser.getChunkViewHolder(viewType);
+	public AbstractRecyclerViewHolder<ChunkData> createDefaultViewHolder(ViewGroup parent, int viewType) {
+		Class<?> c = (Class<AbstractRecyclerViewHolder<ChunkData>>) UIFrameParser.getChunkViewHolder(viewType);
 		Class<?>[] parameterTypes={View.class};   
 		Constructor<?> constructor = null;
 		try {
@@ -65,7 +65,7 @@ public class TestRecycleViewAdapter extends AbstractRececlerAdapter<ChunkListDat
 		}  
 		View view = LayoutInflater.from(mContext).inflate(getItemLayoutId(viewType), null, false);
 		try {
-			return (AbstractRecyclerViewHolder<ChunkListData>) constructor.newInstance(view);
+			return (AbstractRecyclerViewHolder<ChunkData>) constructor.newInstance(view);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -84,7 +84,7 @@ public class TestRecycleViewAdapter extends AbstractRececlerAdapter<ChunkListDat
 		return UIFrameParser.getChunkItemLayoutId(viewType);
 	}
 	
-	class DefaultHolder extends AbstractRecyclerViewHolder<ChunkListData> {
+	class DefaultHolder extends AbstractRecyclerViewHolder<ChunkData> {
 
 		public DefaultHolder(View itemView) {
 			super(itemView);
@@ -95,7 +95,7 @@ public class TestRecycleViewAdapter extends AbstractRececlerAdapter<ChunkListDat
 		}
 
 		@Override
-		public void setItemView(ChunkListData t) {
+		public void setItemView(ChunkData t) {
 		}
 	}
 }

@@ -13,13 +13,13 @@ import android.util.SparseIntArray;
 import com.cy.test.R;
 import com.cy.uiframe.main.parse.Parser;
 import com.cy.uiframetest.bean.ChunkDissertationData;
-import com.cy.uiframetest.bean.ChunkListData;
-import com.cy.uiframetest.bean.ChunkSimpleBanner;
-import com.cy.uiframetest.receclerview.ChunkBannerViewHolder;
+import com.cy.uiframetest.bean.ChunkData;
+import com.cy.uiframetest.bean.ChunkSimpleBannerData;
+import com.cy.uiframetest.receclerview.ChunkSimpleBannerViewHolder;
 import com.cy.uiframetest.receclerview.ChunkDissertationViewHolder;
 import com.google.gson.Gson;
 
-public class UIFrameParser extends Parser<ChunkListData> {
+public class UIFrameParser extends Parser<ChunkData> {
 	
 	public static final String ITEM_TYPE_BANNER = "SimpleBanner";
 	public static final String ITEM_TYPE_HOME_DISSERTATION_GAMES = "DissertationGames";
@@ -46,7 +46,7 @@ public class UIFrameParser extends Parser<ChunkListData> {
 	
 	static {
 		mChunkDataArray = new SparseArray<Class<?>>();
-		mChunkDataArray.put(CHUNK_LIST_TYPE.SimpleBanner.getListType(), ChunkSimpleBanner.class);
+		mChunkDataArray.put(CHUNK_LIST_TYPE.SimpleBanner.getListType(), ChunkSimpleBannerData.class);
 		mChunkDataArray.put(CHUNK_LIST_TYPE.Dissertation.getListType(), ChunkDissertationData.class);
 		
 		mChunkListItemTypeArray = new HashMap<String, Integer>();
@@ -58,7 +58,7 @@ public class UIFrameParser extends Parser<ChunkListData> {
 		mChunkItemLayoutArray.put(CHUNK_LIST_TYPE.Dissertation.getListType(), R.layout.uiframe_chunk_dissertation_layout);
 		
 		mChunkViewHolderArray = new SparseArray<Class<?>>();
-		mChunkViewHolderArray.put(CHUNK_LIST_TYPE.SimpleBanner.getListType(), ChunkBannerViewHolder.class);
+		mChunkViewHolderArray.put(CHUNK_LIST_TYPE.SimpleBanner.getListType(), ChunkSimpleBannerViewHolder.class);
 		mChunkViewHolderArray.put(CHUNK_LIST_TYPE.Dissertation.getListType(), ChunkDissertationViewHolder.class);
 	}
 	
@@ -70,13 +70,13 @@ public class UIFrameParser extends Parser<ChunkListData> {
 		return mChunkViewHolderArray.get(listType);
 	}
 	
-	public UIFrameParser(ParserCallBack<ChunkListData> callback) {
+	public UIFrameParser(ParserCallBack<ChunkData> callback) {
 		super(callback);
 	}
 
 	@Override
-	protected ArrayList<ChunkListData> createDataList(JSONArray list) throws JSONException {
-		ArrayList<ChunkListData> dataList = new ArrayList<ChunkListData>();
+	protected ArrayList<ChunkData> createDataList(JSONArray list) throws JSONException {
+		ArrayList<ChunkData> dataList = new ArrayList<ChunkData>();
         for (int i = 0; i < list.length(); i++) {
             JSONObject item = list.getJSONObject(i);
             String itemType = item.optString("listItemType");
@@ -85,13 +85,13 @@ public class UIFrameParser extends Parser<ChunkListData> {
         return dataList;
 	}
 	
-	private void addListItem(ArrayList<ChunkListData> dataList, JSONObject item, String itemType) {
+	private void addListItem(ArrayList<ChunkData> dataList, JSONObject item, String itemType) {
 		Integer listType = mChunkListItemTypeArray.get(itemType);
 		if(null == listType) {
 			return;
 		}
 		
-		ChunkListData data = createItemData(listType, item);
+		ChunkData data = createItemData(listType, item);
 		if(null == data) {
 			return;
 		}
@@ -99,10 +99,10 @@ public class UIFrameParser extends Parser<ChunkListData> {
 		dataList.add(data);
 	}
 
-	public ChunkListData createItemData(int listType, JSONObject item) {
+	public ChunkData createItemData(int listType, JSONObject item) {
 		try {
 			Gson gson = new Gson();
-			return (ChunkListData) gson.fromJson(item.toString(), mChunkDataArray.get(listType));
+			return (ChunkData) gson.fromJson(item.toString(), mChunkDataArray.get(listType));
 		} catch (Exception e) {
 			return null;
 		}

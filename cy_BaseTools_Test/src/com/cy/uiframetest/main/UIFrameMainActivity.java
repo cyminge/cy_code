@@ -46,7 +46,7 @@ public class UIFrameMainActivity extends BaseActivity {
 	}
 	
 	private IUrlBean createUrlBean() {
-		return new MultiUrlBean(URLS);
+		return new TestMultiUrlBean(URLS);
 	}
 
 	@Override
