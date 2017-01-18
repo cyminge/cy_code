@@ -51,6 +51,7 @@ public class UIFrameLaunchActivityHelper extends LaunchActivityHelper<ChunkData>
 	protected void prepareView(View contentView) {
 		mAbstractRecyclerView = (AbstractRecyclerView<ChunkData>) contentView.findViewById(R.id.recycle_view);
 		mAbstractRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+		mAbstractRecyclerView.setLaunchActivityHelper(this);
 		View headerView = prepareHeaderView();
 		if(null != headerView) {
 			mAbstractRecyclerView.addHeaderView(headerView);

@@ -27,7 +27,7 @@ public class TestRecycleViewAdapter extends AbstractRececlerAdapter<ChunkData> {
 			return 1;
 		}
 		
-		return listData.mListType;
+		return listData.mListItemType;
 	}
 	
 //	@Override
@@ -63,9 +63,11 @@ public class TestRecycleViewAdapter extends AbstractRececlerAdapter<ChunkData> {
 			e.printStackTrace();
 			Log.e("cyTest", "獲取ViewHolder構造函數參數失敗!!");
 		}  
-		View view = LayoutInflater.from(mContext).inflate(getItemLayoutId(viewType), null, false);
+		View view = LayoutInflater.from(mContext).inflate(getItemLayoutId(viewType), null);
 		try {
-			return (AbstractRecyclerViewHolder<ChunkData>) constructor.newInstance(view);
+			AbstractRecyclerViewHolder<ChunkData> holder = (AbstractRecyclerViewHolder<ChunkData>) constructor.newInstance(view);
+			holder.initItemView(view);
+			return holder;
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

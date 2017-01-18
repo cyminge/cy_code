@@ -95,7 +95,7 @@ public class UIFrameParser extends Parser<ChunkData> {
 		if(null == data) {
 			return;
 		}
-		data.mListType = listType;
+		data.mListItemType = listType;
 		dataList.add(data);
 	}
 

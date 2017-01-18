@@ -107,9 +107,10 @@ public class Parser<T> {
 	
 	public void onGetData(ArrayList<T> list, int exceptionType) {
 		if(null == mParserCallBack) {
-			mParserCallBack.onParse(list, exceptionType);
 			return;
 		}
+		
+		mParserCallBack.onParse(list, exceptionType);
 	}
 	
 	/**

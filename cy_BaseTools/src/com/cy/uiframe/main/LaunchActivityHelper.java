@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -155,6 +156,7 @@ public class LaunchActivityHelper<T> implements IpullToRefreshCallBack, ILoadDat
 
 	@Override
 	public boolean isReadyToBeginPull() {
+		Log.e("cyTest", "mContentRootView.getScrollY():"+mContentRootView.getScrollY());
 		return mContentRootView.getScrollY() == 0;
 	}
 

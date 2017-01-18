@@ -40,6 +40,8 @@ public class ChunkDissertationViewHolder extends AbstractRecyclerViewHolder<Chun
 
 	public ChunkDissertationViewHolder(View itemView) {
 		super(itemView);
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        itemView.setLayoutParams(lp);
 	}
 
 	@Override
@@ -103,6 +105,9 @@ public class ChunkDissertationViewHolder extends AbstractRecyclerViewHolder<Chun
 	private void initSubHolder(View view) {
 		DissertationItemHolder holder = new DissertationItemHolder(view);
 		holder.initItemView(view);
+		if(null == mSubHolder) {
+			mSubHolder = new ArrayList<AbstractRecyclerViewHolder<GameBean>>();
+		}
 		mSubHolder.add(holder);
 	}
 

@@ -11,13 +11,13 @@ public class DownloadArgsBean implements Cloneable {
 	public boolean mWifiAutoDownload = false;
 	public int mVersionCode = -1;
 	
-	public String downloadCount;
-	public String gameId;
+	public String downloadCount;  // 下載數
+	public String gameId; // 遊戲ID
 	public long gameid;
-	public String name;
+	public String name;  // 遊戲名稱
 	public String packageName; // package 要改成packageName
-	public String size;
-	public RewardData reward;
+	public String size; // 遊戲大小 213.00M
+	public RewardData reward;  // 有獎下載參數
 		
 	public class RewardData {
 		public String remindDes;

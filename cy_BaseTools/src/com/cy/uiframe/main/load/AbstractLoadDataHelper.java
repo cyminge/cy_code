@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.cy.constant.Constant;
 import com.cy.frame.downloader.util.TimeUtils;
@@ -122,6 +123,8 @@ public abstract class AbstractLoadDataHelper {
 	}
 	
 	protected String doPost() {
+		String data = mUrlBean.postData(getPostMap());
+		Log.e("cyTest", ""+data);
 		return mUrlBean.postData(getPostMap());
 	}
 
