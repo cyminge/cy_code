@@ -86,7 +86,7 @@ public class DownloadRunnable implements Runnable {
     @Override
     public void run() {
         if (!Utils.hasNetwork()) {
-            onTaskPause(DownloadStatusMgr.PAUSE_NO_NETWORK);
+            pauseTask(DownloadStatusMgr.PAUSE_NO_NETWORK);
             return;
         }
 
@@ -101,7 +101,7 @@ public class DownloadRunnable implements Runnable {
     private void initFile() {
         mHomeDir = GNStorageUtils.getHomeDirAbsolute();
         if (null == mHomeDir) {
-            onTaskPause(DownloadStatusMgr.PAUSE_DEVICE_NOT_FOUND);
+            pauseTask(DownloadStatusMgr.PAUSE_DEVICE_NOT_FOUND);
         }
         mDownloadFile = new File(mHomeDir + mDownloadInfo.mFilePath);
         if (!mDownloadFile.getParentFile().exists()) {
@@ -214,7 +214,7 @@ public class DownloadRunnable implements Runnable {
 
     private void retryDownload(int exceptionType) {
         if (!Utils.hasNetwork() || mTimeoutCount > START_DOWNLOAD_TIMEOUT_RETRY_COUNT) {
-            onTaskPause(DownloadStatusMgr.PAUSE_NO_NETWORK);
+            pauseTask(DownloadStatusMgr.PAUSE_NO_NETWORK);
             return;
         }
 
@@ -253,7 +253,7 @@ public class DownloadRunnable implements Runnable {
             int len = NO_DATA;
             while (!mExit) {
                 if (!file.exists()) {
-                    onTaskPause(DownloadStatusMgr.PAUSE_FILE_ERROR);
+                    pauseTask(DownloadStatusMgr.PAUSE_FILE_ERROR);
                     break;
                 }
                 if (len != NO_DATA) {
@@ -277,12 +277,12 @@ public class DownloadRunnable implements Runnable {
                 }
             }
         } catch (FileNotFoundException e) {
-            onTaskPause(DownloadStatusMgr.PAUSE_FILE_ERROR);
+            pauseTask(DownloadStatusMgr.PAUSE_FILE_ERROR);
         } catch (IOException e) {
             if (Utils.isSDCardLowSpace()) {
-                onTaskPause(DownloadStatusMgr.PAUSE_INSUFFICIENT_SPACE);
+                pauseTask(DownloadStatusMgr.PAUSE_INSUFFICIENT_SPACE);
             } else {
-                onTaskPause(DownloadStatusMgr.PAUSE_FILE_ERROR);
+                pauseTask(DownloadStatusMgr.PAUSE_FILE_ERROR);
             }
         } catch (Exception e) {
             onTaskFail(DownloadStatusMgr.FAIL_UNKNOWN);
@@ -324,7 +324,7 @@ public class DownloadRunnable implements Runnable {
 
         if (timeoutCount > MAX_SOCKET_TIMEOUT) {
             if (!Utils.hasNetwork()) {
-                onTaskPause(DownloadStatusMgr.PAUSE_NO_NETWORK);
+                pauseTask(DownloadStatusMgr.PAUSE_NO_NETWORK);
                 return false;
             } else {
                 return true;
@@ -337,7 +337,7 @@ public class DownloadRunnable implements Runnable {
 
     private void reconnect() {
         if (!DifferenceUtils.isFlowTipConfirmed()) {
-            onTaskPause(DownloadStatusMgr.PAUSE_NO_NETWORK);
+            pauseTask(DownloadStatusMgr.PAUSE_NO_NETWORK);
             return;
         }
 
@@ -353,7 +353,7 @@ public class DownloadRunnable implements Runnable {
         }
 
         if (contentLength < DownloadUtils.MIN_APK_SIZE && DownloadUtils.isWifiInvalid()) {
-            onTaskPause(DownloadStatusMgr.PAUSE_WIFI_INVALID);
+            pauseTask(DownloadStatusMgr.PAUSE_WIFI_INVALID);
             return false;
         }
         return true;
@@ -388,7 +388,7 @@ public class DownloadRunnable implements Runnable {
         onExit(DownloadStatusMgr.TASK_STATUS_FAILED, reason);
     }
 
-    private void onTaskPause(int reason) {
+    private void pauseTask(int reason) {
         onExit(DownloadStatusMgr.TASK_STATUS_PAUSED, reason);
     }
 

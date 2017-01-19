@@ -384,6 +384,23 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     	intent.putExtra("jumpParams", value);
     	startActivity(intent);
     }
+    
+    public void testToGameHallEventDetail(View view) {
+    	Intent intent = new Intent();
+    	intent.setAction("gn.com.android.gamehall.action.EVENT_DETAIL");
+    	intent.putExtra("from", "test");
+    	intent.putExtra("source", "test");
+    	intent.putExtra("contentId", "1765");
+    	startActivity(intent);
+    	
+//    	from  ： （必填）
+//    	source： （必填）
+//    	contentId：活动ID（必填）
+//    	gameId: 游戏id （必填）
+//    	target_packagename ：(选填)
+//    	ad_id （用于统计，选填）
+//    	"action":"gn.com.android.gamehall.action.EVENT_DETAIL" 
+    }
 
     public Resources getResources(final float fontScale) {
         Resources res = super.getResources();
