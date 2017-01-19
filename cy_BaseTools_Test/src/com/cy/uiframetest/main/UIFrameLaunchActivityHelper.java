@@ -106,4 +106,72 @@ public class UIFrameLaunchActivityHelper extends LaunchActivityHelper<ChunkData>
 		return true;
     }
 	
+	@Override
+	public boolean isReadyToBeginPull() {
+		return ((LinearLayoutManager)mAbstractRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0;
+	}
+	
+	private boolean mIsInSlideView = false;
+	
+	@Override
+	public boolean isRecyclerViewNotConsumerEvent(float nowX, float nowY, int action) {
+//		float lastX, lastY;
+//		if (action == MotionEvent.ACTION_DOWN) {
+//			mIsInSlideView = false;
+//            lastX = nowX;
+//            lastY = nowY;
+//            if (mSlideView != null) {
+//                mSlideView.setGestureDetectorEnabled(false);
+//            }
+//        }
+//		
+//		if(null != mSlideView && mSlideView.getVisibility() != View.GONE && !mSlideView.isSingle()) {
+//			if (Math.abs(nowX - lastX) > Math.abs(nowY - lastY) && isInSlideView(nowY)) {
+//                mSlideView.setGestureDetectorEnabled(true);
+//                mIsInSlideView = true;
+//                return true;
+//            }
+//			return true;
+//		}
+		
+		return super.isRecyclerViewNotConsumerEvent(nowX, nowY, action);
+	}
+	
+//	private boolean isInSlideView(float nowY) {
+//        int slideHeight = getHeaderViewHeight();
+//        if (!mInHome) {
+//            return nowY > 0 && nowY < slideHeight;
+//        }
+//
+//        int pullHeaderHeight = getPullHeaderHeight();
+//        int titleHeight = (int) getResources().getDimension(R.dimen.title_height);
+//        int tabHeight = (int) getResources().getDimension(R.dimen.tab_height);
+//
+//        int slideOffsetY = (int) nowY - titleHeight - pullHeaderHeight;
+//        if (mIsSubTabView) {
+//            slideOffsetY -= tabHeight;
+//        }
+//
+//        return slideOffsetY > 0 && slideOffsetY < slideHeight;
+//    }
+//
+//    private int getPullHeaderHeight() {
+//        PullToRefreshGameView pullView = getPullView();
+//        if (pullView.isRefreshing()) {
+//            return pullView.getHeaderSize();
+//        } else {
+//            return 0;
+//        }
+//    }
+//    
+//    private int getHeaderViewHeight() {
+//        int slideHeight = (int) getResources().getDimension(R.dimen.slideview_height);
+//        View topChild = mPageListView.getChildAt(0);
+//        if (mPageListView.getFirstVisiblePosition() == 0 && topChild != null) {
+//            return slideHeight + topChild.getTop();
+//        } else {
+//            return 0;
+//        }
+//    }
+	
 }

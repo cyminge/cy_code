@@ -82,10 +82,13 @@ public class SlideView extends RecyclableView implements ISlideView {
     
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+    	Log.e("cyTest", "SlideView -- onTouchEvent");
     	if (mSlideViewEventAdapter.onTouchEvent(event)) {
             return true;
         }
-    	return super.onTouchEvent(event);
+    	
+    	return true;
+//    	return super.onTouchEvent(event);
     }
     
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -195,5 +198,9 @@ public class SlideView extends RecyclableView implements ISlideView {
 	public void resetState() {
 
 	}
+	
+	public void setGestureDetectorEnabled(boolean enable) {
+        mSlideViewEventAdapter.setGestureDetectorEnabled(enable);
+    }
 
 }

@@ -15,9 +15,7 @@ import android.view.View;
 @SuppressLint("NewApi") 
 public abstract class AbstractRecyclerView<T> extends RecyclerView {
 
-	private static final String TAG = "AbstractRecyclerView";
-	
-	private LaunchActivityHelper<T> mLaunchActivityHelper;
+	protected LaunchActivityHelper<T> mLaunchActivityHelper;
 	
 	protected AbstractRececlerAdapter<T> mAdapter;
 
@@ -69,64 +67,9 @@ public abstract class AbstractRecyclerView<T> extends RecyclerView {
 	public boolean canScrollHorizontally(int direction) {
 		boolean flag = super.canScrollHorizontally(direction);
 		Log.e("cyTest", "canScrollHorizontally: "+flag);
-		return flag;
+		return false;
 	}
 	
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		switch (event.getAction()) {
-
-		case MotionEvent.ACTION_DOWN:
-			Log.i(TAG, "CustomLayout-onTouchEvent-ACTION_DOWN");
-			break;
-		case MotionEvent.ACTION_UP:
-			Log.i(TAG, "CustomLayout-onTouchEvent-ACTION_UP");
-			break;
-		default:
-			break;
-
-		}
-		return super.onTouchEvent(event);
-	}
-
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
-		switch (ev.getAction()) {
-
-		case MotionEvent.ACTION_DOWN:
-			Log.i(TAG, "CustomLayout-dispatchTouchEvent-ACTION_DOWN");
-			break;
-
-		case MotionEvent.ACTION_UP:
-			Log.i(TAG, "CustomLayout-dispatchTouchEvent-ACTION_UP");
-			break;
-
-		default:
-			break;
-
-		}
-		return super.dispatchTouchEvent(ev);
-	}
-
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		switch (ev.getAction()) {
-
-		case MotionEvent.ACTION_DOWN:
-			Log.i(TAG, "CustomLayout-onInterceptTouchEvent-ACTION_DOWN");
-			break;
-
-		case MotionEvent.ACTION_UP:
-			Log.i(TAG, "CustomLayout-onInterceptTouchEvent-ACTION_UP");
-			break;
-
-		default:
-			break;
-
-		}
-		return super.onInterceptTouchEvent(ev);
-	}
-
 	// @Override
 	// public void setLayoutManager(LayoutManager layout) {
 	// super.setLayoutManager(layout);

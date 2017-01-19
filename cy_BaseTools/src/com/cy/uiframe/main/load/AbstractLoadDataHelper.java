@@ -123,8 +123,6 @@ public abstract class AbstractLoadDataHelper {
 	}
 	
 	protected String doPost() {
-		String data = mUrlBean.postData(getPostMap());
-		Log.e("cyTest", ""+data);
 		return mUrlBean.postData(getPostMap());
 	}
 

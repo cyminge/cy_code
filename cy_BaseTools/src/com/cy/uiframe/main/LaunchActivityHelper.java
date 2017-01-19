@@ -156,7 +156,6 @@ public class LaunchActivityHelper<T> implements IpullToRefreshCallBack, ILoadDat
 
 	@Override
 	public boolean isReadyToBeginPull() {
-		Log.e("cyTest", "mContentRootView.getScrollY():"+mContentRootView.getScrollY());
 		return mContentRootView.getScrollY() == 0;
 	}
 
@@ -217,6 +216,14 @@ public class LaunchActivityHelper<T> implements IpullToRefreshCallBack, ILoadDat
 	@Override
 	public boolean isShowingLoadingView() {
 		return mViewHelper.isLoading();
+	}
+	
+	/**
+	 * 是否recyclerView不消费该次事件  （不应该放在这个类，要调整）
+	 * @return
+	 */
+	public boolean isRecyclerViewNotConsumerEvent(float nowX, float nowY, int action) {
+		return false;
 	}
 
 }
