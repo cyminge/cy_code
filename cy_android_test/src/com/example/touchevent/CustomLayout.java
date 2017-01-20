@@ -67,7 +67,9 @@ import android.widget.LinearLayout;
 			break;
 
 		}
-		return super.onInterceptTouchEvent(ev);
+		boolean event = super.onInterceptTouchEvent(ev);
+		Log.e(TAG, "CustomLayout-onInterceptTouchEvent-event:"+event);
+		return event;
 	}
 
 }

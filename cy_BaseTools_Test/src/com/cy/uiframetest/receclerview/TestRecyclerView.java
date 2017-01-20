@@ -62,7 +62,9 @@ public class TestRecyclerView extends AbstractRecyclerView<ChunkData> {
 		if (mLaunchActivityHelper.isRecyclerViewNotConsumerEvent(nowX, nowY, action)) {
 			return false;
 		}
-		return super.onInterceptTouchEvent(ev);
+		boolean event = super.onInterceptTouchEvent(ev);
+		Log.e("cyTest", "TestRecyclerView -- onInterceptTouchEvent : "+event);
+		return event;
 	}
 
 }

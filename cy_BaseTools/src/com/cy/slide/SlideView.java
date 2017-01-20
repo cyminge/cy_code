@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnItemTouchListener;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -14,7 +16,7 @@ import com.cy.slide.AnimationComputer.OnAnimFinishListener;
 import com.cy.utils.bitmap.BitmapUtils;
 
 @SuppressLint("ClickableViewAccessibility") 
-public class SlideView extends RecyclableView implements ISlideView {
+public class SlideView extends RecyclableView implements ISlideView, OnItemTouchListener {
 	
 	public static final int ANIMATION_EFFECTS_TYPE_1 = 1;
 	public static final int ANIMATION_EFFECTS_TYPE_2 = 2;
@@ -81,14 +83,18 @@ public class SlideView extends RecyclableView implements ISlideView {
     }
     
     @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+    	return super.dispatchTouchEvent(event);
+    }
+    
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
-    	Log.e("cyTest", "SlideView -- onTouchEvent");
+//    	Log.e("cyTest", "SlideView -- onTouchEvent");
     	if (mSlideViewEventAdapter.onTouchEvent(event)) {
             return true;
         }
     	
-    	return true;
-//    	return super.onTouchEvent(event);
+    	return super.onTouchEvent(event);
     }
     
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -202,5 +208,16 @@ public class SlideView extends RecyclableView implements ISlideView {
 	public void setGestureDetectorEnabled(boolean enable) {
         mSlideViewEventAdapter.setGestureDetectorEnabled(enable);
     }
+
+	@Override
+	public boolean onInterceptTouchEvent(RecyclerView arg0, MotionEvent arg1) {
+		Log.e("cyTest", "++++++++++++++++++++++++++++++++++++++");
+		return false;
+	}
+
+	@Override
+	public void onTouchEvent(RecyclerView arg0, MotionEvent arg1) {
+		
+	}
 
 }

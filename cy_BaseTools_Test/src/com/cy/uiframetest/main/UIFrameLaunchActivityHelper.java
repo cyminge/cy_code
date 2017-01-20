@@ -10,6 +10,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.cy.frame.downloader.util.JsonConstant;
@@ -53,6 +54,7 @@ public class UIFrameLaunchActivityHelper extends LaunchActivityHelper<ChunkData>
 		mAbstractRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 		mAbstractRecyclerView.setLaunchActivityHelper(this);
 		View headerView = prepareHeaderView();
+		mAbstractRecyclerView.addOnItemTouchListener(mSlideView);
 		if(null != headerView) {
 			mAbstractRecyclerView.addHeaderView(headerView);
 		}
@@ -115,7 +117,7 @@ public class UIFrameLaunchActivityHelper extends LaunchActivityHelper<ChunkData>
 	
 	@Override
 	public boolean isRecyclerViewNotConsumerEvent(float nowX, float nowY, int action) {
-//		float lastX, lastY;
+//		float lastX = 0, lastY=0;
 //		if (action == MotionEvent.ACTION_DOWN) {
 //			mIsInSlideView = false;
 //            lastX = nowX;
@@ -133,6 +135,8 @@ public class UIFrameLaunchActivityHelper extends LaunchActivityHelper<ChunkData>
 //            }
 //			return true;
 //		}
+		// int position = ((LinearLayoutManager)mAbstractRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+		// Log.e("cyTest", "isRecyclerViewNotConsumerEvent position : "+position);
 		
 		return super.isRecyclerViewNotConsumerEvent(nowX, nowY, action);
 	}
@@ -165,7 +169,7 @@ public class UIFrameLaunchActivityHelper extends LaunchActivityHelper<ChunkData>
 //    }
 //    
 //    private int getHeaderViewHeight() {
-//        int slideHeight = (int) getResources().getDimension(R.dimen.slideview_height);
+//        int slideHeight = mSlideView.getHeight();
 //        View topChild = mPageListView.getChildAt(0);
 //        if (mPageListView.getFirstVisiblePosition() == 0 && topChild != null) {
 //            return slideHeight + topChild.getTop();

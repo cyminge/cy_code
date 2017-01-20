@@ -22,7 +22,7 @@ import android.widget.Button;
             Log.i(TAG, "CustomButton-onTouchEvent-ACTION_DOWN");
 			break;
 		case MotionEvent.ACTION_MOVE :
-			 Log.i(TAG, "CustomButton-onTouchEvent-ACTION_MOVE");
+//			 Log.i(TAG, "CustomButton-onTouchEvent-ACTION_MOVE");
 		case MotionEvent.ACTION_UP:
             Log.i(TAG, "CustomButton-onTouchEvent-ACTION_UP");
 			break;
