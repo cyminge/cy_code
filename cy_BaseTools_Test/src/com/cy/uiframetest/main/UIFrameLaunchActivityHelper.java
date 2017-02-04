@@ -10,7 +10,6 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.cy.frame.downloader.util.JsonConstant;
@@ -54,7 +53,6 @@ public class UIFrameLaunchActivityHelper extends LaunchActivityHelper<ChunkData>
 		mAbstractRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 		mAbstractRecyclerView.setLaunchActivityHelper(this);
 		View headerView = prepareHeaderView();
-		mAbstractRecyclerView.addOnItemTouchListener(mSlideView);
 		if(null != headerView) {
 			mAbstractRecyclerView.addHeaderView(headerView);
 		}
@@ -63,6 +61,7 @@ public class UIFrameLaunchActivityHelper extends LaunchActivityHelper<ChunkData>
 	protected View prepareHeaderView() {
 		View headerView = LayoutInflater.from(mContext).inflate(R.layout.activity_slideview_main, null);
 		mSlideView = (SlideView) headerView.findViewById(R.id.slide_view);
+		mSlideView.setViewParent(mAbstractRecyclerView);
 		mSlideViewHelper = new SlideViewHelper(mSlideView, mContext);
 		return headerView;
 	}
@@ -112,70 +111,5 @@ public class UIFrameLaunchActivityHelper extends LaunchActivityHelper<ChunkData>
 	public boolean isReadyToBeginPull() {
 		return ((LinearLayoutManager)mAbstractRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0;
 	}
-	
-	private boolean mIsInSlideView = false;
-	
-	@Override
-	public boolean isRecyclerViewNotConsumerEvent(float nowX, float nowY, int action) {
-//		float lastX = 0, lastY=0;
-//		if (action == MotionEvent.ACTION_DOWN) {
-//			mIsInSlideView = false;
-//            lastX = nowX;
-//            lastY = nowY;
-//            if (mSlideView != null) {
-//                mSlideView.setGestureDetectorEnabled(false);
-//            }
-//        }
-//		
-//		if(null != mSlideView && mSlideView.getVisibility() != View.GONE && !mSlideView.isSingle()) {
-//			if (Math.abs(nowX - lastX) > Math.abs(nowY - lastY) && isInSlideView(nowY)) {
-//                mSlideView.setGestureDetectorEnabled(true);
-//                mIsInSlideView = true;
-//                return true;
-//            }
-//			return true;
-//		}
-		// int position = ((LinearLayoutManager)mAbstractRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-		// Log.e("cyTest", "isRecyclerViewNotConsumerEvent position : "+position);
-		
-		return super.isRecyclerViewNotConsumerEvent(nowX, nowY, action);
-	}
-	
-//	private boolean isInSlideView(float nowY) {
-//        int slideHeight = getHeaderViewHeight();
-//        if (!mInHome) {
-//            return nowY > 0 && nowY < slideHeight;
-//        }
-//
-//        int pullHeaderHeight = getPullHeaderHeight();
-//        int titleHeight = (int) getResources().getDimension(R.dimen.title_height);
-//        int tabHeight = (int) getResources().getDimension(R.dimen.tab_height);
-//
-//        int slideOffsetY = (int) nowY - titleHeight - pullHeaderHeight;
-//        if (mIsSubTabView) {
-//            slideOffsetY -= tabHeight;
-//        }
-//
-//        return slideOffsetY > 0 && slideOffsetY < slideHeight;
-//    }
-//
-//    private int getPullHeaderHeight() {
-//        PullToRefreshGameView pullView = getPullView();
-//        if (pullView.isRefreshing()) {
-//            return pullView.getHeaderSize();
-//        } else {
-//            return 0;
-//        }
-//    }
-//    
-//    private int getHeaderViewHeight() {
-//        int slideHeight = mSlideView.getHeight();
-//        View topChild = mPageListView.getChildAt(0);
-//        if (mPageListView.getFirstVisiblePosition() == 0 && topChild != null) {
-//            return slideHeight + topChild.getTop();
-//        } else {
-//            return 0;
-//        }
-//    }
 	
 }

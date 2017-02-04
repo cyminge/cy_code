@@ -33,18 +33,6 @@ public class TestRecyclerView extends AbstractRecyclerView<ChunkData> {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		// switch (event.getAction()) {
-		//
-		// case MotionEvent.ACTION_DOWN:
-		// Log.i(TAG, "CustomLayout-onTouchEvent-ACTION_DOWN");
-		// break;
-		// case MotionEvent.ACTION_UP:
-		// Log.i(TAG, "CustomLayout-onTouchEvent-ACTION_UP");
-		// break;
-		// default:
-		// break;
-		//
-		// }
 		Log.e("cyTest", "TestRecyclerView -- onTouchEvent");
 		return super.onTouchEvent(event);
 	}
@@ -56,15 +44,9 @@ public class TestRecyclerView extends AbstractRecyclerView<ChunkData> {
 
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		float nowX = ev.getX();
-		float nowY = ev.getY();
-		int action = ev.getAction();
-		if (mLaunchActivityHelper.isRecyclerViewNotConsumerEvent(nowX, nowY, action)) {
-			return false;
-		}
 		boolean event = super.onInterceptTouchEvent(ev);
 		Log.e("cyTest", "TestRecyclerView -- onInterceptTouchEvent : "+event);
 		return event;
 	}
-
+	
 }

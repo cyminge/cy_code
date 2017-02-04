@@ -48,7 +48,8 @@ import android.widget.LinearLayout;
 			break;
 
 		}
-		return super.dispatchTouchEvent(ev);
+		return true;
+//		return super.dispatchTouchEvent(ev);
 	}
 
 	@Override

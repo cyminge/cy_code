@@ -5,18 +5,18 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnItemTouchListener;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ViewParent;
 import android.view.animation.DecelerateInterpolator;
 
 import com.cy.slide.AnimationComputer.OnAnimFinishListener;
 import com.cy.utils.bitmap.BitmapUtils;
 
 @SuppressLint("ClickableViewAccessibility") 
-public class SlideView extends RecyclableView implements ISlideView, OnItemTouchListener {
+public class SlideView extends RecyclableView implements ISlideView {
 	
 	public static final int ANIMATION_EFFECTS_TYPE_1 = 1;
 	public static final int ANIMATION_EFFECTS_TYPE_2 = 2;
@@ -31,6 +31,8 @@ public class SlideView extends RecyclableView implements ISlideView, OnItemTouch
 	
     private int mWidth;
     private int mHeight;
+     
+    private ViewParent mViewParent; // 用于是否让父控件拦截事件
 	
 	private int mAnimationEffectsType; // 为了展示不同滑动效果
 	
@@ -47,6 +49,10 @@ public class SlideView extends RecyclableView implements ISlideView, OnItemTouch
 		mAnimationEffectsType = effectsType;
 		mAnimationComputer = new AnimationComputer(new DecelerateInterpolator(), mAnimFinishListener);
 		mSlideViewEventAdapter = new SlideViewEventAdapter(context, this, true, mAnimationComputer);
+	}
+	
+	public void setViewParent(ViewParent viewParent) {
+		mViewParent = viewParent;
 	}
 	
 	private OnAnimFinishListener mAnimFinishListener = new OnAnimFinishListener() {
@@ -82,20 +88,104 @@ public class SlideView extends RecyclableView implements ISlideView, OnItemTouch
         postDelayed(mSwitchCommand, NEXT_SWITCH_DELAY);
     }
     
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-    	return super.dispatchTouchEvent(event);
-    }
+    private float mLastX = 0, mLastY = 0;
     
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-//    	Log.e("cyTest", "SlideView -- onTouchEvent");
+        int action = event.getAction();
+    	switch(action) {
+    	case MotionEvent.ACTION_DOWN :
+    		mLastX = event.getX();
+    		mLastY = event.getY();
+    		setGestureDetectorEnabled(false);
+    		break;
+    	case MotionEvent.ACTION_MOVE :
+    	case MotionEvent.ACTION_UP :
+    		if(isSingle()) {
+    			break;
+    		}
+    		if (Math.abs(event.getX() - mLastX) < Math.abs(event.getY() - mLastY)) {
+    			if(null != mViewParent) {
+    				mViewParent.requestDisallowInterceptTouchEvent(false);
+    			}
+                return false;
+            }
+    		setGestureDetectorEnabled(true);
+    	}
+    	
     	if (mSlideViewEventAdapter.onTouchEvent(event)) {
+    		if(null != mViewParent) {
+    			mViewParent.requestDisallowInterceptTouchEvent(true);
+    		}
             return true;
         }
     	
     	return super.onTouchEvent(event);
     }
+    
+//	private boolean mIsInSlideView = false;
+//	
+//	public boolean isRecyclerViewNotConsumerEvent(float nowX, float nowY, int action) {
+//		float lastX = 0, lastY=0;
+//		if (action == MotionEvent.ACTION_DOWN) {
+//			mIsInSlideView = false;
+//            lastX = nowX;
+//            lastY = nowY;
+//            if (mSlideView != null) {
+//                mSlideView.setGestureDetectorEnabled(false);
+//            }
+//        }
+//		
+//		if(null != mSlideView && mSlideView.getVisibility() != View.GONE && !mSlideView.isSingle()) {
+//			if (Math.abs(nowX - lastX) > Math.abs(nowY - lastY) && isInSlideView(nowY)) {
+//                mSlideView.setGestureDetectorEnabled(true);
+//                mIsInSlideView = true;
+//                return true;
+//            }
+//			return true;
+//		}
+//		 int position = ((LinearLayoutManager)mAbstractRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+//		 Log.e("cyTest", "isRecyclerViewNotConsumerEvent position : "+position);
+//		
+//		return super.isRecyclerViewNotConsumerEvent(nowX, nowY, action);
+//	}
+//	
+//	private boolean isInSlideView(float nowY) {
+//        int slideHeight = getHeaderViewHeight();
+//        if (!mInHome) {
+//            return nowY > 0 && nowY < slideHeight;
+//        }
+//
+//        int pullHeaderHeight = getPullHeaderHeight();
+//        int titleHeight = (int) getResources().getDimension(R.dimen.title_height);
+//        int tabHeight = (int) getResources().getDimension(R.dimen.tab_height);
+//
+//        int slideOffsetY = (int) nowY - titleHeight - pullHeaderHeight;
+//        if (mIsSubTabView) {
+//            slideOffsetY -= tabHeight;
+//        }
+//
+//        return slideOffsetY > 0 && slideOffsetY < slideHeight;
+//    }
+//
+//    private int getPullHeaderHeight() {
+//        PullToRefreshGameView pullView = getPullView();
+//        if (pullView.isRefreshing()) {
+//            return pullView.getHeaderSize();
+//        } else {
+//            return 0;
+//        }
+//    }
+//    
+//    private int getHeaderViewHeight() {
+//        int slideHeight = mSlideView.getHeight();
+//        View topChild = mPageListView.getChildAt(0);
+//        if (mPageListView.getFirstVisiblePosition() == 0 && topChild != null) {
+//            return slideHeight + topChild.getTop();
+//        } else {
+//            return 0;
+//        }
+//    }
     
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
     	super.onLayout(changed, left, top, right, bottom);
@@ -208,16 +298,5 @@ public class SlideView extends RecyclableView implements ISlideView, OnItemTouch
 	public void setGestureDetectorEnabled(boolean enable) {
         mSlideViewEventAdapter.setGestureDetectorEnabled(enable);
     }
-
-	@Override
-	public boolean onInterceptTouchEvent(RecyclerView arg0, MotionEvent arg1) {
-		Log.e("cyTest", "++++++++++++++++++++++++++++++++++++++");
-		return false;
-	}
-
-	@Override
-	public void onTouchEvent(RecyclerView arg0, MotionEvent arg1) {
-		
-	}
 
 }
