@@ -19,13 +19,17 @@ import com.cy.frame.downloader.util.JsonConstant;
 import com.cy.frame.downloader.util.JsonUtils;
 import com.cy.frame.downloader.util.TimeUtils;
 import com.cy.frame.downloader.util.UrlConstant;
-import com.cy.global.BaseApplication;
+import com.cy.global.WatchDog;
 import com.cy.utils.Utils;
 import com.cy.utils.sharepref.SharePrefUtil;
 
+/**
+ * 有些应用在列表中需要屏蔽掉。这个是获取需要屏蔽掉的应用。用于做差异化展示或者其他情况。
+ * @author JLB6088
+ *
+ */
 public class FilterApps {
-    private static final String SYSTEM_SPECIAL_PRELOAD_APP = "com.happyelements.AndroidAnimal.jinli";
-    private static final String TAG = "FilterApps";
+    private static final String SYSTEM_SPECIAL_PRELOAD_APP = "com.happyelements.AndroidAnimal.jinli"; // 系统预装应用
     private static final String FILTER_APPS_CACHE_TIME = "filter_apps_cache_time";
     private static final String FILTER_APPS = "filter_apps";
     private static ArrayList<String> sFilterApps = new ArrayList<String>();
@@ -102,7 +106,7 @@ public class FilterApps {
             return false;
         }
 
-        Context context = BaseApplication.getAppContext();
+        Context context = WatchDog.getContext();
         PackageManager pm = context.getPackageManager();
         boolean packageError = false;
         try {

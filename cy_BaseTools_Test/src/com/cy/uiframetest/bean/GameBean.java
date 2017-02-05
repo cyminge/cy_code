@@ -1,5 +1,7 @@
 package com.cy.uiframetest.bean;
 
+import com.cy.frame.downloader.entity.DownloadArgsBean;
+
 public class GameBean extends DownloadArgsBean {
 	
 	public String ad_id;

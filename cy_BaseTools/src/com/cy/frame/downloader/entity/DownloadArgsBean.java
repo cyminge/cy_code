@@ -1,4 +1,4 @@
-package com.cy.uiframetest.bean;
+package com.cy.frame.downloader.entity;
 
 import com.cy.frame.downloader.controller.ButtonStatusManager;
 
@@ -17,6 +17,7 @@ public class DownloadArgsBean implements Cloneable {
 	public String name;  // 遊戲名稱
 	public String packageName; // package 要改成packageName
 	public String size; // 遊戲大小 213.00M
+	public String downUrl; // 下载url
 	public RewardData reward;  // 有獎下載參數
 		
 	public class RewardData {

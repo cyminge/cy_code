@@ -88,6 +88,11 @@ public class SlideView extends RecyclableView implements ISlideView {
         postDelayed(mSwitchCommand, NEXT_SWITCH_DELAY);
     }
     
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+    	return super.dispatchTouchEvent(event);
+    }
+    
     private float mLastX = 0, mLastY = 0;
     
     @Override
