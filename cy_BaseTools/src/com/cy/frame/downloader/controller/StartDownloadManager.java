@@ -25,7 +25,6 @@ import com.cy.frame.downloader.upgrade.GamesUpgradeManager.UpgradeAppInfo;
 import com.cy.frame.downloader.util.GameInstaller;
 import com.cy.utils.Utils;
 import com.cy.utils.storage.GNStorageUtils;
-import com.cy.utils.storage.StorageUtils;
 
 public abstract class StartDownloadManager {
 
@@ -101,8 +100,8 @@ public abstract class StartDownloadManager {
 
 
     private void showFullApkDialog(DownloadArgs downloadArgs) {
-        String message = mContext.getString(R.string.reload_fullapk_nofify, downloadArgs.mGameName,
-                downloadArgs.mGameSize);
+        String message = mContext.getString(R.string.reload_fullapk_nofify, downloadArgs.name,
+                downloadArgs.size);
         GameDialog fullDownloadDialog = new GameDialog(mContext);
         fullDownloadDialog.setMessage(message);
 
@@ -148,7 +147,7 @@ public abstract class StartDownloadManager {
             showLimitedToast(R.string.max_download_task);
             return DownloadDB.NO_DOWN_ID;
         }
-        String packageName = downloadArgs.mPackageName;
+        String packageName = downloadArgs.packageName;
 
         long downId = DownloadDB.NO_DOWN_ID;
         DownloadInfo info = getDownloadInfo(packageName);
@@ -177,7 +176,7 @@ public abstract class StartDownloadManager {
             return source;
         }
 
-        return Utils.combineGameUpgradeSource(downloadArgs.mPackageName, downloadArgs.mSource);
+        return Utils.combineGameUpgradeSource(downloadArgs.packageName, downloadArgs.mSource);
     }
 
     protected DownloadStatusMgr getDownloadStatusMgr() {
@@ -197,9 +196,9 @@ public abstract class StartDownloadManager {
     }
 
     protected void runInstall(DownloadArgs args, InstallListener listener) {
-        InstallManager.addInstallingGame(args.mPackageName);
-        if (Utils.permitSilentInstall(args.mPackageName)) {
-            GameInstaller.silentInstall(mContext, args, args.mPackageName + Constant.APK, false);
+        InstallManager.addInstallingGame(args.packageName);
+        if (Utils.permitSilentInstall(args.packageName)) {
+            GameInstaller.silentInstall(mContext, args, args.packageName + Constant.APK, false);
             if (listener != null) {
                 listener.onInstalling(args);
             }
@@ -210,11 +209,11 @@ public abstract class StartDownloadManager {
     }
 
     protected void popupInstall(final DownloadArgs args) {
-        GameInstaller.popupInstall(mContext, args.mPackageName);
+        GameInstaller.popupInstall(mContext, args.packageName);
     }
 
     protected boolean hasLocalApk(DownloadArgs downloadArgs) {
-        String gamePackage = downloadArgs.mPackageName;
+        String gamePackage = downloadArgs.packageName;
         String fileName = gamePackage + Constant.APK;
         boolean hasAPK = Utils.isFileExisting(fileName) && Utils.isSamePackage(fileName, gamePackage);
         if (hasAPK) {

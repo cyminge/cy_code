@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cy.constant.Constant;
+import com.cy.frame.downloader.controller.ButtonStatusManager;
+import com.cy.frame.downloader.entity.GameBean;
 import com.cy.frame.downloader.ui.IProgressButton;
 import com.cy.global.WatchDog;
 import com.cy.imageloader.ImageLoader;
@@ -18,7 +20,6 @@ import com.cy.imageloader.ui.AlphaAnimImageView;
 import com.cy.test.R;
 import com.cy.uiframe.recyclerview.AbstractRecyclerViewHolder;
 import com.cy.uiframetest.bean.ChunkDissertationData;
-import com.cy.uiframetest.bean.GameBean;
 import com.cy.uiframetest.receclerview.ParallaxScrollView.OnTouchDispatcher;
 import com.cy.utils.Utils;
 
@@ -227,8 +228,12 @@ public class ChunkDissertationViewHolder extends AbstractRecyclerViewHolder<Chun
 		}
 		
 	    public void setButtonState(GameBean data) {
-//	    	data.mStatus = getButtonStatus(data);
-//	        mButton.setButton(listData, listData.mStatus, ButtonStatusManager.getProgress(listData));
+	    	data.mStatus = getButtonStatus(data);
+	        mButton.setButton(data, data.mStatus, ButtonStatusManager.getProgress(data));
+	    }
+	    
+	    protected int getButtonStatus(GameBean data) {
+	        return ButtonStatusManager.getButtonStatus(data);
 	    }
 		
 		protected void setSubscript(int type) {
@@ -253,7 +258,7 @@ public class ChunkDissertationViewHolder extends AbstractRecyclerViewHolder<Chun
 	            mGiftIcon.setVisibility(View.GONE);
 	        }
 	    }
-
+	    
 	}
 
 }

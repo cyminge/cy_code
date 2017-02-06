@@ -6,12 +6,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
+import com.cy.frame.downloader.entity.GameBean;
 import com.cy.test.R;
 
 public class DownloadActivity extends Activity {
@@ -31,7 +30,7 @@ public class DownloadActivity extends Activity {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
             case 9527:
-                ArrayList<GameListDataCategory> list = DataManager.getData();
+                ArrayList<GameBean> list = DataManager.getData();
                 Log.e("cyTest", "数据长度：" + list.size());
                 if (!list.isEmpty()) {
                     mAdapter.mDataList = list;

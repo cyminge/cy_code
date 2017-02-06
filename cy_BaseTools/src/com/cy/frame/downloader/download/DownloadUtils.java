@@ -159,7 +159,7 @@ public class DownloadUtils {
     }
 
     public static boolean isFileInvilid(String homeDir, DownloadInfo info) {
-        String packageName = info.mPackageName;
+        String packageName = info.packageName;
         String fileName = getFileName(packageName);
         Utils.renameFile(homeDir, fileName + Constant.TMP_FILE_EXT, fileName);
 
@@ -194,8 +194,8 @@ public class DownloadUtils {
     }
 
     private static void recoveryDownloadUrl(DownloadInfo info) {
-        if (info.mRawDownloadUrl != null && !info.mRawDownloadUrl.equals(info.mDownloadUrl)) {
-            info.mDownloadUrl = info.mRawDownloadUrl;
+        if (info.mRawDownloadUrl != null && !info.mRawDownloadUrl.equals(info.downUrl)) {
+            info.downUrl = info.mRawDownloadUrl;
         }
     }
 
@@ -248,7 +248,7 @@ public class DownloadUtils {
         if (info == null || info.mStartTime == 0) {
             return pkgName;
         } else {
-            return StatisValue.combinePkgName(info.mPackageName, info.mStartTime + Constant.EMPTY);
+            return StatisValue.combinePkgName(info.packageName, info.mStartTime + Constant.EMPTY);
         }
     }
 
@@ -282,8 +282,8 @@ public class DownloadUtils {
             return;
         }
 
-        GameActionUtil.postGameAction(info.mPackageName, Constant.ACTION_SUCCESS_DOWNLOAD);
-        if (Constant.AMIGO_PLAY_PACKAGE_NAME.equals(info.mPackageName)) {
+        GameActionUtil.postGameAction(info.packageName, Constant.ACTION_SUCCESS_DOWNLOAD);
+        if (Constant.AMIGO_PLAY_PACKAGE_NAME.equals(info.packageName)) {
             // StatisHelper.get().send(StatisValue.DOWNLOAD_AMIGO_PLAY_SUCCESS,
             // Constant.AMIGO_PLAY_PACKAGE_NAME, info.mSource);
         }

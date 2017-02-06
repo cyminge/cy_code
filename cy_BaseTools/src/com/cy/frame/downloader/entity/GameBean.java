@@ -1,8 +1,8 @@
-package com.cy.uiframetest.bean;
+package com.cy.frame.downloader.entity;
 
-import com.cy.frame.downloader.entity.DownloadArgsBean;
+import com.cy.frame.downloader.download.entity.DownloadArgs;
 
-public class GameBean extends DownloadArgsBean {
+public class GameBean extends DownloadArgs {
 	
 	public String ad_id;
 	public String resume;

@@ -15,16 +15,16 @@ public class DownloadRequest extends DownloadArgs implements Parcelable {
     }
 
     public DownloadRequest(DownloadArgs args) {
-        mGameSize = args.mGameSize;
-        mDownloadUrl = args.mDownloadUrl.replaceAll(BLANK_TAG, Constant.EMPTY);
-        mGameId = args.mGameId;
-        mIconUrl = args.mIconUrl;
-        mGameName = args.mGameName;
-        mPackageName = args.mPackageName;
+        size = args.size;
+        downUrl = args.downUrl.replaceAll(BLANK_TAG, Constant.EMPTY);
+        gameId = args.gameId;
+        gameid = args.gameid;
+        name = args.name;
+        packageName = args.packageName;
         mSource = args.mSource;
         mVersionCode = args.mVersionCode;
         mIsSilentDownload = args.mIsSilentDownload;
-        mAutoDownload = args.mAutoDownload;
+        mWifiAutoDownload = args.mWifiAutoDownload;
     }
 
     public static final Parcelable.Creator<DownloadRequest> CREATOR = new Parcelable.Creator<DownloadRequest>() {
@@ -42,12 +42,12 @@ public class DownloadRequest extends DownloadArgs implements Parcelable {
 
     public DownloadRequest(Parcel in) {
         mFilePath = in.readString();
-        mGameSize = in.readString();
-        mDownloadUrl = in.readString();
-        mGameId = in.readLong();
-        mIconUrl = in.readString();
-        mGameName = in.readString();
-        mPackageName = in.readString();
+        size = in.readString();
+        downUrl = in.readString();
+        gameId = in.readString();
+        gameid = in.readLong();
+        name = in.readString();
+        packageName = in.readString();
         mSource = in.readString();
         mAllowByMobileNet = (Boolean) in.readValue(null);
         mReserveJson = in.readString();
@@ -63,12 +63,12 @@ public class DownloadRequest extends DownloadArgs implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mFilePath);
-        dest.writeString(mGameSize);
-        dest.writeString(mDownloadUrl);
-        dest.writeLong(mGameId);
-        dest.writeString(mIconUrl);
-        dest.writeString(mGameName);
-        dest.writeString(mPackageName);
+        dest.writeString(size);
+        dest.writeString(downUrl);
+        dest.writeString(gameId);
+        dest.writeLong(gameid);
+        dest.writeString(name);
+        dest.writeString(packageName);
         dest.writeString(mSource);
         dest.writeValue(mAllowByMobileNet);
         dest.writeString(mReserveJson);

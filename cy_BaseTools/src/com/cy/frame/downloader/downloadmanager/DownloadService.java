@@ -101,7 +101,7 @@ public class DownloadService extends Service {
     }
 
     public static synchronized void removeTask(DownloadInfo info, int targetStatus) {
-        DownloadRunnable removeTask = mDownloadingTask.remove(info.mPackageName);
+        DownloadRunnable removeTask = mDownloadingTask.remove(info.packageName);
         if (removeTask != null) {
             removeTask.exit(targetStatus);
         }

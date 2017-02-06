@@ -8,19 +8,25 @@ package com.cy;
 public class TestCast {
 
 	public static void main(String[] args) {
-		Parent p = new Son();
-		System.out.println(p instanceof Son);
-		System.out.println((Son)p != null);
+//		Parent p = new Son();
+//		System.out.println(p instanceof Son);
+//		System.out.println((Son)p != null);
+//		
+//		Parent pp = new Parent();
+//		
+//		Son ss = new Son();
+//		
+//		System.out.println(ss instanceof Parent);
+//		System.out.println(pp instanceof Son);
+//		
+//		System.out.println(pp = ss);
 		
-		Parent pp = new Parent();
+		Parent parent = new Parent();
+		Son son = (Son) parent;
+		
 		
 		Son ss = new Son();
-		
-		System.out.println(ss instanceof Parent);
-		System.out.println(pp instanceof Son);
-		
-		System.out.println(pp = ss);
-//		System.out.println(ss = pp);
+		Parent pp = (Parent)ss;
 	}
 	
 	

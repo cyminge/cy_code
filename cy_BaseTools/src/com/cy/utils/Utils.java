@@ -36,6 +36,7 @@ import com.cy.constant.Constant;
 import com.cy.frame.downloader.controller.ButtonStatusManager;
 import com.cy.frame.downloader.core.DownloadInfoMgr;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
+import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.frame.downloader.statis.StatisValue;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
@@ -222,7 +223,7 @@ public class Utils {
     private static boolean checkSpaceForRetry(DownloadArgs args) {
         int status = ButtonStatusManager.getButtonStatus(args);
         if (status == ButtonStatusManager.BUTTON_STATUS_FAILED) {
-            DownloadInfo info = DownloadInfoMgr.getNormalInstance().getDownloadInfo(args.mPackageName);
+            DownloadInfo info = DownloadInfoMgr.getNormalInstance().getDownloadInfo(args.packageName);
             if (info != null && checkSDCard(info.mTotalSize) == Constant.SD_LOW_SPACE) {
                 return false;
             }

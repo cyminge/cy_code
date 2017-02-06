@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.cy.constant.Constant;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
+import com.cy.frame.downloader.download.entity.DownloadArgs.RewardData;
 import com.cy.frame.downloader.statis.StatisValue;
 import com.cy.frame.downloader.util.JsonConstant;
 import com.cy.frame.downloader.util.JsonUtils;
@@ -25,182 +26,181 @@ import com.cy.utils.Utils;
 @SuppressLint("NewApi")
 public class DownloadArgsFactory {
 
-    public static interface DownloadArgsListener {
-        public void onGetDownloadArgs(DownloadArgs downloadArgs);
-    }
+	public static interface DownloadArgsListener {
+		public void onGetDownloadArgs(DownloadArgs downloadArgs);
+	}
 
-    private static final String GAME_ID = "game_id";
-    private String mGameId;
-    private String mGamePkgName;
-    private String mSource;
-    private String mFrom = StatisValue.FROM_GN;
-    private DownloadArgsListener mListener;
-    private boolean mThreadStop = true;
+	private static final String GAME_ID = "game_id";
+	private String mGameId;
+	private String mGamePkgName;
+	private String mSource;
+	private String mFrom = StatisValue.FROM_GN;
+	private DownloadArgsListener mListener;
+	private boolean mThreadStop = true;
 
-    private Runnable mDownloadArgsRunnable = new Runnable() {
-        public void run() {
-            while (!mThreadStop) {
-                String downloadArgs = postData();
-                if (needWait(downloadArgs)) {
-                    blockThread();
-                } else {
-                    mThreadStop = true;
-                    parseDownloadArgs(downloadArgs);
-                }
-            }
-        }
-    };
+	private Runnable mDownloadArgsRunnable = new Runnable() {
+		public void run() {
+			while (!mThreadStop) {
+				String downloadArgs = postData();
+				if (needWait(downloadArgs)) {
+					blockThread();
+				} else {
+					mThreadStop = true;
+					parseDownloadArgs(downloadArgs);
+				}
+			}
+		}
+	};
 
-    public DownloadArgsFactory(String gameId, DownloadArgsListener listener, String source) {
-        this(null, gameId, Constant.EMPTY, listener);
-        mSource = source;
-    }
+	public DownloadArgsFactory(String gameId, DownloadArgsListener listener, String source) {
+		this(null, gameId, Constant.EMPTY, listener);
+		mSource = source;
+	}
 
-    public DownloadArgsFactory(Activity activity, String gameId, DownloadArgsListener listener) {
-        this(activity, gameId, Constant.EMPTY, listener);
-    }
+	public DownloadArgsFactory(Activity activity, String gameId, DownloadArgsListener listener) {
+		this(activity, gameId, Constant.EMPTY, listener);
+	}
 
-    public DownloadArgsFactory(Activity activity, String gameId, String gamePkgName,
-            DownloadArgsListener listener) {
-        mGameId = gameId;
-        mGamePkgName = gamePkgName;
-        mListener = listener;
-        init(activity);
-        startGet();
-    }
+	public DownloadArgsFactory(Activity activity, String gameId, String gamePkgName,
+			DownloadArgsListener listener) {
+		mGameId = gameId;
+		mGamePkgName = gamePkgName;
+		mListener = listener;
+		init(activity);
+		startGet();
+	}
 
-    private void init(Activity activity) {
-        if (activity == null) {
-            return;
-        }
-        Intent intent = activity.getIntent();
-        initSource(activity, intent);
-        initFrom(intent);
-    }
+	private void init(Activity activity) {
+		if (activity == null) {
+			return;
+		}
+		Intent intent = activity.getIntent();
+		initSource(activity, intent);
+		initFrom(intent);
+	}
 
-    private void initSource(Activity activity, Intent intent) {
-        // String curSource = ((GNBaseActivity) activity).getSource();
-        // String preString = intent.getStringExtra(JsonConstant.SOURCE);
-        // if (TextUtils.isEmpty(preString)) {
-        // preString = StatisSourceManager.getInstance().getPreSource();
-        // }
-        mSource = StatisValue.combine("", "");
-    }
+	private void initSource(Activity activity, Intent intent) {
+		// String curSource = ((GNBaseActivity) activity).getSource();
+		// String preString = intent.getStringExtra(JsonConstant.SOURCE);
+		// if (TextUtils.isEmpty(preString)) {
+		// preString = StatisSourceManager.getInstance().getPreSource();
+		// }
+		mSource = StatisValue.combine("", "");
+	}
 
-    private void initFrom(Intent intent) {
-        String from = intent.getStringExtra(JsonConstant.FROM);
-        if (from == null || from.isEmpty() || !StatisValue.FROM_BAIDU.equals(from)) {
-            mFrom = StatisValue.FROM_GN;
-        } else {
-            mFrom = from;
-        }
-    }
+	private void initFrom(Intent intent) {
+		String from = intent.getStringExtra(JsonConstant.FROM);
+		if (from == null || from.isEmpty() || !StatisValue.FROM_BAIDU.equals(from)) {
+			mFrom = StatisValue.FROM_GN;
+		} else {
+			mFrom = from;
+		}
+	}
 
-    public void getDownloadArgs() {
-        if (mThreadStop) {
-            startGet();
-        }
-    }
+	public void getDownloadArgs() {
+		if (mThreadStop) {
+			startGet();
+		}
+	}
 
-    private void startGet() {
-        if (Utils.hasNetwork()) {
-            mThreadStop = false;
-            NormalThreadPool.getInstance().post(mDownloadArgsRunnable);
-        }
-    }
+	private void startGet() {
+		if (Utils.hasNetwork()) {
+			mThreadStop = false;
+			NormalThreadPool.getInstance().post(mDownloadArgsRunnable);
+		}
+	}
 
-    public void onDestroy() {
-        stopThread();
-    }
+	public void onDestroy() {
+		stopThread();
+	}
 
-    private void stopThread() {
-        synchronized (this) {
-            mThreadStop = true;
-            notify();
-        }
-    }
+	private void stopThread() {
+		synchronized (this) {
+			mThreadStop = true;
+			notify();
+		}
+	}
 
-    private void blockThread() {
-        Activity activity = WatchDog.INSTANCE.getTopActivity();
-        if (activity != null && activity.isFinishing()) {
-            return;
-        }
+	private void blockThread() {
+		Activity activity = WatchDog.INSTANCE.getTopActivity();
+		if (activity != null && activity.isFinishing()) {
+			return;
+		}
 
-        synchronized (this) {
-            try {
-                wait(Constant.SECOND_1);
-            } catch (InterruptedException e) {
-            }
-        }
-    }
+		synchronized (this) {
+			try {
+				wait(Constant.SECOND_1);
+			} catch (InterruptedException e) {
+			}
+		}
+	}
 
-    private boolean needWait(String downloadArgs) {
-        return JsonUtils.isRequestDataFail(downloadArgs);
-    }
+	private boolean needWait(String downloadArgs) {
+		return JsonUtils.isRequestDataFail(downloadArgs);
+	}
 
-    private void parseDownloadArgs(String downloadArgs) {
-        if (JsonUtils.isRequestDataSuccess(downloadArgs)) {
-            try {
-                DownloadArgs args = createDownloadArgs(downloadArgs);
-                if (mListener != null) {
-                    mListener.onGetDownloadArgs(args);
-                }
-            } catch (Exception e) {
-                Log.e("cyTest", "解析下载文件信息出错");
-                e.printStackTrace();
-            }
-        }
-    }
+	private void parseDownloadArgs(String downloadArgs) {
+		if (JsonUtils.isRequestDataSuccess(downloadArgs)) {
+			try {
+				DownloadArgs args = createDownloadArgs(downloadArgs);
+				if (mListener != null) {
+					mListener.onGetDownloadArgs(args);
+				}
+			} catch (Exception e) {
+				Log.e("cyTest", "解析下载文件信息出错");
+				e.printStackTrace();
+			}
+		}
+	}
 
-    protected String postData() {
-        return JsonUtils.postData(UrlConstant.DOWNLOAD_ARGS, getPostMap()); // 这是个什么鬼？
-    }
+	protected String postData() {
+		return JsonUtils.postData(UrlConstant.DOWNLOAD_ARGS, getPostMap()); // 这是个什么鬼？
+	}
 
-    protected Map<String, String> getPostMap() {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put(GAME_ID, mGameId);
-        map.put(JsonConstant.FROM, mFrom);
-        if (TextUtils.isEmpty(mGameId)) {
-            map.put(JsonConstant.PACKAGE_NAME, mGamePkgName);
-        }
-        return map;
-    }
+	protected Map<String, String> getPostMap() {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(GAME_ID, mGameId);
+		map.put(JsonConstant.FROM, mFrom);
+		if (TextUtils.isEmpty(mGameId)) {
+			map.put(JsonConstant.PACKAGE_NAME, mGamePkgName);
+		}
+		return map;
+	}
 
-    protected DownloadArgs createDownloadArgs(String jsonData) throws JSONException {
-        JSONObject json = new JSONObject(jsonData);
-        DownloadArgs downloadArgs = createDownloadArgs(json, mSource);
-        if (downloadArgs.isInvalid()) {
-            throw new JSONException("args invalid");
-        }
-        return downloadArgs;
-    }
+	protected DownloadArgs createDownloadArgs(String jsonData) throws JSONException {
+		JSONObject json = new JSONObject(jsonData);
+		DownloadArgs downloadArgs = createDownloadArgs(json, mSource);
+		if (downloadArgs.isInvalid()) {
+			throw new JSONException("args invalid");
+		}
+		return downloadArgs;
+	}
 
-    public static DownloadArgs createDownloadArgs(JSONObject json, String source) throws JSONException {
-        String gameName = json.getString(JsonConstant.GAME_NAME);
-        String gameId = json.getString(JsonConstant.GAME_ID);
-        String gameUrl = json.getString(JsonConstant.DOWN_URL);
-        String gamePackage = json.getString(JsonConstant.PACKAGE_NAME);
-        String gameSize = json.getString(JsonConstant.FILE_SIZE);
-        String gameIconUrl = json.getString(JsonConstant.ICON_URL);
-        String downloadCount = json.optString(JsonConstant.DOWN_COUNT);
-        DownloadArgs downloadArgs = new DownloadArgs(source, Long.parseLong(gameId), gameName, gameUrl,
-                gamePackage, gameSize, gameIconUrl);
-        downloadArgs.mDownloadCount = downloadCount;
-        downloadArgs.mRewardData = createRewardData(json);
-        return downloadArgs;
-    }
+	public static DownloadArgs createDownloadArgs(JSONObject json, String source) throws JSONException {
+		String gameName = json.getString(JsonConstant.GAME_NAME);
+		String gameId = json.getString(JsonConstant.GAME_ID);
+		String gameUrl = json.getString(JsonConstant.DOWN_URL);
+		String gamePackage = json.getString(JsonConstant.PACKAGE_NAME);
+		String gameSize = json.getString(JsonConstant.FILE_SIZE);
+		String gameIconUrl = json.getString(JsonConstant.ICON_URL);
+		String downloadCount = json.optString(JsonConstant.DOWN_COUNT);
+		DownloadArgs downloadArgs = new DownloadArgs(source, Long.parseLong(gameId), gameName, gameUrl,
+				gamePackage, gameSize);
+		downloadArgs.downloadCount = downloadCount;
+		downloadArgs.reward = createRewardData(downloadArgs, json);
+		return downloadArgs;
+	}
 
-    public static DownloadArgs.RewardData createRewardData(JSONObject json) {
-        try {
-            JSONObject rewardObject = json.getJSONObject(JsonConstant.REWARD);
-            DownloadArgs.RewardData data = new DownloadArgs.RewardData();
-            data.mTypeCount = rewardObject.getInt(JsonConstant.REWARD_TYPE_COUNT);
-            data.mRemindDes = rewardObject.getString(JsonConstant.REWARD_REMIND_DES)
-                    .replaceAll("\\\\n", "\n");
-            data.mRewardStatisId = rewardObject.getInt(JsonConstant.REWARD_STATIS_ID);
-            return data;
-        } catch (JSONException e) {
-        }
-        return null;
-    }
+	public static DownloadArgs.RewardData createRewardData(DownloadArgs downloadArgs, JSONObject json) {
+		try {
+			JSONObject rewardObject = json.getJSONObject(JsonConstant.REWARD);
+			RewardData data = downloadArgs.new RewardData();
+			data.rewardTypeCount = rewardObject.getInt(JsonConstant.REWARD_TYPE_COUNT);
+			data.remindDes = rewardObject.getString(JsonConstant.REWARD_REMIND_DES).replaceAll("\\\\n", "\n");
+			data.rewardStatisId = rewardObject.getInt(JsonConstant.REWARD_STATIS_ID);
+			return data;
+		} catch (JSONException e) {
+		}
+		return null;
+	}
 }

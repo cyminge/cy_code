@@ -51,7 +51,7 @@ public abstract class DownloadCompletedService extends Service {
     }
 
     protected void startInstall(Context context, String homeDir, DownloadInfo downloadInfo) {
-        String packageName = downloadInfo.mPackageName;
+        String packageName = downloadInfo.packageName;
         InstallManager.addInstallingGame(packageName);
         String fileName = packageName + Constant.APK;
         if (Utils.permitSilentInstall(packageName)) {

@@ -37,10 +37,10 @@ public class DownloadUrlUtils {
         }
 
         Map<String, String> map = new HashMap<String, String>();
-        map.put(JsonConstant.GAME_ID, info.mGameId + Constant.EMPTY);
-        if (GamesUpgradeManager.isIncreaseType(info.mPackageName)) {
+        map.put(JsonConstant.GAME_ID, info.gameId);
+        if (GamesUpgradeManager.isIncreaseType(info.packageName)) {
             map.put(JsonConstant.TYPE, StatisValue.SPLIT);
-            map.put(JsonConstant.MD5, getPkgMd5(info.mPackageName));
+            map.put(JsonConstant.MD5, getPkgMd5(info.packageName));
         }
 
         String data = JsonUtils.postData(UrlConstant.GET_DOWNLOAD_URL, map);
@@ -57,7 +57,7 @@ public class DownloadUrlUtils {
             String gameUrl = json.optString(JsonConstant.DOWN_URL);
             if (!TextUtils.isEmpty(gameUrl) && !gameUrl.equals(info.mRawDownloadUrl)) {
                 info.mRawDownloadUrl = gameUrl;
-                info.mDownloadUrl = gameUrl;
+                info.downUrl = gameUrl;
                 DownloadDB.getInstance().update(info);
             }
         } catch (JSONException e) {

@@ -39,7 +39,6 @@ public class DownloadDB extends SQLiteOpenHelper {
     private static final String COLUMN_GAME_SIZE = "game_size";
     private static final String COLUMN_DOWNLOAD_URL = "download_url";
     private static final String COLUMN_GAME_ID = "game_id";
-    private static final String COLUMN_ICON_URL = "icon_url";
     private static final String COLUMN_GAME_NAME = "game_name";
     private static final String COLUMN_PACKAGE_NAME = "package_name";
     private static final String COLUMN_SOURCE = "source";
@@ -87,7 +86,6 @@ public class DownloadDB extends SQLiteOpenHelper {
         sb.append(COLUMN_GAME_SIZE).append(" varchar,");
         sb.append(COLUMN_DOWNLOAD_URL).append(" varchar,");
         sb.append(COLUMN_GAME_ID).append(" integer,");
-        sb.append(COLUMN_ICON_URL).append(" varchar,");
         sb.append(COLUMN_GAME_NAME).append(" varchar,");
         sb.append(COLUMN_PACKAGE_NAME).append(" varchar,");
         sb.append(COLUMN_SOURCE).append(" varchar,");
@@ -166,7 +164,7 @@ public class DownloadDB extends SQLiteOpenHelper {
                     values.put(COLUMN_REASON, info.mReason);
                     values.put(COLUMN_TOTAL_SIZE_BYTES, info.mTotalSize);
                     values.put(COLUMN_PROGRESS, info.mProgress);
-                    values.put(COLUMN_DOWNLOAD_URL, info.mDownloadUrl);
+                    values.put(COLUMN_DOWNLOAD_URL, info.downUrl);
                     values.put(COLUMN_RAW_DOWNLOAD_URL, info.mRawDownloadUrl);
                     if (info.isCompleted()) {
                         values.put(COLUMN_COMPLETE_TIME, info.getCompleteTime());
@@ -192,12 +190,11 @@ public class DownloadDB extends SQLiteOpenHelper {
             long retDownId = NO_DOWN_ID;
             ContentValues values = new ContentValues();
             values.put(COLUMN_FILE_PATH, info.mFilePath);
-            values.put(COLUMN_GAME_SIZE, info.mGameSize);
-            values.put(COLUMN_DOWNLOAD_URL, info.mDownloadUrl);
-            values.put(COLUMN_GAME_ID, info.mGameId);
-            values.put(COLUMN_ICON_URL, info.mIconUrl);
-            values.put(COLUMN_GAME_NAME, info.mGameName);
-            values.put(COLUMN_PACKAGE_NAME, info.mPackageName);
+            values.put(COLUMN_GAME_SIZE, info.size);
+            values.put(COLUMN_DOWNLOAD_URL, info.downUrl);
+            values.put(COLUMN_GAME_ID, info.gameid);
+            values.put(COLUMN_GAME_NAME, info.name);
+            values.put(COLUMN_PACKAGE_NAME, info.packageName);
             values.put(COLUMN_SOURCE, info.mSource);
             values.put(COLUMN_ALLOW_BY_MOBILE_NET, info.mAllowByMobileNet ? 1 : 0);
             values.put(COLUMN_RESERVE_JSON, info.mReserveJson);
@@ -206,7 +203,7 @@ public class DownloadDB extends SQLiteOpenHelper {
             values.put(COLUMN_PROGRESS, info.mProgress);
             values.put(COLUMN_TOTAL_SIZE_BYTES, info.mTotalSize);
             values.put(COLUMN_START_TIME, info.mStartTime);
-            values.put(COLUMN_RAW_DOWNLOAD_URL, info.mDownloadUrl);
+            values.put(COLUMN_RAW_DOWNLOAD_URL, info.downUrl);
             values.put(COLUMN_IS_SILENT_DOWNLOAD, info.mIsSilentDownload ? 1 : 0);
             values.put(COLUMN_VERSION_CODE, info.mVersionCode);
             values.put(COLUMN_INIT_TIME, info.mInitTime);
@@ -237,7 +234,7 @@ public class DownloadDB extends SQLiteOpenHelper {
                 for (int i = 0; i < count; i++) {
                     cursor.moveToPosition(i);
                     DownloadInfo info = createDownloadInfo(cursor);
-                    if (!info.isCompleted() || Utils.isFileExisting(info.mPackageName + Constant.APK)) {
+                    if (!info.isCompleted() || Utils.isFileExisting(info.packageName + Constant.APK)) {
                         list.add(info);
                     }
                 }
@@ -256,12 +253,11 @@ public class DownloadDB extends SQLiteOpenHelper {
         DownloadInfo info = new DownloadInfo();
         info.mDownId = cursor.getLong(cursor.getColumnIndex(COLUMN_ID));
         info.mFilePath = cursor.getString(cursor.getColumnIndex(COLUMN_FILE_PATH));
-        info.mGameSize = cursor.getString(cursor.getColumnIndex(COLUMN_GAME_SIZE));
-        info.mDownloadUrl = cursor.getString(cursor.getColumnIndex(COLUMN_DOWNLOAD_URL));
-        info.mGameId = cursor.getLong(cursor.getColumnIndex(COLUMN_GAME_ID));
-        info.mIconUrl = cursor.getString(cursor.getColumnIndex(COLUMN_ICON_URL));
-        info.mGameName = cursor.getString(cursor.getColumnIndex(COLUMN_GAME_NAME));
-        info.mPackageName = cursor.getString(cursor.getColumnIndex(COLUMN_PACKAGE_NAME));
+        info.size = cursor.getString(cursor.getColumnIndex(COLUMN_GAME_SIZE));
+        info.downUrl = cursor.getString(cursor.getColumnIndex(COLUMN_DOWNLOAD_URL));
+        info.gameid = cursor.getLong(cursor.getColumnIndex(COLUMN_GAME_ID));
+        info.name = cursor.getString(cursor.getColumnIndex(COLUMN_GAME_NAME));
+        info.packageName = cursor.getString(cursor.getColumnIndex(COLUMN_PACKAGE_NAME));
         info.mSource = cursor.getString(cursor.getColumnIndex(COLUMN_SOURCE));
         info.mAllowByMobileNet = cursor.getInt(cursor.getColumnIndex(COLUMN_ALLOW_BY_MOBILE_NET)) == 1;
         info.mReserveJson = cursor.getString(cursor.getColumnIndex(COLUMN_RESERVE_JSON));

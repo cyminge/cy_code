@@ -114,9 +114,9 @@ public class DownloadStatusMgr {
             return DownloadDB.NO_DOWN_ID;
         }
 
-        String packageName = downloadArgs.mPackageName;
+        String packageName = downloadArgs.packageName;
         String localPath = File.separator + packageName;
-        if (GamesUpgradeManager.isIncreaseType(downloadArgs.mPackageName)) {
+        if (GamesUpgradeManager.isIncreaseType(downloadArgs.packageName)) {
             localPath = localPath + ".patch" + Constant.TMP_FILE_EXT;
         } else {
             localPath = localPath + Constant.APK + Constant.TMP_FILE_EXT;
@@ -138,7 +138,7 @@ public class DownloadStatusMgr {
      * @return
      */
     protected long enqueue(DownloadRequest request, int delayTime) {
-        DownloadInfo info = DownloadInfoMgr.getDownloadInfoInAll(request.mPackageName);
+        DownloadInfo info = DownloadInfoMgr.getDownloadInfoInAll(request.packageName);
         info = handlerExistInfo(info);
         if (null != info) {
             return info.mDownId;
@@ -158,7 +158,7 @@ public class DownloadStatusMgr {
             info.mDownId = id;
             mDownloadInfoMgr.addDownloadInfo(info);
             delayAddInfoForAnimation(info, delayTime);
-            GameActionUtil.postGameAction(info.mPackageName, Constant.ACTION_START_DOWNLOAD); // 什么东东???
+            GameActionUtil.postGameAction(info.packageName, Constant.ACTION_START_DOWNLOAD); // 什么东东???
         }
         return id;
     }
@@ -190,10 +190,10 @@ public class DownloadStatusMgr {
     }
 
     private void enqueue(DownloadInfo info) {
-        if (Utils.isMobileNet() && (!info.mAllowByMobileNet || info.mAutoDownload)) {
-            pauseDownloadTask(info.mPackageName, PAUSE_WAIT_WIFI, false);
+        if (Utils.isMobileNet() && (!info.mAllowByMobileNet || info.mWifiAutoDownload)) {
+            pauseDownloadTask(info.packageName, PAUSE_WAIT_WIFI, false);
         } else {
-            resumeDownloadTask(info.mPackageName, REASON_START);
+            resumeDownloadTask(info.packageName, REASON_START);
         }
     }
 
@@ -230,9 +230,9 @@ public class DownloadStatusMgr {
     public void onDeleteTask(DownloadInfo info) {
         int oldStatus = info.mStatus;
         info.mStatus = TASK_STATUS_DELETE;
-        ButtonStatusManager.removeDownloaded(info.mPackageName);
-        mDownloadInfoMgr.removeDownloadInfo(info.mPackageName);
-        Utils.delAllfiles(info.mPackageName);
+        ButtonStatusManager.removeDownloaded(info.packageName);
+        mDownloadInfoMgr.removeDownloadInfo(info.packageName);
+        Utils.delAllfiles(info.packageName);
         if (oldStatus == DownloadStatusMgr.TASK_STATUS_DOWNLOADING) {
             switchPendingToDownload();
         }
@@ -341,7 +341,7 @@ public class DownloadStatusMgr {
         for (String pkg : packageList) {
             DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(pkg);
             if (info.mReason == PAUSE_NO_NETWORK || info.mReason == PAUSE_WAIT_WIFI) {
-                resumeDownloadTask(info.mPackageName, RESUME_NETWORK_RECONNECT);
+                resumeDownloadTask(info.packageName, RESUME_NETWORK_RECONNECT);
             }
         }
     }
@@ -355,7 +355,7 @@ public class DownloadStatusMgr {
             for (String pkg : packageList) {
                 DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(pkg);
                 if (shouldResumeOnMediaChanged(info)) {
-                    resumeDownloadTask(info.mPackageName, RESUME_DEVICE_RECOVER);
+                    resumeDownloadTask(info.packageName, RESUME_DEVICE_RECOVER);
                 }
             }
         }
@@ -381,7 +381,7 @@ public class DownloadStatusMgr {
         for (Entry<String, DownloadInfo> entry : entrySet) {
             DownloadInfo info = entry.getValue();
             if (info.isRunning()) {
-                String pkgName = info.mPackageName;
+                String pkgName = info.packageName;
                 info.mNeedUpdateDB = true;
                 DownloadInfo targetInfo = switchTaskStatus(pkgName, status, reason);
                 mDownloadInfoMgr.updateDownloadInfo(targetInfo, false);

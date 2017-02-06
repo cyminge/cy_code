@@ -6,7 +6,6 @@ import com.cy.frame.downloader.core.DownloadInfoMgr;
 import com.cy.frame.downloader.core.DownloadStatusMgr;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
-import com.cy.frame.downloader.entity.ListData;
 import com.cy.frame.downloader.install.InstallManager;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.global.WatchDog;
@@ -56,7 +55,7 @@ public class ButtonStatusManager {
      * @return
      */
     public static synchronized int getButtonStatus(DownloadArgs args) {
-        int status = getButtonStatus(args.mPackageName);
+        int status = getButtonStatus(args.packageName);
         return convertStatus(args, status);
     }
 
@@ -104,7 +103,7 @@ public class ButtonStatusManager {
     }
 
     private static int convertStatus(DownloadArgs args, int status) {
-        if (args.mRewardData != null) {
+        if (args.reward != null) {
             if (BUTTON_STATUS_DOWNLOAD == status) {
                 status = BUTTON_STATUS_REWARD_DOWNLOAD;
             } else if (BUTTON_STATUS_UPGRADE == status) {
@@ -122,8 +121,8 @@ public class ButtonStatusManager {
      */
     public static boolean isOpenTest(DownloadArgs args, int status) {
         if ((BUTTON_STATUS_REWARD_DOWNLOAD == status || BUTTON_STATUS_REWARD_UPGRADE == status)
-                && args.mRewardData != null) {
-            int rewardStatisId = args.mRewardData.mRewardStatisId;
+                && args.reward != null) {
+            int rewardStatisId = args.reward.rewardStatisId;
             if ((rewardStatisId & FLAG_OPEN_TEST_TEST) != 0) {
                 return true;
             }
@@ -216,7 +215,7 @@ public class ButtonStatusManager {
      * @param data
      * @return
      */
-    public static float getProgress(ListData data) {
+    public static float getProgress(DownloadArgs data) {
         return getProgress(data.mStatus, data);
     }
 
@@ -231,7 +230,7 @@ public class ButtonStatusManager {
             case BUTTON_STATUS_RUNNING:
             case BUTTON_STATUS_PAUSE:
             case BUTTON_STATUS_FAILED:
-                DownloadInfo info = DownloadInfoMgr.getNormalInstance().getDownloadInfo(args.mPackageName);
+                DownloadInfo info = DownloadInfoMgr.getNormalInstance().getDownloadInfo(args.packageName);
                 if (info == null) {
                     return 0;
                 }
@@ -239,7 +238,7 @@ public class ButtonStatusManager {
                 if (info.mTotalSize > 0) {
                     total = info.mTotalSize;
                 } else {
-                    total = Utils.getPkgTotalByte(args.mPackageName, args.mGameSize);
+                    total = Utils.getPkgTotalByte(args.packageName, args.size);
                 }
                 float progress = ((float) info.mProgress) / total;
                 progress = Math.max(0, progress);

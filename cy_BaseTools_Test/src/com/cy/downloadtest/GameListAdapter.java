@@ -18,8 +18,7 @@ import com.cy.frame.downloader.controller.DownloadClickHelper;
 import com.cy.frame.downloader.controller.DownloadClickHelper.DownloadClickCallback;
 import com.cy.frame.downloader.controller.SingleDownloadManager.SingleDownloadListener;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
-import com.cy.frame.downloader.entity.GameListData;
-import com.cy.frame.downloader.entity.ListData;
+import com.cy.frame.downloader.entity.GameBean;
 import com.cy.frame.downloader.ui.IProgressButton;
 import com.cy.global.WatchDog;
 import com.cy.test.R;
@@ -28,7 +27,7 @@ public class GameListAdapter extends BaseAdapter {
 
     private Context mContext;
 
-    public ArrayList<GameListDataCategory> mDataList = new ArrayList<GameListDataCategory>();
+    public ArrayList<GameBean> mDataList = new ArrayList<GameBean>();
 
     private DownloadClickHelper mClickHelper;
 
@@ -53,9 +52,9 @@ public class GameListAdapter extends BaseAdapter {
         }
 
         holder.progressButton.setTag(position);
-        holder.setButtonState(mDataList.get(position).getData());
+        holder.setButtonState(mDataList.get(position));
         holder.progressButton.setOnClickListener(mHolderClickListener);
-        holder.gameName.setText(((GameListData) (mDataList.get(position).getData())).mGameName);
+        holder.gameName.setText(((mDataList.get(position))).name);
 
         return convertView;
     }
@@ -70,12 +69,12 @@ public class GameListAdapter extends BaseAdapter {
          * @param data
          */
         public void setButtonState(Object data) {
-            GameListData listData = (GameListData) data;
+            GameBean listData = (GameBean) data;
             listData.mStatus = getButtonStatus(listData);
             progressButton.setButton(listData, listData.mStatus, ButtonStatusManager.getProgress(listData));
         }
 
-        public int getButtonStatus(GameListData data) {
+        public int getButtonStatus(GameBean data) {
             return ButtonStatusManager.getButtonStatus(data);
         }
 
@@ -126,15 +125,15 @@ public class GameListAdapter extends BaseAdapter {
         }
 
         Integer position = (Integer) view.getTag();
-        Object data = mDataList.get(position).getData();
+        Object data = mDataList.get(position);
 
-        ListData dataItem = (ListData) data;
+        GameBean dataItem = (GameBean) data;
         mClickHelper.clickHandle((IProgressButton) view, dataItem);
     }
     
     private void manualInstall(IProgressButton button, DownloadArgs data, boolean success) {
-        if (data instanceof ListData) {
-            ListData listData = (ListData) data;
+        if (data instanceof GameBean) {
+        	GameBean listData = (GameBean) data;
             if (success) {
                 listData.mStatus = ButtonStatusManager.BUTTON_STATUS_INSTALLING;
             } else {
@@ -188,7 +187,7 @@ public class GameListAdapter extends BaseAdapter {
     }
 
     @Override
-    public GameListDataCategory getItem(int position) {
+    public GameBean getItem(int position) {
         if (position < 0 || position >= getCount()) {
             return null;
         }

@@ -53,7 +53,7 @@ public class SingleDownloadManager extends StartDownloadManager {
 
         @Override
         protected Integer doInBackground(Object... params) {
-            String gamePackage = mDownloadArgs.mPackageName;
+            String gamePackage = mDownloadArgs.packageName;
             if (Utils.permitSilentInstall(gamePackage)) {
                 InstallManager.addInstallingGame(gamePackage);
             }
@@ -72,7 +72,7 @@ public class SingleDownloadManager extends StartDownloadManager {
                     runInstall(mDownloadArgs, mListener);
                     break;
                 case LOCALAPK_CHECK_SIGNFAIL:
-                    InstallManager.removeInstallingGame(mDownloadArgs.mPackageName);
+                    InstallManager.removeInstallingGame(mDownloadArgs.packageName);
                     Toast.makeText(mContext, R.string.nosame_sign, Toast.LENGTH_SHORT).show();
                     onResetDownload();
                     break;
@@ -92,7 +92,7 @@ public class SingleDownloadManager extends StartDownloadManager {
             return;
         }
 
-        if (InstallManager.isInstalling(mDownloadArgs.mPackageName)) { // 如果正在安装
+        if (InstallManager.isInstalling(mDownloadArgs.packageName)) { // 如果正在安装
             return;
         }
 
@@ -109,8 +109,8 @@ public class SingleDownloadManager extends StartDownloadManager {
      * @return
      */
     private boolean shouldCheckSign() {
-        UpgradeAppInfo upgradeAppInfo = GamesUpgradeManager.getOneAppInfo(mDownloadArgs.mPackageName);
-        return GamesUpgradeManager.hasNewVersion(mDownloadArgs.mPackageName) && hasLocalUpgradeApk(upgradeAppInfo);
+        UpgradeAppInfo upgradeAppInfo = GamesUpgradeManager.getOneAppInfo(mDownloadArgs.packageName);
+        return GamesUpgradeManager.hasNewVersion(mDownloadArgs.packageName) && hasLocalUpgradeApk(upgradeAppInfo);
     }
 
     /**
@@ -119,9 +119,9 @@ public class SingleDownloadManager extends StartDownloadManager {
      * @return
      */
     private boolean hasLocalUpgradeApk(UpgradeAppInfo info) {
-        String path = GNStorageUtils.getHomeDirAbsolute() + File.separator + info.mPackageName + Constant.APK;
+        String path = GNStorageUtils.getHomeDirAbsolute() + File.separator + info.packageName + Constant.APK;
         PackageInfo p = Utils.getPackageInfoByPath(path);
-        if (p != null && p.packageName.equals(info.mPackageName)) {
+        if (p != null && p.packageName.equals(info.packageName)) {
             if (p.versionCode >= info.mNewVersionCode) {
                 return true;
             }
@@ -146,7 +146,7 @@ public class SingleDownloadManager extends StartDownloadManager {
     protected boolean isDownloadable() {
 
         if (hasLocalApk(mDownloadArgs)) { // 本地是否有apk
-            ButtonStatusManager.addDownloaded(mDownloadArgs.mPackageName);
+            ButtonStatusManager.addDownloaded(mDownloadArgs.packageName);
             runInstall(mDownloadArgs, mListener);
             return false;
         }
@@ -164,11 +164,11 @@ public class SingleDownloadManager extends StartDownloadManager {
             return false;
         }
 
-        UpgradeAppInfo upgradeAppInfo = GamesUpgradeManager.getOneAppInfo(args.mPackageName);
+        UpgradeAppInfo upgradeAppInfo = GamesUpgradeManager.getOneAppInfo(args.packageName);
         if (upgradeAppInfo != null && upgradeAppInfo.mIsIncreaseType) {
-            return checkSDCard(upgradeAppInfo.mPatchSize, args.mPackageName);
+            return checkSDCard(upgradeAppInfo.mPatchSize, args.packageName);
         } else {
-            return checkSDCard(args.mGameSize, args.mPackageName);
+            return checkSDCard(args.size, args.packageName);
         }
     }
 

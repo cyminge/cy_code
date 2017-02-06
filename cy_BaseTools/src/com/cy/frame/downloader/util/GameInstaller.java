@@ -18,6 +18,7 @@ import com.cy.frame.downloader.controller.ButtonStatusManager;
 import com.cy.frame.downloader.core.DownloadInfoMgr;
 import com.cy.frame.downloader.core.DownloadStatusMgr;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
+import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.install.InstallManager;
 import com.cy.global.BaseApplication;
 import com.cy.global.WatchDog;
@@ -48,7 +49,7 @@ import com.cy.utils.storage.GNStorageUtils;
     	NormalThreadPool.getInstance().post(new Runnable() {
             @Override
             public void run() {
-                DownloadArgs args = fromActivity ? (DownloadArgs) downloadArgs.clone() : downloadArgs;
+                DownloadArgs args = fromActivity ? (DownloadArgs) downloadArgs : downloadArgs;
                 systemSilentInstall(context, homeDir, args, fileName, fromActivity);
             }
         });
@@ -120,8 +121,8 @@ import com.cy.utils.storage.GNStorageUtils;
         }
 
         try {
-            String gameName = getGameName(args.mPackageName, args.mGameName);
-            String pkgName = args.mPackageName;
+            String gameName = getGameName(args.packageName, args.name);
+            String pkgName = args.packageName;
             String infoStr = context.getString(R.string.installed);
             Intent intent = new Intent();
             intent.setAction(INSTALL_JUMP_ACTION);
@@ -178,18 +179,18 @@ import com.cy.utils.storage.GNStorageUtils;
     }
 
     public static boolean manualInstall(final Context context, final DownloadArgs downloadArgs) {
-        String fileName = downloadArgs.mPackageName + Constant.APK;
-        if (Utils.isSamePackage(fileName, downloadArgs.mPackageName)) {
-            InstallManager.addInstallingGame(downloadArgs.mPackageName);
-            if (Utils.permitSilentInstall(downloadArgs.mPackageName)) {
+        String fileName = downloadArgs.packageName + Constant.APK;
+        if (Utils.isSamePackage(fileName, downloadArgs.packageName)) {
+            InstallManager.addInstallingGame(downloadArgs.packageName);
+            if (Utils.permitSilentInstall(downloadArgs.packageName)) {
                 GameInstaller.silentInstall(context, downloadArgs, fileName, true);
             } else {
-                GameInstaller.popupInstall(context, downloadArgs.mPackageName);
+                GameInstaller.popupInstall(context, downloadArgs.packageName);
             }
             return true;
         } else {
-            ButtonStatusManager.removeDownloaded(downloadArgs.mPackageName);
-            DownloadInfoMgr.getNormalInstance().removeDownloadInfo(downloadArgs.mPackageName);
+            ButtonStatusManager.removeDownloaded(downloadArgs.packageName);
+            DownloadInfoMgr.getNormalInstance().removeDownloadInfo(downloadArgs.packageName);
             Utils.deleteFile(fileName);
             Toast.makeText(context, R.string.file_error, Toast.LENGTH_SHORT).show();
             return false;

@@ -6,6 +6,7 @@ import android.widget.ListView;
 import com.cy.downloadtest.GameListAdapter.GameViewHolder;
 import com.cy.frame.downloader.core.DownloadInfoMgr;
 import com.cy.frame.downloader.core.DownloadInfoMgr.DownloadChangeListener;
+import com.cy.frame.downloader.entity.GameBean;
 
 /**
  * 下载按钮状态的处理
@@ -85,7 +86,7 @@ public class ButtonStatusHandler {
         if (realPosition < 0) {
             return;
         }
-        GameListDataCategory gameListDataCategory = mAdapter.getItem(realPosition);
+        GameBean gameListDataCategory = mAdapter.getItem(realPosition);
         if (gameListDataCategory == null) {
             return;
         }
@@ -103,7 +104,7 @@ public class ButtonStatusHandler {
     }
 
     private Object getItemData(int holderPosition) {
-        return mAdapter.getItem(holderPosition).getData();
+        return mAdapter.getItem(holderPosition);
     }
 
     private void updateProgressButton(Object viewHolderTag, Object listData, int position) {

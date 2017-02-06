@@ -1,6 +1,5 @@
 package com.cy.frame.downloader.controller;
 
-import android.app.Activity;
 import android.widget.Toast;
 
 import com.cy.frame.downloader.controller.SingleDownloadManager.SingleDownloadListener;
@@ -9,6 +8,7 @@ import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.ui.IProgressButton;
 import com.cy.frame.downloader.util.GameInstaller;
 import com.cy.global.BaseApplication;
+import com.cy.global.WatchDog;
 import com.cy.utils.Utils;
 
 /**
@@ -18,16 +18,14 @@ import com.cy.utils.Utils;
  */
 public class DownloadClickHelper {
 
-    private Activity mActivity;
     private DownloadClickCallback mDownloadClickCallback;
     private DownloadStatusMgr mDownloadStatusMgr;
 
-    public DownloadClickHelper(Activity activity) {
-        this(activity, null);
+    public DownloadClickHelper() {
+        this(null);
     }
     
-    public DownloadClickHelper(Activity activity, DownloadClickCallback downloadClickCallback) {
-        mActivity = activity;
+    public DownloadClickHelper(DownloadClickCallback downloadClickCallback) {
         mDownloadClickCallback = downloadClickCallback;
         mDownloadStatusMgr = DownloadStatusMgr.getNormalInstance();
     }
@@ -97,7 +95,7 @@ public class DownloadClickHelper {
                 startRewardDownload(args, button);
                 break;
             case ButtonStatusManager.BUTTON_STATUS_OPEN:
-                Utils.launchGame(args.mPackageName);
+                Utils.launchGame(args.packageName);
                 break;
             default:
                 break;
@@ -138,9 +136,6 @@ public class DownloadClickHelper {
      * @param button
      */
     private void startRewardDownload(final DownloadArgs args, final IProgressButton button) {
-        if (mActivity == null || mActivity.isFinishing()) {
-            return;
-        }
 //        RewardDialogMgr.sendRewardClickStatis(args);
 //        RewardDialogMgr.startRewardDownload(args, mActivity, new RewardDialogMgr.DownloadCallback() {
 //            @Override
@@ -154,9 +149,7 @@ public class DownloadClickHelper {
     }
 
     private void showGiftToast(DownloadArgs args) {
-        if (mActivity != null && !mActivity.isFinishing()) {
-            Toast.makeText(mActivity, "显示礼物提示", Toast.LENGTH_SHORT).show();
-        }
+        Toast.makeText(WatchDog.getContext(), "显示礼物提示", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -164,8 +157,8 @@ public class DownloadClickHelper {
      * @param args
      */
     private void pauseDownloadTask(DownloadArgs args) {
-        boolean downloading = mDownloadStatusMgr.isDownloading(args.mPackageName);
-        mDownloadStatusMgr.pauseDownloadTask(args.mPackageName, DownloadStatusMgr.PAUSE_BY_USER, downloading);
+        boolean downloading = mDownloadStatusMgr.isDownloading(args.packageName);
+        mDownloadStatusMgr.pauseDownloadTask(args.packageName, DownloadStatusMgr.PAUSE_BY_USER, downloading);
     }
 
     /**
@@ -176,7 +169,7 @@ public class DownloadClickHelper {
         if (!Utils.checkDownloadEnvironment(args)) {
             return;
         }
-        mDownloadStatusMgr.resumeDownloadTask(args.mPackageName, DownloadStatusMgr.RESUME_BY_USER);
+        mDownloadStatusMgr.resumeDownloadTask(args.packageName, DownloadStatusMgr.RESUME_BY_USER);
     }
 
 }

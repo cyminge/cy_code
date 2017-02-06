@@ -64,7 +64,7 @@ public class DownloadOrderMgr {
         synchronized (sSortPkgList) {
             sSortPkgList.clear();
             for (DownloadInfo info : infos) {
-                sSortPkgList.add(info.mPackageName);
+                sSortPkgList.add(info.packageName);
             }
             computeDownloadCount(sSortPkgList);
             DownloadNotification.updateNotification(sDownloadCount, sSortPkgList);

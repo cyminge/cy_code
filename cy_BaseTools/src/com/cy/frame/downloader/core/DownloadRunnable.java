@@ -111,7 +111,7 @@ public class DownloadRunnable implements Runnable {
             long fileLength = mDownloadFile.length();
             if (fileLength > mDownloadInfo.mTotalSize) {
                 mDownloadInfo.mProgress = 0;
-                Utils.delAllfiles(mDownloadInfo.mPackageName);
+                Utils.delAllfiles(mDownloadInfo.packageName);
             } else if (mDownloadInfo.mProgress != fileLength) {
                 mDownloadInfo.mProgress = fileLength;
             }
@@ -156,14 +156,14 @@ public class DownloadRunnable implements Runnable {
 
             if (mDownloadInfo.isNewDownload()) {
                 long totalSize = contentLength + mDownloadInfo.mProgress;
-                float gameSize = Float.valueOf(mDownloadInfo.mGameSize) * Constant.MB;
+                float gameSize = Float.valueOf(mDownloadInfo.size) * Constant.MB;
                 if (Math.abs(gameSize - totalSize) > Constant.MB && !mSizeRetryed) {
                     mSizeRetryed = true;
                     retryDownload(DownloadStatusMgr.FAIL_APK_ERROR);
                     return;
                 }
                 mDownloadInfo.mTotalSize = totalSize;
-                mDownloadInfo.mDownloadUrl = connect.getURL().toString();
+                mDownloadInfo.downUrl = connect.getURL().toString();
                 if (!mExit) {
                     getDownloadInfoMgr().updateDownloadInfo(mDownloadInfo);
                 }
@@ -228,7 +228,7 @@ public class DownloadRunnable implements Runnable {
 
     private HttpURLConnection initConnection() throws IOException {
         HttpURLConnection connection;
-        URL url = new URL(mDownloadInfo.mDownloadUrl);
+        URL url = new URL(mDownloadInfo.downUrl);
         connection = (HttpURLConnection) url.openConnection();
         if (mDownloadInfo.mProgress > 0) {
             connection.setRequestProperty("Range", "bytes=" + mDownloadInfo.mProgress + "-"); // 设置当前已下载的字节数
@@ -342,7 +342,7 @@ public class DownloadRunnable implements Runnable {
         }
 
         mExit = true;
-        DownloadService.postTask(mDownloadInfo.mPackageName, new DownloadRunnable(mDownloadInfo));
+        DownloadService.postTask(mDownloadInfo.packageName, new DownloadRunnable(mDownloadInfo));
     }
 
     private boolean checkWifi(int contentLength) {
@@ -368,7 +368,7 @@ public class DownloadRunnable implements Runnable {
 
     protected void handelSelfDownload(DownloadInfo downloadInfo) {
         startInstall(downloadInfo);
-        ButtonStatusManager.addDownloaded(mDownloadInfo.mPackageName);
+        ButtonStatusManager.addDownloaded(mDownloadInfo.packageName);
     }
 
     protected void startInstall(DownloadInfo downloadInfo) {
@@ -402,13 +402,13 @@ public class DownloadRunnable implements Runnable {
         }
         
         mExit = true;
-        getDownloadStatusMgr().onDownloadingExit(mDownloadInfo.mPackageName, status, reason);
+        getDownloadStatusMgr().onDownloadingExit(mDownloadInfo.packageName, status, reason);
         DownloadDB.getInstance().tryCloseDB();
     }
 
     private void failLogFile(String reason) {
         reason = reason.replace(LINE, Constant.EMPTY);
-        String log = mDownloadInfo.mPackageName + Constant.COMBINE_SYMBOL_2 + mDownloadInfo.mDownloadUrl
+        String log = mDownloadInfo.packageName + Constant.COMBINE_SYMBOL_2 + mDownloadInfo.downUrl
                 + Constant.COMBINE_SYMBOL_2 + System.currentTimeMillis() + Constant.COMBINE_SYMBOL_2 + reason;
         DownloadUtils.saveLastFailLog(log);
     }

@@ -139,7 +139,7 @@ import com.cy.utils.Utils;
     }
 
     public String getGameName() {
-        return mDownloadArgs == null ? Constant.EMPTY : mDownloadArgs.mGameName;
+        return mDownloadArgs == null ? Constant.EMPTY : mDownloadArgs.name;
     }
 
     public void onDestroy() {
@@ -157,7 +157,7 @@ import com.cy.utils.Utils;
                 @Override
                 public void run() {
                     final int status = getCurrentStatus();
-                    boolean fileMatch = Utils.isSamePackage(mFileName, mDownloadArgs.mPackageName);
+                    boolean fileMatch = Utils.isSamePackage(mFileName, mDownloadArgs.packageName);
                     onResumeCheck(status, fileMatch);
                 }
             });
@@ -169,13 +169,13 @@ import com.cy.utils.Utils;
             @Override
             public void run() {
                 if (apkHasDeleted(status, fileMatch)) {
-                    ButtonStatusManager.removeDownloaded(mDownloadArgs.mPackageName);
-                    mDownloadInfoMgr.removeDownloadInfo(mDownloadArgs.mPackageName);
+                    ButtonStatusManager.removeDownloaded(mDownloadArgs.packageName);
+                    mDownloadInfoMgr.removeDownloadInfo(mDownloadArgs.packageName);
                     onStatusChange(status);
                 }
 
                 if (apkHasAdded(status, fileMatch)) {
-                    ButtonStatusManager.addDownloaded(mDownloadArgs.mPackageName);
+                    ButtonStatusManager.addDownloaded(mDownloadArgs.packageName);
                     onStatusChange(status);
                 }
             }
@@ -191,7 +191,7 @@ import com.cy.utils.Utils;
     }
 
     private void initFileName() {
-        mFileName = mDownloadArgs.mPackageName + Constant.APK;
+        mFileName = mDownloadArgs.packageName + Constant.APK;
     }
 
     public void getDownloadArgs() {
@@ -206,7 +206,7 @@ import com.cy.utils.Utils;
     }
 
     private boolean needShowView() {
-        return !Utils.isSameClient(mDownloadArgs.mPackageName) || isUpgrade();
+        return !Utils.isSameClient(mDownloadArgs.packageName) || isUpgrade();
     }
 
     private void showView() {
@@ -237,7 +237,7 @@ import com.cy.utils.Utils;
     private void onClickDownload() {
         if (mClickHelper == null) {
             
-            mClickHelper = new DownloadClickHelper(mActivity, new DownloadClickCallback() {
+            mClickHelper = new DownloadClickHelper(new DownloadClickCallback() {
                 @Override
                 public void onResumeDownload() {
                     handleDownloadChange(R.string.pause, ButtonStatusManager.BUTTON_STATUS_RUNNING);
@@ -303,11 +303,11 @@ import com.cy.utils.Utils;
                 handleDownloadChange(R.string.resume, status);
                 break;
             case ButtonStatusManager.BUTTON_STATUS_INSTALL:
-                if (Utils.isSamePackage(mFileName, mDownloadArgs.mPackageName)) {
+                if (Utils.isSamePackage(mFileName, mDownloadArgs.packageName)) {
                     setBtnText(ButtonStatusManager.BUTTON_STATUS_INSTALL, R.string.install);
                 } else {
-                    ButtonStatusManager.removeDownloaded(mDownloadArgs.mPackageName);
-                    mDownloadInfoMgr.removeDownloadInfo(mDownloadArgs.mPackageName);
+                    ButtonStatusManager.removeDownloaded(mDownloadArgs.packageName);
+                    mDownloadInfoMgr.removeDownloadInfo(mDownloadArgs.packageName);
                     Utils.deleteFile(mFileName);
                     setBtnText(status, R.string.download, getAppendSize());
                 }
@@ -325,7 +325,7 @@ import com.cy.utils.Utils;
                 setBtnText(status, R.string.reward_upgrade, getAppendSize());
                 break;
             case ButtonStatusManager.BUTTON_STATUS_UPGRADE:
-                UpgradeAppInfo info = GamesUpgradeManager.getOneAppInfo(mDownloadArgs.mPackageName);
+                UpgradeAppInfo info = GamesUpgradeManager.getOneAppInfo(mDownloadArgs.packageName);
                 if (isIncreaseUpgrade()) {
                     setBtnText(status, getIncreaseUpdateResId(), getPatchSize(info));
                 } else {
@@ -350,7 +350,7 @@ import com.cy.utils.Utils;
     }
 
     protected String getAppendSize() {
-        return mDownloadArgs.mGameSize + Constant.M;
+        return mDownloadArgs.size + Constant.M;
     }
 
     protected String getPatchSize(UpgradeAppInfo info) {
@@ -429,7 +429,7 @@ import com.cy.utils.Utils;
     }
 
     private void handleDownloadChange(int resId, int downloadStatus) {
-        DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(mDownloadArgs.mPackageName);
+        DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(mDownloadArgs.packageName);
         if (info == null) {
             return;
         }
@@ -438,7 +438,7 @@ import com.cy.utils.Utils;
 
     private void onDownloadRunning(long progress, long total, int resId, int downloadStatus) {
         if (total < 0) {
-            total = Utils.getPkgTotalByte(mDownloadArgs.mPackageName, mDownloadArgs.mGameSize);
+            total = Utils.getPkgTotalByte(mDownloadArgs.packageName, mDownloadArgs.size);
         }
 
         String percentText = Utils.getPercentText(progress, total);
@@ -464,11 +464,11 @@ import com.cy.utils.Utils;
     }
 
     private boolean isUpgrade() {
-        return GamesUpgradeManager.hasNewVersion(mDownloadArgs.mPackageName);
+        return GamesUpgradeManager.hasNewVersion(mDownloadArgs.packageName);
     }
 
     private boolean isIncreaseUpgrade() {
-        return GamesUpgradeManager.isIncreaseType(mDownloadArgs.mPackageName);
+        return GamesUpgradeManager.isIncreaseType(mDownloadArgs.packageName);
     }
 
     public String getGamePackage() {
@@ -476,7 +476,7 @@ import com.cy.utils.Utils;
             return Constant.EMPTY;
         }
 
-        return mDownloadArgs.mPackageName;
+        return mDownloadArgs.packageName;
     }
 
     public void startDownload(long gameId) {

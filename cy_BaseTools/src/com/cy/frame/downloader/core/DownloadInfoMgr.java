@@ -120,7 +120,7 @@ public class DownloadInfoMgr {
         } else if (info.isDownloading() && downloadingCount < DownloadStatusMgr.MAX_DOWNLOADING_TASK) {
 //            DownloadRunnable task = mIsSilent ? new SilentDownloadRunnable(info) : new DownloadRunnable(info); // cyminge modify
             DownloadRunnable task = new DownloadRunnable(info);
-            postTask(info.mPackageName, task);
+            postTask(info.packageName, task);
             downloadingCount++;
         } else {
             info.mStatus = DownloadStatusMgr.TASK_STATUS_PENDING;
@@ -262,7 +262,7 @@ public class DownloadInfoMgr {
     }
 
     public void updateDownloadInfo(DownloadInfo info, boolean updateDb) {
-        if (!hasDownloadInfo(info.mPackageName)) {
+        if (!hasDownloadInfo(info.packageName)) {
             return;
         }
         putToMap(info);
@@ -276,7 +276,7 @@ public class DownloadInfoMgr {
     }
 
     public void updateProgress(DownloadInfo info) {
-        if (!hasDownloadInfo(info.mPackageName)) {
+        if (!hasDownloadInfo(info.packageName)) {
             return;
         }
         putToMap(info);
@@ -290,7 +290,7 @@ public class DownloadInfoMgr {
     }
 
     public void updateProgressNoDelay(DownloadInfo info) {
-        if (!hasDownloadInfo(info.mPackageName)) {
+        if (!hasDownloadInfo(info.packageName)) {
             return;
         }
         putToMap(info);
@@ -300,7 +300,7 @@ public class DownloadInfoMgr {
     }
 
     public void putToMap(DownloadInfo info) {
-        mDownloadInfoMap.put(info.mPackageName, info);
+        mDownloadInfoMap.put(info.packageName, info);
     }
 
     public void removeFromMap(String pkgName) {

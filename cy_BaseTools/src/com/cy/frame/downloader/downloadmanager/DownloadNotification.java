@@ -56,7 +56,7 @@ public class DownloadNotification {
             if (i != 0) {
                 detailBuilder.append(comma);
             }
-            detailBuilder.append(info.mGameName);
+            detailBuilder.append(info.name);
         }
         return detailBuilder.toString();
     }
