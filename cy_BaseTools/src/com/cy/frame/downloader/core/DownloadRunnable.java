@@ -156,7 +156,7 @@ public class DownloadRunnable implements Runnable {
 
             if (mDownloadInfo.isNewDownload()) {
                 long totalSize = contentLength + mDownloadInfo.mProgress;
-                float gameSize = Float.valueOf(mDownloadInfo.size) * Constant.MB;
+                float gameSize = Float.valueOf(Utils.trimSize(mDownloadInfo.size)) * Constant.MB;
                 if (Math.abs(gameSize - totalSize) > Constant.MB && !mSizeRetryed) {
                     mSizeRetryed = true;
                     retryDownload(DownloadStatusMgr.FAIL_APK_ERROR);

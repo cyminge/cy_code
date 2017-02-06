@@ -103,7 +103,7 @@ public class GameListAdapter extends BaseAdapter {
         }
 
         if (mClickHelper == null) {
-            mClickHelper = new DownloadClickHelper((Activity) mContext, new DownloadClickCallback() {
+            mClickHelper = new DownloadClickHelper(new DownloadClickCallback() {
                 @Override
                 public void onResumeDownload() {
                 }

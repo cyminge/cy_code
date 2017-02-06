@@ -11,7 +11,7 @@ public class GameBean extends DownloadArgs {
 	public String category; // 分類
 	
 	public String img;  // 遊戲圖標
-	public String link;  // 下載鏈接地址
+//	public String link;  // 下載鏈接地址
 	public int commonGift;
 	public int vipGift;
 	public String freedl;

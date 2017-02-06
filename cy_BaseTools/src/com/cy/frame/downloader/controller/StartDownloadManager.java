@@ -172,6 +172,9 @@ public abstract class StartDownloadManager {
 //        }
 
         String source = downloadArgs.mSource;
+        if(source == null) {
+        	return "";
+        }
         if (source.contains(StatisValue.SPLIT) || source.contains(StatisValue.UPDATE)) {
             return source;
         }
