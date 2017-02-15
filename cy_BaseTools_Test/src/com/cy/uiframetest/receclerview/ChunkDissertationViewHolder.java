@@ -229,6 +229,7 @@ public class ChunkDissertationViewHolder extends AbstractRecyclerViewHolder<Chun
 		
 	    public void setButtonState(GameBean data) {
 	    	data.mStatus = getButtonStatus(data);
+	    	mButton.setTag(data);
 	        mButton.setButton(data, data.mStatus, ButtonStatusManager.getProgress(data));
 	    }
 	    

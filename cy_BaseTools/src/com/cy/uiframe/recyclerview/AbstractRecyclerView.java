@@ -70,6 +70,14 @@ public abstract class AbstractRecyclerView<T> extends RecyclerView {
 		return false;
 	}
 	
+	public int getHeaderViewsCount() {
+		return mAdapter.getHeaderViewsCount();
+	}
+	
+	public void exit() {
+		
+	}
+	
 	// @Override
 	// public void setLayoutManager(LayoutManager layout) {
 	// super.setLayoutManager(layout);

@@ -136,6 +136,7 @@ public class DownloadClickHelper {
      * @param button
      */
     private void startRewardDownload(final DownloadArgs args, final IProgressButton button) {
+    	startDownload(args, false, button);
 //        RewardDialogMgr.sendRewardClickStatis(args);
 //        RewardDialogMgr.startRewardDownload(args, mActivity, new RewardDialogMgr.DownloadCallback() {
 //            @Override

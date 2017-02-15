@@ -34,11 +34,12 @@ public abstract class AbstractRecyclerViewHolder<T> extends RecyclerView.ViewHol
     
     protected void onViewHolderClick(View view, int id) {
     	if(view instanceof IProgressButton) {
-    		onDownloadBtnClick();
+    		IProgressButton btn = (IProgressButton) view;
+    		onDownloadBtnClick(btn);
     	} 
     }
 
-    private void onDownloadBtnClick() {
+    private void onDownloadBtnClick(IProgressButton btn) {
     	if (mClickHelper == null) {
             mClickHelper = new DownloadClickHelper(new DownloadClickCallback() {
                 @Override
@@ -60,6 +61,8 @@ public abstract class AbstractRecyclerViewHolder<T> extends RecyclerView.ViewHol
                 }
             });
         }
+    	
+    	mClickHelper.clickHandle(btn, (DownloadArgs)btn.getTag());
     }
     
     private SingleDownloadListener createDownloadListener(final IProgressButton button,
