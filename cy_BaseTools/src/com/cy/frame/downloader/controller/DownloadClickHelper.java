@@ -1,14 +1,11 @@
 package com.cy.frame.downloader.controller;
 
-import android.widget.Toast;
-
 import com.cy.frame.downloader.controller.SingleDownloadManager.SingleDownloadListener;
 import com.cy.frame.downloader.core.DownloadStatusMgr;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.ui.IProgressButton;
 import com.cy.frame.downloader.util.GameInstaller;
 import com.cy.global.BaseApplication;
-import com.cy.global.WatchDog;
 import com.cy.utils.Utils;
 
 /**
@@ -95,16 +92,20 @@ public class DownloadClickHelper {
                 startRewardDownload(args, button);
                 break;
             case ButtonStatusManager.BUTTON_STATUS_OPEN:
-                Utils.launchGame(args.packageName);
+                launchGame(args.packageName);
                 break;
             default:
                 break;
         }
     }
+    
+    protected void launchGame(String packageName) {
+    	Utils.launchGame(packageName);
+    }
 
     private int getCurrentStatus(DownloadArgs args) {
         if (args == null) {
-            return ButtonStatusManager.BUTTON_STATUS_RUNNING;
+            return ButtonStatusManager.BUTTON_STATUS_RUNNING; //??
         }
 
         return ButtonStatusManager.getButtonStatus(args);
@@ -149,8 +150,14 @@ public class DownloadClickHelper {
 //        });
     }
 
+    /**
+     * 这个是什么功能??
+     * @param args
+     */
     private void showGiftToast(DownloadArgs args) {
-        Toast.makeText(WatchDog.getContext(), "显示礼物提示", Toast.LENGTH_SHORT).show();
+//    	if(args.reward != null && !TextUtils.isEmpty(args.reward.remindDes)) {
+//		Toast.makeText(WatchDog.getContext(), "显示礼物提示", Toast.LENGTH_SHORT).show();
+//    	}
     }
 
     /**
@@ -159,7 +166,7 @@ public class DownloadClickHelper {
      */
     private void pauseDownloadTask(DownloadArgs args) {
         boolean downloading = mDownloadStatusMgr.isDownloading(args.packageName);
-        mDownloadStatusMgr.pauseDownloadTask(args.packageName, DownloadStatusMgr.PAUSE_BY_USER, downloading);
+        mDownloadStatusMgr.pauseDownloadTask(args.packageName, DownloadStatusMgr.TASK_PAUSE_BY_USER, downloading);
     }
 
     /**
@@ -170,7 +177,7 @@ public class DownloadClickHelper {
         if (!Utils.checkDownloadEnvironment(args)) {
             return;
         }
-        mDownloadStatusMgr.resumeDownloadTask(args.packageName, DownloadStatusMgr.RESUME_BY_USER);
+        mDownloadStatusMgr.resumeDownloadTask(args.packageName, DownloadStatusMgr.TASK_RESUME_BY_USER);
     }
 
 }

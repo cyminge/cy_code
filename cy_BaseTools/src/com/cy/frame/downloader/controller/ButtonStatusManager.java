@@ -12,23 +12,22 @@ import com.cy.global.WatchDog;
 import com.cy.utils.Utils;
 
 public class ButtonStatusManager {
-    public static final int BUTTON_STATUS_DOWNLOAD = 0x0;
-    public static final int BUTTON_STATUS_RUNNING = 0x1;
-    public static final int BUTTON_STATUS_UPGRADE = 0x2;
-    public static final int BUTTON_STATUS_OPEN = 0x3;
-    public static final int BUTTON_STATUS_INSTALLING = 0x4;
-    public static final int BUTTON_STATUS_DISABLE = 0x5;
-    public static final int BUTTON_STATUS_PAUSE = 0x6;
-    public static final int BUTTON_STATUS_INSTALL = 0x7;
-    public static final int BUTTON_STATUS_FAILED = 0x8;
-    public static final int BUTTON_STATUS_REWARD_DOWNLOAD = 0x9;
-    public static final int BUTTON_STATUS_REWARD_UPGRADE = 0xa;
-    public static final int BUTTON_STATUS_GAME_SUBSCRIBE = 0xb;
-    public static final int BUTTON_STATUS_GAME_SUBSCRIBED = 0xc;
-    public static final int BUTTON_STATUS_OPEN_TEST_DOWNLOAD = 0xd;
-    public static final int BUTTON_STATUS_GAME_SUBSCRIBE_DOWNLOAD = 0xe;
+    public static final int BUTTON_STATUS_DOWNLOAD = 0x0;             // 下载
+    public static final int BUTTON_STATUS_RUNNING = 0x1;              // 下载中
+    public static final int BUTTON_STATUS_UPGRADE = 0x2;              // 更新
+    public static final int BUTTON_STATUS_OPEN = 0x3;                 // 打开
+    public static final int BUTTON_STATUS_INSTALLING = 0x4;           // 安装中
+    public static final int BUTTON_STATUS_DISABLE = 0x5;              // 本应用，按钮不可用
+    public static final int BUTTON_STATUS_PAUSE = 0x6;                // 暂停
+    public static final int BUTTON_STATUS_INSTALL = 0x7;              // 安装
+    public static final int BUTTON_STATUS_FAILED = 0x8;               // 失败 ??         
+    public static final int BUTTON_STATUS_REWARD_DOWNLOAD = 0x9;      // 有奖下载
+    public static final int BUTTON_STATUS_REWARD_UPGRADE = 0xa;       // 有奖更新
+    public static final int BUTTON_STATUS_GAME_SUBSCRIBE = 0xb;       // 预约
+    public static final int BUTTON_STATUS_GAME_SUBSCRIBED = 0xc;      // 已预约
+    public static final int BUTTON_STATUS_GAME_SUBSCRIBE_DOWNLOAD = 0xe; // 预约下载
     private static final float MAX_PROGRESS = 0.99f;
-    private static final int FLAG_OPEN_TEST_TEST = 1 << 3;
+    private static final int FLAG_OPEN_TEST_TEST = 1 << 3; // 测试环境用
 
     private static ArrayList<String> sInstalledApp = new ArrayList<String>();
     private static ArrayList<String> sDownloadedAPK = new ArrayList<String>();
@@ -38,6 +37,12 @@ public class ButtonStatusManager {
         initInstalledApp(); // 初始化所有已安装的应用
     }
     
+    /**
+     * 测试用
+     * @param args
+     * @param status
+     * @return
+     */
     public static int convertOpenTestStatus(DownloadArgs args, int status) {
         if (isOpenTest(args, status)) {
             if (BUTTON_STATUS_DOWNLOAD == status) {
@@ -212,21 +217,12 @@ public class ButtonStatusManager {
 
     /**
      * 获取下载进度
-     * @param data
-     * @return
-     */
-    public static float getProgress(DownloadArgs data) {
-        return getProgress(data.mStatus, data);
-    }
-
-    /**
-     * 获取下载进度
      * @param status
      * @param args
      * @return
      */
-    public static float getProgress(int status, DownloadArgs args) {
-        switch (status) {
+    public static float getProgress(DownloadArgs args) {
+        switch (args.mStatus) {
             case BUTTON_STATUS_RUNNING:
             case BUTTON_STATUS_PAUSE:
             case BUTTON_STATUS_FAILED:

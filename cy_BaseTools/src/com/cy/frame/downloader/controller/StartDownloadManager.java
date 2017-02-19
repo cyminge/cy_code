@@ -40,14 +40,12 @@ public abstract class StartDownloadManager {
      * @return
      */
     protected abstract boolean isDownloadable();
-
     protected abstract boolean confirmDownload();
-
     protected abstract void onResetDownload();
-
     protected abstract void startDownload();
 
     protected StartDownloadManager() {
+    	this(0);
     }
 
     public StartDownloadManager(int delayTime) {
@@ -98,7 +96,10 @@ public abstract class StartDownloadManager {
         return true;
     }
 
-
+    /**
+     * 省流量升级失败后再下载的提醒框
+     * @param downloadArgs
+     */
     private void showFullApkDialog(DownloadArgs downloadArgs) {
         String message = mContext.getString(R.string.reload_fullapk_nofify, downloadArgs.name,
                 downloadArgs.size);

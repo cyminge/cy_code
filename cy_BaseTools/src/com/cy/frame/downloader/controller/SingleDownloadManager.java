@@ -105,7 +105,7 @@ public class SingleDownloadManager extends StartDownloadManager {
     }
 
     /**
-     * 检查是否有新版本的签名
+     * 检查是否有新版本
      * @return
      */
     private boolean shouldCheckSign() {

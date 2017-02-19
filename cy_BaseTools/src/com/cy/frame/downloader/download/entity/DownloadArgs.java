@@ -8,8 +8,8 @@ public class DownloadArgs implements Cloneable {
 	public int mStatus = ButtonStatusManager.BUTTON_STATUS_DOWNLOAD;
 
 	public String mSource;
-	public boolean mIsSilentDownload = false;
-	public boolean mWifiAutoDownload = false;
+	public boolean mIsSilentDownload = false; // 是否静默下载
+	public boolean mWifiAutoDownload = false; 
 	public int mVersionCode = -1;
 
 	public String downloadCount; // 下載數

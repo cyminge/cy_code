@@ -1,6 +1,5 @@
 package com.cy.frame.downloader.core;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -9,6 +8,7 @@ import android.widget.Toast;
 
 import com.cy.R;
 import com.cy.constant.Constant;
+import com.cy.frame.downloader.config.DownloadConfiguration;
 import com.cy.frame.downloader.controller.ButtonStatusManager;
 import com.cy.frame.downloader.controller.DownloadOrderMgr;
 import com.cy.frame.downloader.download.DownloadUtils;
@@ -26,48 +26,49 @@ import com.cy.utils.storage.GNStorageUtils;
 
 public class DownloadStatusMgr {
 
-    public static final int TASK_STATUS_PENDING = 0x100;
-    public static final int TASK_STATUS_DOWNLOADING = 0x101;
-    public static final int TASK_STATUS_PAUSED = 0x102;
-    public static final int TASK_STATUS_SUCCESSFUL = 0x103;
-    public static final int TASK_STATUS_FAILED = 0x104;
-    public static final int TASK_STATUS_DELETE = 0x105;
+    public static final int TASK_STATUS_PENDING = 0x100;              // 等待中 
+    public static final int TASK_STATUS_DOWNLOADING = 0x101;          // 下载中
+    public static final int TASK_STATUS_PAUSED = 0x102;               // 已暂停
+    public static final int TASK_STATUS_SUCCESSFUL = 0x103;           // 下载完成
+    public static final int TASK_STATUS_FAILED = 0x104;               // 下载失败
+    public static final int TASK_STATUS_DELETE = 0x105;               // 删除
 
-    public static final int REASON_NONE = -1;
+    public static final int TASK_FAIL_REASON_NONE = -1;
     // fail reason
-    public static final int FAIL_UNKNOWN = 0x300;
-    public static final int FAIL_HTTP_DATA_ERROR = 0x301;
-    public static final int FAIL_URL_ERROR = 0x302;
-    public static final int FAIL_APK_ERROR = 0x303;
-    public static final int FAIL_URL_UNREACHABLE = 0x304;
-    public static final int FAIL_URL_UNRECOVERABLE = 0x305;
-    public static final int FAIL_CONTENT_TYPE_ERROR = 0x306;
-    public static final int FAIL_GAME_NOT_EXIST = 0x308;
-    public static final int FAIL_CANNOT_RESUME = 0x309;
+    public static final int TASK_FAIL_UNKNOWN = 0x300;                     //未知
+    public static final int TASK_FAIL_HTTP_DATA_ERROR = 0x301;             // Http 数据异常
+    public static final int TASK_FAIL_URL_ERROR = 0x302;                   // 下载地址有误
+    public static final int TASK_FAIL_APK_ERROR = 0x303;                   // 文件有误
+    public static final int TASK_FAIL_URL_UNREACHABLE = 0x304;             // 下载地址不可达
+    public static final int TASK_FAIL_URL_UNRECOVERABLE = 0x305;           // 下载地址不可恢复
+    public static final int TASK_FAIL_CONTENT_TYPE_ERROR = 0x306;          // 文件类型有误
+    public static final int TASK_FAIL_GAME_NOT_EXIST = 0x308;              // 应用不存在
+    public static final int TASK_FAIL_CANNOT_RESUME = 0x309;               // 任务不能继续
 
     // pause reason
-    public static final int PAUSE_NO_NETWORK = 0x509;
-    public static final int PAUSE_WAIT_WIFI = 0x510;
-    public static final int PAUSE_BY_USER = 0x511;
-    public static final int PAUSE_FILE_ERROR = 0x512;
-    public static final int PAUSE_INSUFFICIENT_SPACE = 0x513;
-    public static final int PAUSE_DEVICE_NOT_FOUND = 0x514;
-    public static final int PAUSE_WIFI_INVALID = 0x515;
-    public static final int PAUSE_XUNLEI_WAITING_TO_RETRY = 0x517;
+    public static final int TASK_PAUSE_NO_NETWORK = 0x509;
+    public static final int TASK_PAUSE_WAIT_WIFI = 0x510;
+    public static final int TASK_PAUSE_BY_USER = 0x511;
+    public static final int TASK_PAUSE_FILE_ERROR = 0x512;
+    public static final int TASK_PAUSE_INSUFFICIENT_SPACE = 0x513;
+    public static final int TASK_PAUSE_DEVICE_NOT_FOUND = 0x514;
+    public static final int TASK_PAUSE_WIFI_INVALID = 0x515;
+    public static final int TASK_PAUSE_XUNLEI_WAITING_TO_RETRY = 0x517;
 
     // resume reason
-    public static final int RESUME_NETWORK_RECONNECT = 0x600;
-    public static final int RESUME_BY_USER = 0x601;
-    public static final int RESUME_DEVICE_RECOVER = 0x602;
+    public static final int TASK_RESUME_NETWORK_RECONNECT = 0x600;
+    public static final int TASK_RESUME_BY_USER = 0x601;
+    public static final int TASK_RESUME_DEVICE_RECOVER = 0x602;
 
     public static final int REASON_START = 0x700;
     public static final int USER_DELETED = 0x701;
     public static final int REASON_PENDING = 0x703;
 
-    public static final int MAX_DOWNLOADING_TASK = 2; // 最大正在下载任务数
     public static final int MAX_DOWNLOAD_TASK = 100; // 最大下载任务数
     private int mLastNewtorkType = Constant.NETWORK_NO_NET;
 
+    private DownloadConfiguration mDownloadConfiguration;
+    
     private static DownloadStatusMgr sSilentInstance;
     private static DownloadStatusMgr sNormalInstance;
 
@@ -83,9 +84,7 @@ public class DownloadStatusMgr {
 
     public static DownloadStatusMgr getSilentInstance() {
         if (sSilentInstance == null) {
-            // sSilentInstance = new
-            // SilentDownloadStatusMgr(DownloadInfoMgr.getSilentInstance()); //
-            // cyminge modify
+//             sSilentInstance = new SilentDownloadStatusMgr(DownloadInfoMgr.getSilentInstance()); // cyminge modify
         }
         return sSilentInstance;
     }
@@ -99,9 +98,14 @@ public class DownloadStatusMgr {
     }
 
     protected DownloadStatusMgr(DownloadInfoMgr downloadInfoMgr) {
-        this.mDownloadInfoMgr = downloadInfoMgr;
+        mDownloadInfoMgr = downloadInfoMgr;
     }
-
+    
+    public static void init(DownloadConfiguration config) {
+    	getNormalInstance().mDownloadConfiguration = config;
+//    	getSilentInstance().mDownloadConfiguration = config; // cyminge modify
+    }
+    
     /**
      * 下载
      * 
@@ -110,21 +114,20 @@ public class DownloadStatusMgr {
      * @return
      */
     public long download(DownloadArgs downloadArgs, int delayTime) {
-        if (!DownloadInfoMgr.isSynDB()) { // 这是个什么东西 ??
+        if (!DownloadInfoMgr.isSynDB()) { // 如果下载服务没有初始化，则直接返回
             return DownloadDB.NO_DOWN_ID;
         }
 
         String packageName = downloadArgs.packageName;
-        String localPath = File.separator + packageName;
-        if (GamesUpgradeManager.isIncreaseType(downloadArgs.packageName)) {
-            localPath = localPath + ".patch" + Constant.TMP_FILE_EXT;
+        String localPath = null;
+        if (GamesUpgradeManager.isIncreaseType(packageName)) {
+        	localPath = mDownloadConfiguration.getHomePath()+ packageName + ".patch" + Constant.TMP_FILE_EXT; // 增量升级
         } else {
-            localPath = localPath + Constant.APK + Constant.TMP_FILE_EXT;
+            localPath = mDownloadConfiguration.getHomePath()+ packageName + Constant.APK + Constant.TMP_FILE_EXT;
         }
 
         DownloadRequest request = new DownloadRequest(downloadArgs);
-        // request.mAllowByMobileNet = SettingUtils.getAllowByMobileNet(); //
-        // 是否允许移动网络下载 cyminge modify
+        request.mAllowByMobileNet = mDownloadConfiguration.isAllowByMobileNet();
         request.mAllowByMobileNet = true;
         request.mFilePath = localPath;
         return enqueue(request, delayTime);
@@ -143,35 +146,18 @@ public class DownloadStatusMgr {
         if (null != info) {
             return info.mDownId;
         }
+        
         info = new DownloadInfo(request);
-
-        long id = DownloadDB.NO_DOWN_ID;
-        // if (ServerConfig.isXunleiEnable()) { // cyminge modify
-        // info.mIsXunlei = true;
-        // id = xunleiDownload(info);
-        // } else {
-        // id = DownloadDB.getInstance().insert(info);
-        // }
-        id = DownloadDB.getInstance().insert(info); // 插入数据库
-
-        if (DownloadDB.NO_DOWN_ID != id) {
-            info.mDownId = id;
-            mDownloadInfoMgr.addDownloadInfo(info);
-            delayAddInfoForAnimation(info, delayTime);
-            GameActionUtil.postGameAction(info.packageName, Constant.ACTION_START_DOWNLOAD); // 什么东东???
+        long id = DownloadDB.getInstance().insert(info); // 插入数据库
+        if (DownloadDB.NO_DOWN_ID == id) {
+            return DownloadDB.NO_DOWN_ID;
         }
+        
+        info.mDownId = id;
+        mDownloadInfoMgr.addDownloadInfo(info);
+        GameActionUtil.postGameAction(info.packageName, Constant.ACTION_START_DOWNLOAD); // 下载应用，通知栏提示
+        delayAddInfoForAnimation(info, delayTime);
         return id;
-    }
-
-    private long xunleiDownload(DownloadInfo info) {
-        // try {
-        // return XunleiManager.getInstance().download(info);
-        // } catch (Exception e) {
-        // Log.e("TAG", e.getLocalizedMessage(), e);
-        // info.mIsXunlei = false;
-        // return DownloadDB.getInstance().insert(info);
-        // }
-        return DownloadDB.getInstance().insert(info);
     }
 
     private void delayAddInfoForAnimation(final DownloadInfo info, int delayTime) {
@@ -190,13 +176,18 @@ public class DownloadStatusMgr {
     }
 
     private void enqueue(DownloadInfo info) {
-        if (Utils.isMobileNet() && (!info.mAllowByMobileNet || info.mWifiAutoDownload)) {
-            pauseDownloadTask(info.packageName, PAUSE_WAIT_WIFI, false);
+        if (Utils.isMobileNet() && (!info.mAllowByMobileNet || info.mWifiAutoDownload)) { // 移动网络下不让下载，只挂起任务
+            pauseDownloadTask(info.packageName, TASK_PAUSE_WAIT_WIFI, false);
         } else {
             resumeDownloadTask(info.packageName, REASON_START);
         }
     }
 
+    /**
+     * 是否已有该任务
+     * @param info
+     * @return
+     */
     protected DownloadInfo handlerExistInfo(DownloadInfo info) {
         if (null != info && info.mIsSilentDownload) {
             getSilentInstance().onDeleteTask(info);
@@ -222,7 +213,7 @@ public class DownloadStatusMgr {
 
     public void onSilentInstallingError(String pkgName) {
         if (mDownloadInfoMgr.hasDownloadInfo(pkgName)) {
-            switchSingleTaskStatus(pkgName, TASK_STATUS_FAILED, FAIL_APK_ERROR);
+            switchSingleTaskStatus(pkgName, TASK_STATUS_FAILED, TASK_FAIL_APK_ERROR);
             mDownloadInfoMgr.orderChange();
         }
     }
@@ -241,18 +232,18 @@ public class DownloadStatusMgr {
     public void switchPendingToDownload() {
         ArrayList<String> packageList = getSortPkgList();
         int downloadingCount = getDownloadingCount();
-        if (downloadingCount >= MAX_DOWNLOADING_TASK) {
+        if (downloadingCount >= mDownloadConfiguration.getMaxDownloadingTask()) {
             return;
         }
 
         for (String pkg : packageList) {
             DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(pkg);
-            if (downloadingCount >= MAX_DOWNLOADING_TASK) {
+            if (downloadingCount >= mDownloadConfiguration.getMaxDownloadingTask()) {
                 return;
             }
 
             if (info.mStatus == TASK_STATUS_PENDING) {
-                switchSingleTaskStatus(pkg, TASK_STATUS_DOWNLOADING, REASON_NONE);
+                switchSingleTaskStatus(pkg, TASK_STATUS_DOWNLOADING, TASK_FAIL_REASON_NONE);
                 downloadingCount++;
             }
         }
@@ -281,12 +272,12 @@ public class DownloadStatusMgr {
             return;
         }
 
-        // if (reason != REASON_START) { // 重新下载统计 cyminge modify
-        // DownloadUtils.sendResumeStatis(pkgName, reason);
-        // }
+         if (reason != REASON_START) { // 重新下载 统计 cyminge modify
+//        	 DownloadUtils.sendResumeStatis(pkgName, reason);
+         }
 
         int targetStatus = TASK_STATUS_DOWNLOADING;
-        if (getDownloadingCount() >= MAX_DOWNLOADING_TASK) {
+        if (getDownloadingCount() >= mDownloadConfiguration.getMaxDownloadingTask()) {
             targetStatus = TASK_STATUS_PENDING;
             reason = REASON_PENDING;
         }
@@ -310,7 +301,7 @@ public class DownloadStatusMgr {
     public void onNetworkChanged() {
         int networkType = Utils.getNetworkType();
         if (networkType == Constant.NETWORK_NO_NET) {
-            switchAllRunningTask(TASK_STATUS_PAUSED, PAUSE_NO_NETWORK);
+            switchAllRunningTask(TASK_STATUS_PAUSED, TASK_PAUSE_NO_NETWORK);
             if (DownloadOrderMgr.hasDownload()) {
                 Toast.makeText(BaseApplication.getAppContext(), R.string.network_off, Toast.LENGTH_SHORT)
                         .show();
@@ -326,9 +317,9 @@ public class DownloadStatusMgr {
     }
 
     private void onMobileNetworkConnect() {
-        int reason = REASON_NONE;
+        int reason = TASK_FAIL_REASON_NONE;
         // if (SettingUtils.getAllowByMobileNet()) { // cyminge modify
-        reason = PAUSE_NO_NETWORK;
+        reason = TASK_PAUSE_NO_NETWORK;
         // } else {
         // reason = PAUSE_WAIT_WIFI;
         // }
@@ -340,22 +331,22 @@ public class DownloadStatusMgr {
         ArrayList<String> packageList = getSortPkgList();
         for (String pkg : packageList) {
             DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(pkg);
-            if (info.mReason == PAUSE_NO_NETWORK || info.mReason == PAUSE_WAIT_WIFI) {
-                resumeDownloadTask(info.packageName, RESUME_NETWORK_RECONNECT);
+            if (info.mReason == TASK_PAUSE_NO_NETWORK || info.mReason == TASK_PAUSE_WAIT_WIFI) {
+                resumeDownloadTask(info.packageName, TASK_RESUME_NETWORK_RECONNECT);
             }
         }
     }
 
     public void onMediaChanged(boolean isEject) {
         if (isEject && GNStorageUtils.isSDCardChange()) {
-            switchAllRunningTask(TASK_STATUS_PAUSED, PAUSE_DEVICE_NOT_FOUND);
+            switchAllRunningTask(TASK_STATUS_PAUSED, TASK_PAUSE_DEVICE_NOT_FOUND);
             showlimitedToast(R.string.device_not_found);
         } else {
             ArrayList<String> packageList = getSortPkgList();
             for (String pkg : packageList) {
                 DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(pkg);
                 if (shouldResumeOnMediaChanged(info)) {
-                    resumeDownloadTask(info.packageName, RESUME_DEVICE_RECOVER);
+                    resumeDownloadTask(info.packageName, TASK_RESUME_DEVICE_RECOVER);
                 }
             }
         }
@@ -373,7 +364,7 @@ public class DownloadStatusMgr {
     }
 
     protected boolean shouldResumeOnMediaChanged(DownloadInfo info) {
-        return info.mReason == PAUSE_DEVICE_NOT_FOUND;
+        return info.mReason == TASK_PAUSE_DEVICE_NOT_FOUND;
     }
 
     private void switchAllRunningTask(int status, int reason) {
@@ -413,7 +404,7 @@ public class DownloadStatusMgr {
         }
 
         if (Utils.isMobileNet() && !enable) {
-            switchAllRunningTask(TASK_STATUS_PAUSED, PAUSE_WAIT_WIFI);
+            switchAllRunningTask(TASK_STATUS_PAUSED, TASK_PAUSE_WAIT_WIFI);
         }
     }
 
@@ -430,7 +421,7 @@ public class DownloadStatusMgr {
             return info;
         }
         if (info.mStatus == TASK_STATUS_DOWNLOADING) {
-            DownloadService.removeTask(info, targetStatus);
+            DownloadService.removeTask(info, targetStatus); // ?? 这里是个什么鬼
         }
         info.mLastStatus = info.mStatus;
 
@@ -438,7 +429,6 @@ public class DownloadStatusMgr {
         info.mReason = reason;
         switch (targetStatus) {
         case TASK_STATUS_DOWNLOADING:
-            checkNeedRedownload(info);
             DownloadRunnable task = createDownloadRunnable(info);
             DownloadService.postTask(pkgName, task);
             break;
@@ -453,15 +443,6 @@ public class DownloadStatusMgr {
             break;
         }
         return info;
-    }
-
-    private void checkNeedRedownload(DownloadInfo info) {
-//        if (info.mXunleiNeedRedownload) {
-//            // XunleiManager.getInstance().delete(info.mDownId);
-//            // long newId = XunleiManager.getInstance().download(info);
-//            // info.mDownId = newId;
-//            // info.mXunleiNeedRedownload = false;
-//        }
     }
 
     protected void showToastByReason(int reason) {

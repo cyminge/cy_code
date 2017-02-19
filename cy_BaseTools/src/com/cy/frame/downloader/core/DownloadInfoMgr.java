@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.cy.frame.downloader.config.DownloadConfiguration;
 import com.cy.frame.downloader.controller.DownloadOrderMgr;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.frame.downloader.downloadmanager.DownloadDB;
@@ -90,11 +91,9 @@ public class DownloadInfoMgr {
 
     public synchronized void initDownloadTask() {
         ArrayList<DownloadInfo> downloadList = DownloadDB.getInstance().queryAll(mIsSilent);
-
         initDownloadItems(downloadList);
         onOrderChange();
         notifyChange();
-        
         sSynDB = true;
     }
 
@@ -115,9 +114,9 @@ public class DownloadInfoMgr {
             DownloadInfo info) {
         if (!sdCardMounted || !hasNetwork) {
             info.mStatus = DownloadStatusMgr.TASK_STATUS_PAUSED;
-            info.mReason = sdCardMounted ? getPauseReason() : DownloadStatusMgr.PAUSE_DEVICE_NOT_FOUND;
+            info.mReason = sdCardMounted ? getPauseReason() : DownloadStatusMgr.TASK_PAUSE_DEVICE_NOT_FOUND;
             DownloadDB.getInstance().update(info);
-        } else if (info.isDownloading() && downloadingCount < DownloadStatusMgr.MAX_DOWNLOADING_TASK) {
+        } else if (info.isDownloading() && downloadingCount < DownloadConfiguration.MAX_DOWNLOADING_TASK) {
 //            DownloadRunnable task = mIsSilent ? new SilentDownloadRunnable(info) : new DownloadRunnable(info); // cyminge modify
             DownloadRunnable task = new DownloadRunnable(info);
             postTask(info.packageName, task);
@@ -133,9 +132,9 @@ public class DownloadInfoMgr {
     private int getPauseReason() {
 //        if (Utils.isMobileNet() && !SettingUtils.getAllowByMobileNet()) {// cyminge modify
         if (Utils.isMobileNet()) {
-            return DownloadStatusMgr.PAUSE_WAIT_WIFI;
+            return DownloadStatusMgr.TASK_PAUSE_WAIT_WIFI;
         } else {
-            return DownloadStatusMgr.PAUSE_NO_NETWORK;
+            return DownloadStatusMgr.TASK_PAUSE_NO_NETWORK;
         }
     }
 

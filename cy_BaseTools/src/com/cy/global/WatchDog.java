@@ -1,5 +1,6 @@
 package com.cy.global;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,11 +12,14 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 
+import com.cy.frame.downloader.config.DownloadConfiguration;
+import com.cy.frame.downloader.core.DownloadStatusMgr;
 import com.cy.frame.downloader.downloadmanager.DownloadService;
 import com.cy.imageloader.ImageLoader;
 import com.cy.threadpool.AbstractThreadPool;
 import com.cy.tracer.Tracer;
 import com.cy.utils.sharepref.SharePrefUtil;
+import com.cy.utils.storage.GNStorageUtils;
 
 /**
  * app启动初始化类
@@ -108,6 +112,11 @@ public enum WatchDog {
         ImageLoader.initialize(context, 0);
         
         DownloadService.startDownloadService(context);
+        
+        DownloadConfiguration.Builder builder = new DownloadConfiguration.Builder();
+        builder.appFilePath(GNStorageUtils.getHomeDirAbsolute()+File.separator);
+        builder.isAllowByMobileNet(true); // SettingUtils.getAllowByMobileNet();
+        DownloadStatusMgr.init(builder.build()); 
         
 //        DownloadInfoMgr.initDownloadService(); // 下载服务
 //        registerReceiver();

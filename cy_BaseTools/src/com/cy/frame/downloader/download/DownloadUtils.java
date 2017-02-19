@@ -20,7 +20,6 @@ import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager.UpgradeAppInfo;
 import com.cy.frame.downloader.util.GameActionUtil;
 import com.cy.frame.downloader.util.GameInstaller;
-import com.cy.global.BaseApplication;
 import com.cy.global.WatchDog;
 import com.cy.utils.ToastUtil;
 import com.cy.utils.Utils;
@@ -60,54 +59,58 @@ public class DownloadUtils {
 
     public static String reasonToString(int reason) {
         switch (reason) {
-        case DownloadStatusMgr.FAIL_HTTP_DATA_ERROR:
+        case DownloadStatusMgr.TASK_FAIL_HTTP_DATA_ERROR:
             return StatisValue.ERR_HTTP;
-        case DownloadStatusMgr.FAIL_URL_ERROR:
+        case DownloadStatusMgr.TASK_FAIL_URL_ERROR:
             return StatisValue.ERR_URL_ERROR;
-        case DownloadStatusMgr.FAIL_URL_UNREACHABLE:
-        case DownloadStatusMgr.FAIL_CANNOT_RESUME:
+        case DownloadStatusMgr.TASK_FAIL_URL_UNREACHABLE:
+        case DownloadStatusMgr.TASK_FAIL_CANNOT_RESUME:
             return StatisValue.ERR_URL_UNREACHABLE;
-        case DownloadStatusMgr.FAIL_URL_UNRECOVERABLE:
+        case DownloadStatusMgr.TASK_FAIL_URL_UNRECOVERABLE:
             return StatisValue.ERR_URL_UNRECOVERABLE;
-        case DownloadStatusMgr.FAIL_APK_ERROR:
+        case DownloadStatusMgr.TASK_FAIL_APK_ERROR:
             return StatisValue.ERR_PACKAGE_NAME;
-        case DownloadStatusMgr.FAIL_CONTENT_TYPE_ERROR:
+        case DownloadStatusMgr.TASK_FAIL_CONTENT_TYPE_ERROR:
             return StatisValue.ERR_CONTENT_TYPE_ERROR;
-        case DownloadStatusMgr.FAIL_GAME_NOT_EXIST:
+        case DownloadStatusMgr.TASK_FAIL_GAME_NOT_EXIST:
             return StatisValue.ERR_GAME_NOT_EXIST;
 
-        case DownloadStatusMgr.PAUSE_NO_NETWORK:
+        case DownloadStatusMgr.TASK_PAUSE_NO_NETWORK:
             return StatisValue.NET;
-        case DownloadStatusMgr.PAUSE_WAIT_WIFI:
+        case DownloadStatusMgr.TASK_PAUSE_WAIT_WIFI:
             return StatisValue.DOWNLOAD_WAIT_WLAN;
-        case DownloadStatusMgr.PAUSE_DEVICE_NOT_FOUND:
+        case DownloadStatusMgr.TASK_PAUSE_DEVICE_NOT_FOUND:
             return StatisValue.ERR_NO_DEVICE;
-        case DownloadStatusMgr.PAUSE_FILE_ERROR:
+        case DownloadStatusMgr.TASK_PAUSE_FILE_ERROR:
             return StatisValue.ERR_FILE_ERROR;
-        case DownloadStatusMgr.PAUSE_INSUFFICIENT_SPACE:
+        case DownloadStatusMgr.TASK_PAUSE_INSUFFICIENT_SPACE:
             return StatisValue.ERR_NO_SPACE;
-        case DownloadStatusMgr.PAUSE_WIFI_INVALID:
+        case DownloadStatusMgr.TASK_PAUSE_WIFI_INVALID:
             return StatisValue.ERR_WIFI_INVALID;
 
-        case DownloadStatusMgr.RESUME_DEVICE_RECOVER:
+        case DownloadStatusMgr.TASK_RESUME_DEVICE_RECOVER:
             return StatisValue.DOWNLOAD_DEVICE_RECOVER;
-        case DownloadStatusMgr.RESUME_NETWORK_RECONNECT:
+        case DownloadStatusMgr.TASK_RESUME_NETWORK_RECONNECT:
             if (Utils.isMobileNet()) {
                 return StatisValue.DOWNLOAD_GPRS;
             } else {
                 return StatisValue.DOWNLOAD_WLAN;
             }
 
-        case DownloadStatusMgr.PAUSE_BY_USER:
-        case DownloadStatusMgr.RESUME_BY_USER:
+        case DownloadStatusMgr.TASK_PAUSE_BY_USER:
+        case DownloadStatusMgr.TASK_RESUME_BY_USER:
             return StatisValue.DOWNLOAD_UESER;
 
-        case DownloadStatusMgr.FAIL_UNKNOWN:
+        case DownloadStatusMgr.TASK_FAIL_UNKNOWN:
         default:
             return StatisValue.ERR_UNKNOWN;
         }
     }
 
+    /**
+     * 异常暂停提示
+     * @param reason
+     */
     public static void toast(int reason) {
         if (WatchDog.INSTANCE.getTopActivity() == null) {
             return;
@@ -115,39 +118,39 @@ public class DownloadUtils {
 
         int failedResid = -1;
         switch (reason) {
-        case DownloadStatusMgr.PAUSE_FILE_ERROR:
+        case DownloadStatusMgr.TASK_PAUSE_FILE_ERROR:
             failedResid = R.string.file_write_error;
             break;
-        case DownloadStatusMgr.PAUSE_DEVICE_NOT_FOUND:
+        case DownloadStatusMgr.TASK_PAUSE_DEVICE_NOT_FOUND:
             failedResid = R.string.sdcard_error;
             break;
-        case DownloadStatusMgr.PAUSE_INSUFFICIENT_SPACE:
+        case DownloadStatusMgr.TASK_PAUSE_INSUFFICIENT_SPACE:
             failedResid = R.string.sdcard_low_space;
             break;
-        case DownloadStatusMgr.FAIL_URL_ERROR:
-        case DownloadStatusMgr.FAIL_URL_UNREACHABLE:
-        case DownloadStatusMgr.FAIL_URL_UNRECOVERABLE:
-        case DownloadStatusMgr.FAIL_HTTP_DATA_ERROR:
-        case DownloadStatusMgr.FAIL_CONTENT_TYPE_ERROR:
-        case DownloadStatusMgr.PAUSE_XUNLEI_WAITING_TO_RETRY:
+        case DownloadStatusMgr.TASK_FAIL_URL_ERROR:
+        case DownloadStatusMgr.TASK_FAIL_URL_UNREACHABLE:
+        case DownloadStatusMgr.TASK_FAIL_URL_UNRECOVERABLE:
+        case DownloadStatusMgr.TASK_FAIL_HTTP_DATA_ERROR:
+        case DownloadStatusMgr.TASK_FAIL_CONTENT_TYPE_ERROR:
+        case DownloadStatusMgr.TASK_PAUSE_XUNLEI_WAITING_TO_RETRY:
             failedResid = R.string.connect_server_fail;
             break;
         case DownloadStatusMgr.USER_DELETED:
             failedResid = R.string.download_deleted;
             break;
-        case DownloadStatusMgr.PAUSE_WIFI_INVALID:
+        case DownloadStatusMgr.TASK_PAUSE_WIFI_INVALID:
             failedResid = R.string.no_net_msg;
             break;
-        case DownloadStatusMgr.FAIL_APK_ERROR:
+        case DownloadStatusMgr.TASK_FAIL_APK_ERROR:
             failedResid = R.string.apk_error_retry;
             break;
-        case DownloadStatusMgr.FAIL_UNKNOWN:
+        case DownloadStatusMgr.TASK_FAIL_UNKNOWN:
             failedResid = R.string.unknown_fail;
             break;
-        case DownloadStatusMgr.FAIL_GAME_NOT_EXIST:
+        case DownloadStatusMgr.TASK_FAIL_GAME_NOT_EXIST:
             failedResid = R.string.game_not_exist;
             break;
-        case DownloadStatusMgr.FAIL_CANNOT_RESUME:
+        case DownloadStatusMgr.TASK_FAIL_CANNOT_RESUME:
             failedResid = R.string.cannot_resume;
             break;
         default:

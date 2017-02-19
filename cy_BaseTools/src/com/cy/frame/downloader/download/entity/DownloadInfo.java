@@ -23,7 +23,7 @@ public final class DownloadInfo extends DownloadRequest implements Cloneable {
 
 	public long mDownId = -1; // 下载ID
 	public int mStatus = DownloadStatusMgr.TASK_STATUS_PENDING; // 下载状态
-	public int mReason = DownloadStatusMgr.REASON_NONE;
+	public int mReason = DownloadStatusMgr.TASK_FAIL_REASON_NONE;
 	private long mCompleteTime = 0;
 	private String mCompleteByMinute = Constant.EMPTY;
 	private String mCompleteByDay = Constant.EMPTY;
@@ -48,7 +48,7 @@ public final class DownloadInfo extends DownloadRequest implements Cloneable {
 
 		if (mStatus == DownloadStatusMgr.TASK_STATUS_SUCCESSFUL && total < MIN_APK_SIZE) {
 			mStatus = DownloadStatusMgr.TASK_STATUS_PAUSED;
-			mReason = DownloadStatusMgr.PAUSE_WIFI_INVALID;
+			mReason = DownloadStatusMgr.TASK_PAUSE_WIFI_INVALID;
 		}
 		mLastStatus = mStatus;
 	}

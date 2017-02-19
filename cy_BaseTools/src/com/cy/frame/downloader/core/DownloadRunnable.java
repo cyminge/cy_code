@@ -79,14 +79,14 @@ public class DownloadRunnable implements Runnable {
         mExit = true;
         mDownloadInfo.mStatus = targetStatus;
         synchronized (mDownloadInfo) {
-            mDownloadInfo.notifyAll();
+//            mDownloadInfo.notifyAll(); //?? 这个唤醒的是什么鬼
         }
     }
 
     @Override
     public void run() {
         if (!Utils.hasNetwork()) {
-            pauseTask(DownloadStatusMgr.PAUSE_NO_NETWORK);
+            pauseTask(DownloadStatusMgr.TASK_PAUSE_NO_NETWORK);
             return;
         }
 
@@ -99,11 +99,12 @@ public class DownloadRunnable implements Runnable {
     }
 
     private void initFile() {
-        mHomeDir = GNStorageUtils.getHomeDirAbsolute();
-        if (null == mHomeDir) {
-            pauseTask(DownloadStatusMgr.PAUSE_DEVICE_NOT_FOUND);
-        }
-        mDownloadFile = new File(mHomeDir + mDownloadInfo.mFilePath);
+//        mHomeDir = GNStorageUtils.getHomeDirAbsolute();
+//        if (null == mHomeDir) {
+//            pauseTask(DownloadStatusMgr.TASK_PAUSE_DEVICE_NOT_FOUND);
+//        }
+//        mDownloadFile = new File(mHomeDir + mDownloadInfo.mFilePath);
+        mDownloadFile = new File(mDownloadInfo.mFilePath);
         if (!mDownloadFile.getParentFile().exists()) {
             FileUtils.mkdirs(mDownloadFile.getParentFile());
         }
@@ -122,24 +123,23 @@ public class DownloadRunnable implements Runnable {
     }
 
     /**
-     * 这里开始真正的下载apk，但是什么时候启动的还没跟踪到 cyminge
+     * 这里开始真正的下载apk
      */
     private void startDownload() {
         if (mExit) {
             return;
         }
 
-        int exceptionType = DownloadStatusMgr.REASON_NONE;
+        int exceptionType = DownloadStatusMgr.TASK_FAIL_REASON_NONE;
         HttpURLConnection connect = null;
         InputStream inputStream = null;
         BufferedInputStream bis = null;
         try {
             connect = initConnection();
             int code = connect.getResponseCode();
-            // 当请求带有时setRequestProperty("Range", "bytes=" +
-            // mDownloadInfo.mProgress + "-");会返回 HTTP_PARTIAL
+            // 当请求带有时setRequestProperty("Range", "bytes=" + mDownloadInfo.mProgress + "-");会返回 HTTP_PARTIAL
             if (code != HttpURLConnection.HTTP_OK && code != HttpURLConnection.HTTP_PARTIAL) {
-                exceptionType = DownloadStatusMgr.FAIL_URL_UNREACHABLE;
+                exceptionType = DownloadStatusMgr.TASK_FAIL_URL_UNREACHABLE;
                 mHttpRetryCount++;
                 retryDownload(exceptionType);
                 return;
@@ -150,7 +150,7 @@ public class DownloadRunnable implements Runnable {
             }
             String contentType = connect.getContentType();
             if (null != contentType && contentType.equals(CONTENT_TYPE_HTML)) {
-                onTaskFail(DownloadStatusMgr.FAIL_CONTENT_TYPE_ERROR);
+                onTaskFail(DownloadStatusMgr.TASK_FAIL_CONTENT_TYPE_ERROR);
                 return;
             }
 
@@ -159,7 +159,7 @@ public class DownloadRunnable implements Runnable {
                 float gameSize = Float.valueOf(Utils.trimSize(mDownloadInfo.size)) * Constant.MB;
                 if (Math.abs(gameSize - totalSize) > Constant.MB && !mSizeRetryed) {
                     mSizeRetryed = true;
-                    retryDownload(DownloadStatusMgr.FAIL_APK_ERROR);
+                    retryDownload(DownloadStatusMgr.TASK_FAIL_APK_ERROR);
                     return;
                 }
                 mDownloadInfo.mTotalSize = totalSize;
@@ -173,17 +173,17 @@ public class DownloadRunnable implements Runnable {
 
             writeFile(mDownloadFile, bis);
         } catch (MalformedURLException e) {
-            onUrlError(DownloadStatusMgr.FAIL_URL_ERROR);
+            onUrlError(DownloadStatusMgr.TASK_FAIL_URL_ERROR);
         } catch (SocketTimeoutException e) {
             mTimeoutCount++;
-            exceptionType = DownloadStatusMgr.FAIL_URL_UNRECOVERABLE;
+            exceptionType = DownloadStatusMgr.TASK_FAIL_URL_UNRECOVERABLE;
         } catch (IOException e) {
             mHttpRetryCount++;
-            exceptionType = DownloadStatusMgr.FAIL_URL_UNRECOVERABLE;
+            exceptionType = DownloadStatusMgr.TASK_FAIL_URL_UNRECOVERABLE;
         } catch (Exception e) {
             failLogFile(getExceptionInfo(e));
             mHttpRetryCount++;
-            exceptionType = DownloadStatusMgr.FAIL_UNKNOWN;
+            exceptionType = DownloadStatusMgr.TASK_FAIL_UNKNOWN;
         } finally {
             try {
                 if (bis != null) {
@@ -199,7 +199,7 @@ public class DownloadRunnable implements Runnable {
             }
         }
 
-        if (exceptionType != DownloadStatusMgr.REASON_NONE) {
+        if (exceptionType != DownloadStatusMgr.TASK_FAIL_REASON_NONE) {
             retryDownload(exceptionType);
         }
     }
@@ -214,7 +214,7 @@ public class DownloadRunnable implements Runnable {
 
     private void retryDownload(int exceptionType) {
         if (!Utils.hasNetwork() || mTimeoutCount > START_DOWNLOAD_TIMEOUT_RETRY_COUNT) {
-            pauseTask(DownloadStatusMgr.PAUSE_NO_NETWORK);
+            pauseTask(DownloadStatusMgr.TASK_PAUSE_NO_NETWORK);
             return;
         }
 
@@ -253,7 +253,7 @@ public class DownloadRunnable implements Runnable {
             int len = NO_DATA;
             while (!mExit) {
                 if (!file.exists()) {
-                    pauseTask(DownloadStatusMgr.PAUSE_FILE_ERROR);
+                    pauseTask(DownloadStatusMgr.TASK_PAUSE_FILE_ERROR);
                     break;
                 }
                 if (len != NO_DATA) {
@@ -269,7 +269,7 @@ public class DownloadRunnable implements Runnable {
                 len = fillBuffer(bis, buffer);
                 if (len == END_OF_FILE) {
                     if (DownloadUtils.isFileInvilid(mHomeDir, mDownloadInfo)) {
-                        onTaskFail(DownloadStatusMgr.FAIL_APK_ERROR);
+                        onTaskFail(DownloadStatusMgr.TASK_FAIL_APK_ERROR);
                     } else {
                         onTaskSucc();
                     }
@@ -277,15 +277,15 @@ public class DownloadRunnable implements Runnable {
                 }
             }
         } catch (FileNotFoundException e) {
-            pauseTask(DownloadStatusMgr.PAUSE_FILE_ERROR);
+            pauseTask(DownloadStatusMgr.TASK_PAUSE_FILE_ERROR);
         } catch (IOException e) {
             if (Utils.isSDCardLowSpace()) {
-                pauseTask(DownloadStatusMgr.PAUSE_INSUFFICIENT_SPACE);
+                pauseTask(DownloadStatusMgr.TASK_PAUSE_INSUFFICIENT_SPACE);
             } else {
-                pauseTask(DownloadStatusMgr.PAUSE_FILE_ERROR);
+                pauseTask(DownloadStatusMgr.TASK_PAUSE_FILE_ERROR);
             }
         } catch (Exception e) {
-            onTaskFail(DownloadStatusMgr.FAIL_UNKNOWN);
+            onTaskFail(DownloadStatusMgr.TASK_FAIL_UNKNOWN);
             failLogFile(getExceptionInfo(e));
         } finally {
             if (out != null) {
@@ -324,7 +324,7 @@ public class DownloadRunnable implements Runnable {
 
         if (timeoutCount > MAX_SOCKET_TIMEOUT) {
             if (!Utils.hasNetwork()) {
-                pauseTask(DownloadStatusMgr.PAUSE_NO_NETWORK);
+                pauseTask(DownloadStatusMgr.TASK_PAUSE_NO_NETWORK);
                 return false;
             } else {
                 return true;
@@ -337,7 +337,7 @@ public class DownloadRunnable implements Runnable {
 
     private void reconnect() {
         if (!DifferenceUtils.isFlowTipConfirmed()) {
-            pauseTask(DownloadStatusMgr.PAUSE_NO_NETWORK);
+            pauseTask(DownloadStatusMgr.TASK_PAUSE_NO_NETWORK);
             return;
         }
 
@@ -353,7 +353,7 @@ public class DownloadRunnable implements Runnable {
         }
 
         if (contentLength < DownloadUtils.MIN_APK_SIZE && DownloadUtils.isWifiInvalid()) {
-            pauseTask(DownloadStatusMgr.PAUSE_WIFI_INVALID);
+            pauseTask(DownloadStatusMgr.TASK_PAUSE_WIFI_INVALID);
             return false;
         }
         return true;
@@ -363,7 +363,7 @@ public class DownloadRunnable implements Runnable {
         handelSelfDownload(mDownloadInfo);
 
         DownloadUtils.onDownloadSucc(mDownloadInfo);
-        onExit(DownloadStatusMgr.TASK_STATUS_SUCCESSFUL, DownloadStatusMgr.REASON_NONE);
+        onExit(DownloadStatusMgr.TASK_STATUS_SUCCESSFUL, DownloadStatusMgr.TASK_FAIL_REASON_NONE);
     }
 
     protected void handelSelfDownload(DownloadInfo downloadInfo) {
@@ -393,7 +393,7 @@ public class DownloadRunnable implements Runnable {
     }
 
     protected void onExit(int status, int reason) {
-        if (reason != DownloadStatusMgr.FAIL_UNKNOWN && reason != DownloadStatusMgr.REASON_NONE) {
+        if (reason != DownloadStatusMgr.TASK_FAIL_UNKNOWN && reason != DownloadStatusMgr.TASK_FAIL_REASON_NONE) {
             failLogFile(DownloadUtils.reasonToString(reason));
         }
 

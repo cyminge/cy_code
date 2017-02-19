@@ -33,7 +33,7 @@ public class DownloadUrlUtils {
     public static int getDownloadUrl(DownloadInfo info) {
 //        if (null != info.mRawDownloadUrl && !info.mRawDownloadUrl.contains(HostsProperties.getOfficialDownloadUrlMark())) { // 如果地址非官方的时候，直接就返回，不然还需要经过转换
         if (null != info.mRawDownloadUrl && !info.mRawDownloadUrl.contains("gionee.com")) { // 如果地址非官方的时候，直接就返回，不然还需要经过转换
-            return DownloadStatusMgr.REASON_NONE;
+            return DownloadStatusMgr.TASK_FAIL_REASON_NONE;
         }
 
         Map<String, String> map = new HashMap<String, String>();
@@ -47,7 +47,7 @@ public class DownloadUrlUtils {
         if (JsonUtils.hasGioneeSign(data)) {
             parseDownloadUrl(info, data);
         }
-        return DownloadStatusMgr.REASON_NONE;
+        return DownloadStatusMgr.TASK_FAIL_REASON_NONE;
     }
 
     private static void parseDownloadUrl(final DownloadInfo info, final String data) {
