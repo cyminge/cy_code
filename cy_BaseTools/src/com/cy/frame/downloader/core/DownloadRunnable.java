@@ -108,6 +108,7 @@ public class DownloadRunnable implements Runnable {
         if (!mDownloadFile.getParentFile().exists()) {
             FileUtils.mkdirs(mDownloadFile.getParentFile());
         }
+        
         if (mDownloadFile.exists()) {
             long fileLength = mDownloadFile.length();
             if (fileLength > mDownloadInfo.mTotalSize) {
