@@ -1,4 +1,4 @@
-package com.cy.frame.downloader.httpsutil;
+package com.cy.utils.httpsutil;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;

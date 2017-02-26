@@ -242,6 +242,9 @@ public class DownloadInfoMgr {
         GameListenerManager.onEvent(GameListenerManager.DOWNLOAD_COUNT_CHANGE);
     }
 
+    /**
+     * 静默下载的apk不展示在列表上
+     */
     private void onOrderChange() {
         if (mIsSilent) {
             return;

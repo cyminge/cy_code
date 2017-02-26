@@ -27,11 +27,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.cy.constant.Constant;
-import com.cy.frame.downloader.httpsutil.MyHostnameVerifier;
-import com.cy.frame.downloader.httpsutil.MyTrustManager;
 import com.cy.global.BaseApplication;
 import com.cy.tracer.Tracer;
 import com.cy.utils.Utils;
+import com.cy.utils.httpsutil.MyHostnameVerifier;
+import com.cy.utils.httpsutil.MyTrustManager;
 
 @SuppressLint("NewApi") 
 public class JsonUtils {

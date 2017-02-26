@@ -1,5 +1,6 @@
 package com.cy.frame.downloader.core;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -122,9 +123,9 @@ public class DownloadStatusMgr {
         String packageName = downloadArgs.packageName;
         String localPath = null;
         if (GamesUpgradeManager.isIncreaseType(packageName)) {
-        	localPath = mDownloadConfiguration.getHomePath()+ packageName + ".patch" + Constant.TMP_FILE_EXT; // 增量升级
+        	localPath = File.separator+ packageName + ".patch" + Constant.TMP_FILE_EXT; // 增量升级
         } else {
-            localPath = mDownloadConfiguration.getHomePath()+ packageName + Constant.APK + Constant.TMP_FILE_EXT;
+            localPath = File.separator+ packageName + Constant.APK + Constant.TMP_FILE_EXT;
         }
 
         DownloadRequest request = new DownloadRequest(downloadArgs);

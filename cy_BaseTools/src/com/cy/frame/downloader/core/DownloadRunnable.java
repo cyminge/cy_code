@@ -75,14 +75,6 @@ public class DownloadRunnable implements Runnable {
         mDownloadInfo = downloadInfo;
     }
 
-    public void exit(int targetStatus) {
-        mExit = true;
-        mDownloadInfo.mStatus = targetStatus;
-        synchronized (mDownloadInfo) {
-//            mDownloadInfo.notifyAll(); //?? 这个唤醒的是什么鬼
-        }
-    }
-
     @Override
     public void run() {
         if (!Utils.hasNetwork()) {
@@ -91,7 +83,7 @@ public class DownloadRunnable implements Runnable {
         }
 
         if (mDownloadInfo.isNewDownload()) {
-            DownloadUrlUtils.getDownloadUrl(mDownloadInfo);
+            DownloadUrlUtils.getDownloadUrl(mDownloadInfo); // 如果是新下载，从服务器获取下载url
         }
 
         initFile();
@@ -99,11 +91,12 @@ public class DownloadRunnable implements Runnable {
     }
 
     private void initFile() {
-//        mHomeDir = GNStorageUtils.getHomeDirAbsolute();
-//        if (null == mHomeDir) {
-//            pauseTask(DownloadStatusMgr.TASK_PAUSE_DEVICE_NOT_FOUND);
-//        }
-//        mDownloadFile = new File(mHomeDir + mDownloadInfo.mFilePath);
+        mHomeDir = GNStorageUtils.getHomeDirAbsolute();
+        if (null == mHomeDir) {
+            pauseTask(DownloadStatusMgr.TASK_PAUSE_DEVICE_NOT_FOUND);
+            return;
+        }
+        mDownloadFile = new File(mHomeDir + mDownloadInfo.mFilePath);
         mDownloadFile = new File(mDownloadInfo.mFilePath);
         if (!mDownloadFile.getParentFile().exists()) {
             FileUtils.mkdirs(mDownloadFile.getParentFile());
@@ -145,26 +138,30 @@ public class DownloadRunnable implements Runnable {
                 retryDownload(exceptionType);
                 return;
             }
-            int contentLength = connect.getContentLength();
-            if (!checkWifi(contentLength)) { // 检查是否wifi有效
-                return;
-            }
+            
             String contentType = connect.getContentType();
             if (null != contentType && contentType.equals(CONTENT_TYPE_HTML)) {
                 onTaskFail(DownloadStatusMgr.TASK_FAIL_CONTENT_TYPE_ERROR);
                 return;
             }
-
+            
+            int contentLength = connect.getContentLength();
+            if (!checkContentLength(contentLength)) {
+            	pauseTask(DownloadStatusMgr.TASK_PAUSE_WIFI_INVALID);
+                return;
+            }
+            
             if (mDownloadInfo.isNewDownload()) {
                 long totalSize = contentLength + mDownloadInfo.mProgress;
                 float gameSize = Float.valueOf(Utils.trimSize(mDownloadInfo.size)) * Constant.MB;
+                // 这里的逻辑是不是有问题?? 上传的包如果没有及时被客户端获取，不存在应该也是正常得吧??
                 if (Math.abs(gameSize - totalSize) > Constant.MB && !mSizeRetryed) {
                     mSizeRetryed = true;
                     retryDownload(DownloadStatusMgr.TASK_FAIL_APK_ERROR);
                     return;
                 }
                 mDownloadInfo.mTotalSize = totalSize;
-                mDownloadInfo.downUrl = connect.getURL().toString();
+                mDownloadInfo.downUrl = connect.getURL().toString(); // 这是重定向后的地址的么?? 跟重新获取的那个url有什么区别
                 if (!mExit) {
                     getDownloadInfoMgr().updateDownloadInfo(mDownloadInfo);
                 }
@@ -346,18 +343,17 @@ public class DownloadRunnable implements Runnable {
         DownloadService.postTask(mDownloadInfo.packageName, new DownloadRunnable(mDownloadInfo));
     }
 
-    private boolean checkWifi(int contentLength) {
-        if (mDownloadInfo.mTotalSize - mDownloadInfo.mProgress < DownloadUtils.MIN_APK_SIZE
-                && mDownloadInfo.mTotalSize > DownloadUtils.MIN_APK_SIZE
-                && mDownloadInfo.mProgress > DownloadUtils.MIN_APK_SIZE) {
-            return true;
+    private boolean checkContentLength(int contentLength) {
+    	// 以前的逻辑中有这个方法 DownloadUtils.isWifiInvalid()用于判断wifi是否被重定向了。不过应该从返回的大小跟已存在的文件大小就可以判断是否异常了。
+        if (contentLength >= DownloadUtils.MIN_APK_SIZE) {
+        	return true;
         }
-
-        if (contentLength < DownloadUtils.MIN_APK_SIZE && DownloadUtils.isWifiInvalid()) {
-            pauseTask(DownloadStatusMgr.TASK_PAUSE_WIFI_INVALID);
-            return false;
+        
+        if(mDownloadInfo.mTotalSize > DownloadUtils.MIN_APK_SIZE && mDownloadInfo.mTotalSize - mDownloadInfo.mProgress < DownloadUtils.MIN_APK_SIZE) {
+        	return true;
         }
-        return true;
+        
+        return false;
     }
 
     protected void onTaskSucc() {
@@ -420,6 +416,14 @@ public class DownloadRunnable implements Runnable {
         ex.printStackTrace(pw);
         pw.close();
         return errorWriter.toString();
+    }
+    
+    public void exit(int targetStatus) {
+        mExit = true;
+        mDownloadInfo.mStatus = targetStatus;
+        synchronized (mDownloadInfo) {
+            mDownloadInfo.notifyAll(); //?? 这个唤醒的是什么鬼
+        }
     }
 
 }

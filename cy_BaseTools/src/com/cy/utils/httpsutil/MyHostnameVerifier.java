@@ -1,4 +1,4 @@
-package com.cy.frame.downloader.httpsutil;
+package com.cy.utils.httpsutil;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
