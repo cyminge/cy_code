@@ -21,12 +21,16 @@ public class TestCast {
 //		
 //		System.out.println(pp = ss);
 		
-		Parent parent = new Parent();
-		Son son = (Son) parent;
-		
-		
-		Son ss = new Son();
-		Parent pp = (Parent)ss;
+//		Parent parent = new Parent();
+//		Son son = (Son) parent;
+//		
+//		
+//		Son ss = new Son();
+//		Parent pp = (Parent)ss;
+	    
+	    String aa = "32323fds";
+	    String[] bb = aa.split("@");
+	    System.out.println(bb[bb.length-1]);
 	}
 	
 	
