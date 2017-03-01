@@ -171,7 +171,7 @@ public class DownloadInfoMgr {
 
     private void notifyChange(boolean statusChange) {
         mLastNotifyTime = System.currentTimeMillis();
-//        synchronized (DownloadInfoMgr.this) {
+        synchronized (DownloadInfoMgr.this) {
             for (DownloadChangeListener listener : mDownloadListeners) {
                 listener.onDownloadChange();
             }
@@ -180,7 +180,7 @@ public class DownloadInfoMgr {
                     listener.onStatusChange();
                 }
             }
-//        }
+        }
     }
 
     public void syncToDB() {

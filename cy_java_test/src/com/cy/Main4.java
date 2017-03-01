@@ -1,9 +1,19 @@
 package com.cy;
 
+import java.util.ArrayList;
+
 public class Main4 {
 
     public static void main(String[] args) {
-        changeJson();
+//        changeJson();
+        Const cc = new Const();
+//        for(int i=0; i<3; i++) {
+            set(cc);
+//        }
+//        System.out.println(cc);
+            
+         ArrayList al = new ArrayList();
+         al.clone();
     }
 
     static void changeJson() {
@@ -29,9 +39,21 @@ public class Main4 {
 //        String message = "{\"success\":true,\"msg\":\"\",\"sign\":\"GioneeGameHall\",\"data\":{\"ordertag\":\"gamehallorder\",\"action\":\"gamehall.noti.msg.custom\",\"version\":\"1.5.9.a\",\"param\":{\"id\":\"254\",\"type\":\"custom\",\"extraType\":\"\",\"viewType\":\"GameDetailView\",\"title\":\"\u5415\u8c46\u8c46\u6307\u5b9aIMEI\u53f7\u6d4b\u8bd5-\u6e38\u620f\",\"content\":\"\u5415\u8c46\u8c46\u6307\u5b9aIMEI\u53f7\u6d4b\u8bd5-\u6e38\u620f\",\"param\":{\"url\":\"\",\"contentId\":\"456\",\"gameId\":\"456\",\"title\":\"\u5415\u8c46\u8c46\u6307\u5b9aIMEI\u53f7\u6d4b\u8bd5-\u6e38\u620f\",\"package\":\"com.lvdoudou01.jinli\",\"hashTime\":\"1\"},\"timeStamp\":1487987760,\"startTime\":1487987760,\"source\":\"GameDetailView\"}}}";
     }
     
-    private static final String UUID_DIVIDER = "U_U";
+    public static void set(final Const cc) {
+        new Thread(new Runnable() {
+            
+            @Override
+            public void run() {
+                System.out.println("11.cc:"+cc+", RAND_CONST:"+cc.RAND_CONST);
+            }
+        }).start();
+        cc.RAND_CONST = 1;
+        System.out.println("22.cc:"+cc);
+    }
     
-    public static class Const {
-        public static int RAND_CONST = 11;
+    
+    
+    public static class Const extends Object {
+        public int RAND_CONST = 11;
     }
 }

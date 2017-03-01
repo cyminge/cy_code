@@ -2,10 +2,7 @@ package com.cy.frame.downloader.controller;
 
 import java.io.File;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.pm.PackageInfo;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,7 +16,6 @@ import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.frame.downloader.downloadmanager.DownloadDB;
 import com.cy.frame.downloader.install.InstallManager;
 import com.cy.frame.downloader.statis.StatisValue;
-import com.cy.frame.downloader.ui.GameDialog;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager.UpgradeAppInfo;
 import com.cy.frame.downloader.util.GameInstaller;
@@ -56,7 +52,7 @@ public abstract class StartDownloadManager {
         check();
     }
 
-    private void check() {
+    protected void check() {
         if (!isDownloadable()) {
             onResetDownload();
             return;
@@ -73,67 +69,6 @@ public abstract class StartDownloadManager {
         startDownload();
     }
 
-    protected void applyFail(final DownloadArgs downloadArgs) {
-        ((Activity) mContext).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showFullApkDialog(downloadArgs);
-            }
-        });
-
-    }
-
-    protected boolean checkNetWork() {
-        if (!Utils.hasNetwork()) {
-            showLimitedToast(R.string.no_net_msg);
-            return false;
-        }
-
-        return true;
-    }
-
-    protected boolean isSysMatched(DownloadArgs downloadArgs) {
-        return true;
-    }
-
-    /**
-     * 省流量升级失败后再下载的提醒框
-     * @param downloadArgs
-     */
-    private void showFullApkDialog(DownloadArgs downloadArgs) {
-        String message = mContext.getString(R.string.reload_fullapk_nofify, downloadArgs.name,
-                downloadArgs.size);
-        GameDialog fullDownloadDialog = new GameDialog(mContext);
-        fullDownloadDialog.setMessage(message);
-
-        fullDownloadDialog.setPositiveButton(R.string.reload_fullapk_confirm,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        check();
-                    }
-                });
-        fullDownloadDialog.setNegativeButton(R.string.reload_fullapk_cancel,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        onResetDownload();
-                    }
-                });
-        showDialog(fullDownloadDialog, R.string.reload_full_title);
-    }
-
-    private void showDialog(GameDialog dialog, int title) {
-        dialog.setTitle(title);
-        dialog.setOnCancelListener(new OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                onResetDownload();
-            }
-        });
-        dialog.show();
-    }
- 
     /**
      * 开始下载
      * @param downloadArgs
@@ -144,10 +79,12 @@ public abstract class StartDownloadManager {
             showLimitedToast(R.string.sdcard_error);
             return DownloadDB.NO_DOWN_ID;
         }
+        
         if (DownloadOrderMgr.getDownloadCount() >= DownloadStatusMgr.MAX_DOWNLOAD_TASK) { // 下载任务数已经最大 ??
             showLimitedToast(R.string.max_download_task);
             return DownloadDB.NO_DOWN_ID;
         }
+        
         String packageName = downloadArgs.packageName;
 
         long downId = DownloadDB.NO_DOWN_ID;
@@ -176,6 +113,7 @@ public abstract class StartDownloadManager {
         if(source == null) {
         	return "";
         }
+        
         if (source.contains(StatisValue.SPLIT) || source.contains(StatisValue.UPDATE)) {
             return source;
         }
@@ -186,13 +124,13 @@ public abstract class StartDownloadManager {
     protected DownloadStatusMgr getDownloadStatusMgr() {
         return DownloadStatusMgr.getNormalInstance();
     }
+    
+    protected DownloadInfoMgr getDownloadInfoMgr() {
+        return getDownloadStatusMgr().getDownloadInfoMgr();
+    }
 
     protected final DownloadInfo getDownloadInfo(String mPackageName) {
         return getDownloadInfoMgr().getDownloadInfo(mPackageName);
-    }
-
-    protected DownloadInfoMgr getDownloadInfoMgr() {
-        return DownloadInfoMgr.getNormalInstance();
     }
 
     protected void showLimitedToast(int msgId) {

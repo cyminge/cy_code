@@ -22,7 +22,6 @@ import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.util.GameActionUtil;
 import com.cy.global.BaseApplication;
 import com.cy.global.WatchDog;
-import com.cy.threadpool.NormalThreadPool;
 import com.cy.utils.Utils;
 import com.cy.utils.storage.GNStorageUtils;
 
@@ -101,6 +100,10 @@ public class DownloadStatusMgr {
 
     protected DownloadStatusMgr(DownloadInfoMgr downloadInfoMgr) {
         mDownloadInfoMgr = downloadInfoMgr;
+    }
+    
+    public DownloadInfoMgr getDownloadInfoMgr() {
+        return mDownloadInfoMgr;
     }
     
     public static void init(DownloadConfiguration config) {

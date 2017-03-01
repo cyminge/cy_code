@@ -2,6 +2,9 @@ package com.cy.frame.downloader.controller;
 
 import java.io.File;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -11,6 +14,7 @@ import com.cy.constant.Constant;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.downloadmanager.DownloadDB;
 import com.cy.frame.downloader.install.InstallManager;
+import com.cy.frame.downloader.ui.GameDialog;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager.UpgradeAppInfo;
 import com.cy.global.BaseApplication;
@@ -103,6 +107,53 @@ public class SingleDownloadManager extends StartDownloadManager {
 
         super.execute();
     }
+    
+    protected void applyFail(final DownloadArgs downloadArgs) {
+        ((Activity) mContext).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showFullApkDialog(downloadArgs);
+            }
+        });
+    }
+    
+    /**
+     * 省流量升级失败后再下载的提醒框
+     * @param downloadArgs
+     */
+    private void showFullApkDialog(DownloadArgs downloadArgs) {
+        String message = mContext.getString(R.string.reload_fullapk_nofify, downloadArgs.name,
+                downloadArgs.size);
+        GameDialog fullDownloadDialog = new GameDialog(mContext);
+        fullDownloadDialog.setMessage(message);
+
+        fullDownloadDialog.setPositiveButton(R.string.reload_fullapk_confirm,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        check();
+                    }
+                });
+        fullDownloadDialog.setNegativeButton(R.string.reload_fullapk_cancel,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onResetDownload();
+                    }
+                });
+        showDialog(fullDownloadDialog, R.string.reload_full_title);
+    }
+
+    private void showDialog(GameDialog dialog, int title) {
+        dialog.setTitle(title);
+        dialog.setOnCancelListener(new OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                onResetDownload();
+            }
+        });
+        dialog.show();
+    }
 
     /**
      * 检查是否有新版本
@@ -158,6 +209,15 @@ public class SingleDownloadManager extends StartDownloadManager {
 
         return checkNetWork() && checkSDCard(mDownloadArgs);
     }
+    
+    protected boolean checkNetWork() {
+        if (!Utils.hasNetwork()) {
+            showLimitedToast(R.string.no_net_msg);
+            return false;
+        }
+
+        return true;
+    }
 
     private static boolean checkSDCard(DownloadArgs args) {
         if (args == null) {
@@ -189,6 +249,10 @@ public class SingleDownloadManager extends StartDownloadManager {
     @Override
     protected boolean confirmDownload() {
         return isSysMatched(mDownloadArgs);
+    }
+    
+    protected boolean isSysMatched(DownloadArgs downloadArgs) {
+        return true;
     }
 
     @Override
