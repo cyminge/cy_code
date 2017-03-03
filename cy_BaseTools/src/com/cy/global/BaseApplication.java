@@ -8,6 +8,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.cy.constant.Constant;
+import com.cy.optimizationtools.fluency.UiThreadBlockWatcher;
 
 public class BaseApplication extends Application {
 
@@ -25,7 +26,7 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        UiThreadBlockWatcher.install(50);
         mBaseApplication = this;
         mBaseAppContext = mBaseApplication.getApplicationContext();
         if(isMainProcess()) {
