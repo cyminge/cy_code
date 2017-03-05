@@ -14,6 +14,7 @@ import com.cy.frame.downloader.controller.ButtonStatusManager;
 import com.cy.frame.downloader.controller.SingleDownloadManager;
 import com.cy.frame.downloader.core.DownloadInfoMgr;
 import com.cy.frame.downloader.core.DownloadStatusMgr;
+import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.frame.downloader.statis.StatisValue;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
@@ -25,6 +26,7 @@ import com.cy.utils.ToastUtil;
 import com.cy.utils.Utils;
 import com.cy.utils.sharepref.SharePrefUtil;
 import com.cy.utils.storage.FileUtils;
+import com.cy.utils.storage.GNStorageUtils;
 
 public class DownloadUtils {
     private static final String TAG = "DownloadUtils";
@@ -293,4 +295,38 @@ public class DownloadUtils {
             // Constant.AMIGO_PLAY_PACKAGE_NAME, info.mSource);
         }
     }
+    
+    public static boolean checkDownloadEnvironment(DownloadArgs args) {
+		if (!Utils.hasNetwork()) {
+			// ToastUtils.showLimited(R.string.no_net_msg);
+			return false;
+		}
+
+		if (!GNStorageUtils.isSDCardMounted()) {
+			// ToastUtils.showLimited(R.string.sdcard_error);
+			return false;
+		}
+		if (!checkSpaceForRetry(args)) {
+			// ToastUtils.showLimited(R.string.sdcard_low_space);
+			return false;
+		}
+
+		if (Utils.needShowMobileHint()) {
+			// BgDialogActivity.show(BgDialogActivity.DIALOG_MOBILE_HINT);
+			return false;
+		}
+
+		return true;
+	}
+    
+    private static boolean checkSpaceForRetry(DownloadArgs args) {
+		int status = ButtonStatusManager.getButtonStatus(args);
+		if (status == ButtonStatusManager.BUTTON_STATUS_FAILED) {
+			DownloadInfo info = DownloadInfoMgr.getNormalInstance().getDownloadInfo(args.packageName);
+			if (info != null && Utils.checkSDCard(info.mTotalSize) == Constant.SD_LOW_SPACE) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

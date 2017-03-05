@@ -4,7 +4,6 @@ import java.io.File;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.cy.R;
@@ -70,11 +69,28 @@ public abstract class StartDownloadManager {
     }
 
     /**
+     * 是否已有该任务
+     * @param info
+     * @return
+     */
+    protected DownloadInfo handlerExistInfo(DownloadInfo info) {
+        if (null != info && info.mIsSilentDownload) {
+            DownloadStatusMgr.getSilentInstance().onDeleteTask(info);
+            return null;
+        }
+        return info;
+    }
+    
+    /**
      * 开始下载
      * @param downloadArgs
      * @return
      */
     protected long download(DownloadArgs downloadArgs) {
+    	if (!DownloadInfoMgr.isSynDB()) { // 如果下载服务没有初始化，则直接返回
+            return DownloadDB.NO_DOWN_ID;
+        }
+    	
         if (!GNStorageUtils.isSDCardMounted()) {
             showLimitedToast(R.string.sdcard_error);
             return DownloadDB.NO_DOWN_ID;
@@ -87,21 +103,20 @@ public abstract class StartDownloadManager {
         
         String packageName = downloadArgs.packageName;
 
-        long downId = DownloadDB.NO_DOWN_ID;
         DownloadInfo info = getDownloadInfo(packageName);
-        try {
-            if (null != info) {
-                downId = info.mDownId;
-            } else {
-                Utils.delAllfiles(packageName);
-                downloadArgs.mSource = resetDownloadSource(downloadArgs);
-                downId = getDownloadStatusMgr().download(downloadArgs, mDelayTime);
-            }
-        } catch (Exception e) {
-            Log.e("TAG", e.getLocalizedMessage(), e);
-            showLimitedToast(R.string.download_manager_error);
+        if(null != info) {
+        	return info.mDownId;
         }
-        return downId;
+        
+        info = DownloadInfoMgr.getDownloadInfoInAll(packageName);
+        info = handlerExistInfo(info);
+        if (null != info) {
+        	return info.mDownId;
+        }
+        
+        Utils.delAllfiles(packageName);
+        downloadArgs.mSource = resetDownloadSource(downloadArgs);
+        return getDownloadStatusMgr().download(downloadArgs, mDelayTime);
     }
 
     private String resetDownloadSource(DownloadArgs downloadArgs) {

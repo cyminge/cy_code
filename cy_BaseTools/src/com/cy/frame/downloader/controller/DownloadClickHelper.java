@@ -165,8 +165,7 @@ public class DownloadClickHelper {
      * @param args
      */
     private void pauseDownloadTask(DownloadArgs args) {
-        boolean downloading = mDownloadStatusMgr.isDownloading(args.packageName);
-        mDownloadStatusMgr.pauseDownloadTask(args.packageName, DownloadStatusMgr.TASK_PAUSE_BY_USER, downloading);
+        mDownloadStatusMgr.pauseDownloadTask(args, DownloadStatusMgr.TASK_PAUSE_BY_USER);
     }
 
     /**
@@ -174,10 +173,7 @@ public class DownloadClickHelper {
      * @param args
      */
     private void resumeDownloadTask(DownloadArgs args) {
-        if (!Utils.checkDownloadEnvironment(args)) {
-            return;
-        }
-        mDownloadStatusMgr.resumeDownloadTask(args.packageName, DownloadStatusMgr.TASK_RESUME_BY_USER);
+        mDownloadStatusMgr.resumeDownloadTask(args, DownloadStatusMgr.TASK_RESUME_BY_USER);
     }
 
 }
