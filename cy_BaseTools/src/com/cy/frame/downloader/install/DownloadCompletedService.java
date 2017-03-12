@@ -10,7 +10,7 @@ import android.os.IBinder;
 
 import com.cy.constant.Constant;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
-import com.cy.frame.downloader.downloadmanager.DownloadDB;
+import com.cy.frame.downloader.manager.DownloadDB;
 import com.cy.frame.downloader.util.GameInstaller;
 import com.cy.threadpool.NormalThreadPool;
 import com.cy.utils.Utils;

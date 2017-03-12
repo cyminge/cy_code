@@ -9,9 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import android.content.res.Resources;
 
 import com.cy.R;
-import com.cy.frame.downloader.core.DownloadInfoMgr;
+import com.cy.frame.downloader.core.DownloadManager;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
-import com.cy.frame.downloader.downloadmanager.DownloadNotification;
+import com.cy.frame.downloader.manager.DownloadNotification;
 import com.cy.utils.Utils;
 
 /**
@@ -75,7 +75,7 @@ public class DownloadOrderMgr {
         sCompletedCount = 0;
         sDownloadCount = 0;
         for (String pkg : sortPkgList) {
-            if (DownloadInfoMgr.getNormalInstance().getDownloadInfo(pkg).isCompleted()) {
+            if (DownloadManager.getNormalInstance().getDownloadInfo(pkg).isCompleted()) {
                 sCompletedCount++;
             } else {
                 sDownloadCount++;

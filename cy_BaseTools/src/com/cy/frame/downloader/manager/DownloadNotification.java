@@ -1,9 +1,9 @@
-package com.cy.frame.downloader.downloadmanager;
+package com.cy.frame.downloader.manager;
 
 import java.util.ArrayList;
 
 import com.cy.R;
-import com.cy.frame.downloader.core.DownloadInfoMgr;
+import com.cy.frame.downloader.core.DownloadManager;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.utils.Utils;
 
@@ -48,7 +48,7 @@ public class DownloadNotification {
         int size = downloadPkgList.size();
         for (int i = 0; i < size; i++) {
             String pkgName = downloadPkgList.get(i);
-            DownloadInfo info = DownloadInfoMgr.getNormalInstance().getDownloadInfo(pkgName);
+            DownloadInfo info = DownloadManager.getNormalInstance().getDownloadInfo(pkgName);
             if (info.isCompleted()) {
                 continue;
             }

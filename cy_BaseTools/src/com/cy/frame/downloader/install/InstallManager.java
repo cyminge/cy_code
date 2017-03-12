@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import com.cy.constant.Constant;
 import com.cy.frame.downloader.controller.ButtonStatusManager;
 import com.cy.frame.downloader.core.DownloadInfoMgr;
+import com.cy.frame.downloader.core.DownloadManager;
 import com.cy.utils.Utils;
 
 @SuppressLint("NewApi") 
@@ -32,23 +33,22 @@ public class InstallManager {
         if (Utils.isFileExisting(fileName)) {
 //            GameActionUtil.postGameAction(packageName, Constant.ACTION_INSTALL); // cyminge modify
 
-            DownloadInfoMgr downloadInfoMgr = getDownloadInfoMgr(packageName);
-            if (null != downloadInfoMgr) {
+        	DownloadManager downloadManager = getDownloadInfoMgr(packageName);
+            if (null != downloadManager) {
                 ButtonStatusManager.removeDownloaded(packageName);
-                downloadInfoMgr.removeDownloadInfo(packageName);
+                downloadManager.removeDownloadInfo(packageName);
                 Utils.deleteFile(fileName);
             }
         }
     }
 
-    private static DownloadInfoMgr getDownloadInfoMgr(String packageName) {
-        DownloadInfoMgr downloadInfoMgr = DownloadInfoMgr.getSilentInstance();
+    private static DownloadManager getDownloadInfoMgr(String packageName) {
+    	DownloadManager downloadInfoMgr = DownloadManager.getSilentInstance();
         if (downloadInfoMgr.hasDownloadInfo(packageName)) {
             return downloadInfoMgr;
         }
 
-        return DownloadInfoMgr.getNormalInstance();
-
+        return DownloadManager.getNormalInstance();
     }
 
 }

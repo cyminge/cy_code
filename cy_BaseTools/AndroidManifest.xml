@@ -38,7 +38,7 @@
             
         </activity>
         
-                <service android:name="com.cy.frame.downloader.downloadmanager.DownloadService" >
+                <service android:name="com.cy.frame.downloader.manager.DownloadService" >
             <intent-filter>
                 <action android:name="game.intent.action.DOWNLOAD_SERVICE" />
             </intent-filter>

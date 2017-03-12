@@ -10,10 +10,10 @@ import com.cy.frame.downloader.download.entity.DownloadRequest;
 import com.cy.frame.downloader.statis.StatisValue;
 import com.cy.utils.Utils;
 
-public class SilentDownloadStatusMgr extends DownloadStatusMgr {
+public class SilentDownloadStatusMgr extends DownloadManager {
 
-    public SilentDownloadStatusMgr(DownloadInfoMgr downloadInfoMgr) {
-        super(downloadInfoMgr);
+    public SilentDownloadStatusMgr(boolean isSilent) {
+        super(isSilent);
     }
 
     @Override

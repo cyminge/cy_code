@@ -16,8 +16,8 @@ import com.cy.frame.downloader.download.DownloadUtils;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.frame.downloader.download.entity.DownloadRequest;
-import com.cy.frame.downloader.downloadmanager.DownloadDB;
-import com.cy.frame.downloader.downloadmanager.DownloadService;
+import com.cy.frame.downloader.manager.DownloadDB;
+import com.cy.frame.downloader.manager.DownloadService;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.util.GameActionUtil;
 import com.cy.global.BaseApplication;
@@ -25,73 +25,45 @@ import com.cy.global.WatchDog;
 import com.cy.utils.Utils;
 import com.cy.utils.storage.GNStorageUtils;
 
-public class DownloadStatusMgr {
-
-	public static final int TASK_STATUS_PENDING = 0x100; // 等待中
-	public static final int TASK_STATUS_DOWNLOADING = 0x101; // 下载中
-	public static final int TASK_STATUS_PAUSED = 0x102; // 已暂停
-	public static final int TASK_STATUS_SUCCESSFUL = 0x103; // 下载完成
-	public static final int TASK_STATUS_FAILED = 0x104; // 下载失败
-	public static final int TASK_STATUS_DELETE = 0x105; // 删除
-
-	public static final int TASK_FAIL_REASON_NONE = -1;
-	// fail reason
-	public static final int TASK_FAIL_UNKNOWN = 0x300; // 未知
-	public static final int TASK_FAIL_HTTP_DATA_ERROR = 0x301; // Http 数据异常
-	public static final int TASK_FAIL_URL_ERROR = 0x302; // 下载地址有误
-	public static final int TASK_FAIL_APK_ERROR = 0x303; // 文件有误
-	public static final int TASK_FAIL_URL_UNREACHABLE = 0x304; // 下载地址不可达
-	public static final int TASK_FAIL_URL_UNRECOVERABLE = 0x305; // 下载地址不可恢复
-	public static final int TASK_FAIL_CONTENT_TYPE_ERROR = 0x306; // 文件类型有误
-	public static final int TASK_FAIL_GAME_NOT_EXIST = 0x308; // 应用不存在
-	public static final int TASK_FAIL_CANNOT_RESUME = 0x309; // 任务不能继续
-
-	// pause reason
-	public static final int TASK_PAUSE_NO_NETWORK = 0x509;
-	public static final int TASK_PAUSE_WAIT_WIFI = 0x510;
-	public static final int TASK_PAUSE_BY_USER = 0x511;
-	public static final int TASK_PAUSE_FILE_ERROR = 0x512;
-	public static final int TASK_PAUSE_INSUFFICIENT_SPACE = 0x513;
-	public static final int TASK_PAUSE_DEVICE_NOT_FOUND = 0x514;
-	public static final int TASK_PAUSE_WIFI_INVALID = 0x515;
-	public static final int TASK_PAUSE_XUNLEI_WAITING_TO_RETRY = 0x517;
-
-	// resume reason
-	public static final int TASK_RESUME_NETWORK_RECONNECT = 0x600;
-	public static final int TASK_RESUME_BY_USER = 0x601;
-	public static final int TASK_RESUME_DEVICE_RECOVER = 0x602;
-
-	public static final int REASON_START = 0x700;
-	public static final int USER_DELETED = 0x701;
-	public static final int REASON_PENDING = 0x703;
-
-	public static final int MAX_DOWNLOAD_TASK = 100; // 最大下载任务数
+public class DownloadManager {
 	private int mLastNewtorkType = Constant.NETWORK_NO_NET;
 
 	private DownloadConfiguration mDownloadConfiguration;
 
-	private static DownloadStatusMgr sSilentInstance;
-	private static DownloadStatusMgr sNormalInstance;
+	private static DownloadManager sSilentInstance;
+	private static DownloadManager sNormalInstance;
 
 	protected DownloadInfoMgr mDownloadInfoMgr;
+	
+    private ArrayList<DownloadChangeListener> mDownloadListeners = new ArrayList<DownloadChangeListener>();
+    private ArrayList<StatusChangeListener> mStatusListeners = new ArrayList<StatusChangeListener>();
+    private long mLastNotifyTime = 0;
+    public static final int NOTIFY_PROGRESS_DELAY_TIME = 1500;
+    
+    public interface DownloadChangeListener {
+        public void onDownloadChange();
+    }
 
-	public static DownloadStatusMgr getNormalInstance() {
+    public interface StatusChangeListener {
+        public void onStatusChange();
+    }
+    
+	public static DownloadManager getNormalInstance() {
 		if (sNormalInstance == null) {
-			sNormalInstance = new DownloadStatusMgr(DownloadInfoMgr.getNormalInstance());
+			sNormalInstance = new DownloadManager(false);
 		}
 
 		return sNormalInstance;
 	}
 
-	public static DownloadStatusMgr getSilentInstance() {
+	public static DownloadManager getSilentInstance() {
 		if (sSilentInstance == null) {
-			sSilentInstance = new SilentDownloadStatusMgr(DownloadInfoMgr.getSilentInstance()); // cyminge
-																								// modify
+			sSilentInstance = new SilentDownloadStatusMgr(true); 
 		}
 		return sSilentInstance;
 	}
 
-	public static DownloadStatusMgr getInstance(DownloadInfo info) {
+	public static DownloadManager getInstance(DownloadInfo info) {
 		if (info.mIsSilentDownload) {
 			return getSilentInstance();
 		} else {
@@ -99,8 +71,8 @@ public class DownloadStatusMgr {
 		}
 	}
 
-	protected DownloadStatusMgr(DownloadInfoMgr downloadInfoMgr) {
-		mDownloadInfoMgr = downloadInfoMgr;
+	protected DownloadManager(boolean isSilent) {
+		mDownloadInfoMgr = new DownloadInfoMgr(this, isSilent);
 	}
 
 	public DownloadInfoMgr getDownloadInfoMgr() {
@@ -111,7 +83,112 @@ public class DownloadStatusMgr {
 		getNormalInstance().mDownloadConfiguration = config;
 		getSilentInstance().mDownloadConfiguration = config; // cyminge modify
 	}
+	
+	public synchronized void clearListener() {
+        mDownloadListeners.clear();
+        mStatusListeners.clear();
+    }
 
+    public synchronized void addChangeListener(DownloadChangeListener listener) {
+        if (listener == null || mDownloadListeners.contains(listener)) {
+            return;
+        }
+        mDownloadListeners.add(listener);
+    }
+
+    public synchronized void removeChangeListener(DownloadChangeListener listener) {
+        mDownloadListeners.remove(listener);
+    }
+
+    public synchronized void addChangeListener(StatusChangeListener listener) {
+        if (listener == null || mStatusListeners.contains(listener)) {
+            return;
+        }
+        mStatusListeners.add(listener);
+    }
+
+    public synchronized void removeChangeListener(StatusChangeListener listener) {
+        mStatusListeners.remove(listener);
+    }
+	
+	public void notifyChange() {
+        notifyChange(true);
+    }
+
+    public void notifyChange(boolean statusChange) {
+        mLastNotifyTime = System.currentTimeMillis();
+        synchronized (DownloadManager.this) {
+            for (DownloadChangeListener listener : mDownloadListeners) {
+                listener.onDownloadChange();
+            }
+            if (statusChange) {
+                for (StatusChangeListener listener : mStatusListeners) {
+                    listener.onStatusChange();
+                }
+            }
+        }
+    }
+    
+    public void initDownloadTask() {
+    	mDownloadInfoMgr.initDownloadInfo();
+    }
+    
+    public static DownloadInfo getDownloadInfoInAll(String pkgName) {
+        DownloadInfo info = getNormalInstance().mDownloadInfoMgr.getDownloadInfo(pkgName);
+        if (null == info) {
+            info = getSilentInstance().mDownloadInfoMgr.getDownloadInfo(pkgName);
+        }
+        return info;
+    }
+    
+    private Runnable mOnProgressChangeRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+        	notifyChange(false);
+        	mDownloadInfoMgr.syncToDB();
+        }
+    };
+    
+    public void updateProgress(DownloadInfo info) {
+        if (!mDownloadInfoMgr.hasDownloadInfo(info.packageName)) {
+            return;
+        }
+        mDownloadInfoMgr.putToMap(info);
+
+        long delay = (NOTIFY_PROGRESS_DELAY_TIME - (System.currentTimeMillis() - mLastNotifyTime));
+        delay = Math.max(0, delay);
+        delay = Math.min(NOTIFY_PROGRESS_DELAY_TIME, delay);
+        
+        WatchDog.getLoopHandler().removeCallbacks(mOnProgressChangeRunnable);
+        WatchDog.getLoopHandler().postDelayed(mOnProgressChangeRunnable, delay);
+    }
+
+    public void updateProgressNoDelay(DownloadInfo info) {
+        if (!mDownloadInfoMgr.hasDownloadInfo(info.packageName)) {
+            return;
+        }
+        mDownloadInfoMgr.putToMap(info);
+        mDownloadInfoMgr.syncToDB();
+        notifyChange(false);
+    }
+
+    public void updateDownloadInfo(DownloadInfo info) {
+    	mDownloadInfoMgr.updateDownloadInfo(info, true);
+    }
+    
+    public DownloadInfo getDownloadInfo(String pkgName) {
+        return mDownloadInfoMgr.getDownloadInfo(pkgName);
+    }
+    
+    public void removeDownloadInfo(String pkgName) {
+    	mDownloadInfoMgr.removeDownloadInfo(pkgName);
+    }
+    
+    public boolean hasDownloadInfo(String pkgName) {
+        return mDownloadInfoMgr.hasDownloadInfo(pkgName);
+    }
+    
 	/**
 	 * 下载
 	 * 
@@ -167,9 +244,9 @@ public class DownloadStatusMgr {
 
 	private void enqueue(DownloadInfo info) {
 		if (Utils.isMobileNet() && (!info.mAllowByMobileNet || info.mWifiAutoDownload)) { // 移动网络下不让下载，只挂起任务
-			pauseDownloadTask(info, TASK_PAUSE_WAIT_WIFI, false);
+			pauseDownloadTask(info, DownloadStatusConstant.TASK_PAUSE_WAIT_WIFI, false);
 		} else {
-			resumeDownloadTask(info, REASON_START);
+			resumeDownloadTask(info, DownloadStatusConstant.REASON_START);
 		}
 	}
 	
@@ -179,14 +256,14 @@ public class DownloadStatusMgr {
 		}
 
 		// 重新下载的统计 cyminge modify
-		if (reason != REASON_START) { 
+		if (reason != DownloadStatusConstant.REASON_START) { 
 			// DownloadUtils.sendResumeStatis(pkgName, reason);
 		}
 
-		int targetStatus = TASK_STATUS_DOWNLOADING;
+		int targetStatus = DownloadStatusConstant.TASK_STATUS_DOWNLOADING;
 		if (getDownloadingCount() >= mDownloadConfiguration.getMaxDownloadingTask()) {
-			targetStatus = TASK_STATUS_PENDING;
-			reason = REASON_PENDING;
+			targetStatus = DownloadStatusConstant.TASK_STATUS_PENDING;
+			reason = DownloadStatusConstant.REASON_PENDING;
 		}
 
 		switchSingleTaskStatus(args.packageName, targetStatus, reason);
@@ -198,7 +275,7 @@ public class DownloadStatusMgr {
 	}
 
 	public void pauseDownloadTask(DownloadArgs args, int reason, boolean isDownloading) {
-		switchSingleTaskStatus(args.packageName, TASK_STATUS_PAUSED, reason);
+		switchSingleTaskStatus(args.packageName, DownloadStatusConstant.TASK_STATUS_PAUSED, reason);
 		if (isDownloading) {
 			switchPendingToDownload();
 		}
@@ -230,7 +307,7 @@ public class DownloadStatusMgr {
 	 */
 	public void onSilentInstallingError(String pkgName) {
 		if (mDownloadInfoMgr.hasDownloadInfo(pkgName)) {
-			switchSingleTaskStatus(pkgName, TASK_STATUS_FAILED, TASK_FAIL_APK_ERROR);
+			switchSingleTaskStatus(pkgName, DownloadStatusConstant.TASK_STATUS_FAILED, DownloadStatusConstant.TASK_FAIL_APK_ERROR);
 			mDownloadInfoMgr.orderChange();
 		}
 	}
@@ -241,11 +318,11 @@ public class DownloadStatusMgr {
 	 */
 	public void onDeleteTask(DownloadInfo info) {
 		int oldStatus = info.mStatus;
-		info.mStatus = TASK_STATUS_DELETE;
+		info.mStatus = DownloadStatusConstant.TASK_STATUS_DELETE;
 		ButtonStatusManager.removeDownloaded(info.packageName);
 		mDownloadInfoMgr.removeDownloadInfo(info.packageName);
-		Utils.delAllfiles(info.packageName);
-		if (oldStatus == DownloadStatusMgr.TASK_STATUS_DOWNLOADING) {
+		DownloadUtils.delAllfiles(info.packageName);
+		if (oldStatus == DownloadStatusConstant.TASK_STATUS_DOWNLOADING) {
 			switchPendingToDownload();
 		}
 	}
@@ -263,8 +340,8 @@ public class DownloadStatusMgr {
 				return;
 			}
 
-			if (info.mStatus == TASK_STATUS_PENDING) {
-				switchSingleTaskStatus(pkg, TASK_STATUS_DOWNLOADING, TASK_FAIL_REASON_NONE);
+			if (info.mStatus == DownloadStatusConstant.TASK_STATUS_PENDING) {
+				switchSingleTaskStatus(pkg, DownloadStatusConstant.TASK_STATUS_DOWNLOADING, DownloadStatusConstant.TASK_FAIL_REASON_NONE);
 				downloadingCount++;
 			}
 		}
@@ -294,7 +371,7 @@ public class DownloadStatusMgr {
 	public void onNetworkChanged() {
 		int networkType = Utils.getNetworkType();
 		if (networkType == Constant.NETWORK_NO_NET) {
-			switchAllRunningTask(TASK_STATUS_PAUSED, TASK_PAUSE_NO_NETWORK);
+			switchAllRunningTask(DownloadStatusConstant.TASK_STATUS_PAUSED, DownloadStatusConstant.TASK_PAUSE_NO_NETWORK);
 			if (DownloadOrderMgr.hasDownload()) {
 				Toast.makeText(BaseApplication.getAppContext(), R.string.network_off, Toast.LENGTH_SHORT).show();
 			}
@@ -309,43 +386,43 @@ public class DownloadStatusMgr {
 	}
 
 	private void onMobileNetworkConnect() {
-		int reason = TASK_FAIL_REASON_NONE;
+		int reason = DownloadStatusConstant.TASK_FAIL_REASON_NONE;
 		// if (SettingUtils.getAllowByMobileNet()) { // cyminge modify
-		reason = TASK_PAUSE_NO_NETWORK;
+		reason = DownloadStatusConstant.TASK_PAUSE_NO_NETWORK;
 		// } else {
 		// reason = PAUSE_WAIT_WIFI;
 		// }
 
-		switchAllRunningTask(TASK_STATUS_PAUSED, reason);
+		switchAllRunningTask(DownloadStatusConstant.TASK_STATUS_PAUSED, reason);
 	}
 
 	private void onWifiNetworkConnect() {
 		ArrayList<String> packageList = getSortPkgList();
 		for (String pkg : packageList) {
 			DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(pkg);
-			if (info.mReason == TASK_PAUSE_NO_NETWORK || info.mReason == TASK_PAUSE_WAIT_WIFI) {
-				resumeDownloadTask(info, TASK_RESUME_NETWORK_RECONNECT);
+			if (info.mReason == DownloadStatusConstant.TASK_PAUSE_NO_NETWORK || info.mReason == DownloadStatusConstant.TASK_PAUSE_WAIT_WIFI) {
+				resumeDownloadTask(info, DownloadStatusConstant.TASK_RESUME_NETWORK_RECONNECT);
 			}
 		}
 	}
 
 	public void onMediaChanged(boolean isEject) {
 		if (isEject && GNStorageUtils.isSDCardChange()) {
-			switchAllRunningTask(TASK_STATUS_PAUSED, TASK_PAUSE_DEVICE_NOT_FOUND);
+			switchAllRunningTask(DownloadStatusConstant.TASK_STATUS_PAUSED, DownloadStatusConstant.TASK_PAUSE_DEVICE_NOT_FOUND);
 			showlimitedToast(R.string.device_not_found);
 		} else {
 			ArrayList<String> packageList = getSortPkgList();
 			for (String pkg : packageList) {
 				DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(pkg);
 				if (shouldResumeOnMediaChanged(info)) {
-					resumeDownloadTask(info, TASK_RESUME_DEVICE_RECOVER);
+					resumeDownloadTask(info, DownloadStatusConstant.TASK_RESUME_DEVICE_RECOVER);
 				}
 			}
 		}
 	}
 
 	protected boolean shouldResumeOnMediaChanged(DownloadInfo info) {
-		return info.mReason == TASK_PAUSE_DEVICE_NOT_FOUND;
+		return info.mReason == DownloadStatusConstant.TASK_PAUSE_DEVICE_NOT_FOUND;
 	}
 
 	private void switchAllRunningTask(int status, int reason) {
@@ -380,7 +457,7 @@ public class DownloadStatusMgr {
 		}
 
 		if (Utils.isMobileNet() && !enable) {
-			switchAllRunningTask(TASK_STATUS_PAUSED, TASK_PAUSE_WAIT_WIFI);
+			switchAllRunningTask(DownloadStatusConstant.TASK_STATUS_PAUSED, DownloadStatusConstant.TASK_PAUSE_WAIT_WIFI);
 		}
 	}
 
@@ -396,7 +473,7 @@ public class DownloadStatusMgr {
 		if (info == null || (info.mStatus == targetStatus && info.mReason == reason)) {
 			return info;
 		}
-		if (info.mStatus == TASK_STATUS_DOWNLOADING) {
+		if (info.mStatus == DownloadStatusConstant.TASK_STATUS_DOWNLOADING) {
 			DownloadService.removeTask(info, targetStatus); // ?? 这里是个什么鬼
 		}
 		info.mLastStatus = info.mStatus;
@@ -404,15 +481,15 @@ public class DownloadStatusMgr {
 		info.mStatus = targetStatus;
 		info.mReason = reason;
 		switch (targetStatus) {
-		case TASK_STATUS_DOWNLOADING:
+		case DownloadStatusConstant.TASK_STATUS_DOWNLOADING:
 			DownloadRunnable task = createDownloadRunnable(info);
 			DownloadService.postTask(pkgName, task);
 			break;
-		case TASK_STATUS_PAUSED:
-		case TASK_STATUS_FAILED:
+		case DownloadStatusConstant.TASK_STATUS_PAUSED:
+		case DownloadStatusConstant.TASK_STATUS_FAILED:
 			showToastByReason(reason);
 			break;
-		case TASK_STATUS_SUCCESSFUL:
+		case DownloadStatusConstant.TASK_STATUS_SUCCESSFUL:
 			info.setCompleteTime(System.currentTimeMillis());
 			break;
 		default:

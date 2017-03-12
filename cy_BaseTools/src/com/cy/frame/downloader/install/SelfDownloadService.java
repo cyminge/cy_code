@@ -7,7 +7,7 @@ import android.content.Intent;
 import com.cy.constant.Constant;
 import com.cy.frame.downloader.core.DownloadRunnable;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
-import com.cy.frame.downloader.downloadmanager.DownloadDB;
+import com.cy.frame.downloader.manager.DownloadDB;
 
 /**
  * 本应用下载文件的安装服务

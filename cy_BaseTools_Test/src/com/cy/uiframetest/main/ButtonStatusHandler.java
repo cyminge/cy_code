@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.widget.AbsListView.OnScrollListener;
 
-import com.cy.frame.downloader.core.DownloadInfoMgr;
-import com.cy.frame.downloader.core.DownloadInfoMgr.DownloadChangeListener;
+import com.cy.frame.downloader.core.DownloadManager;
+import com.cy.frame.downloader.core.DownloadManager.DownloadChangeListener;
 import com.cy.global.WatchDog;
 import com.cy.uiframe.recyclerview.AbstractRececlerAdapter;
 import com.cy.uiframe.recyclerview.AbstractRecyclerView;
-import com.cy.uiframe.recyclerview.AbstractRecyclerViewHolder;
 
 /**
  * 下载按钮状态的处理
@@ -68,7 +67,7 @@ public class ButtonStatusHandler<T> {
                 }
             };
         }
-        DownloadInfoMgr.getNormalInstance().addChangeListener(mChangeListener);
+        DownloadManager.getNormalInstance().addChangeListener(mChangeListener);
     }
 
     private void updateDownloadStatus() {
@@ -88,7 +87,7 @@ public class ButtonStatusHandler<T> {
      * 销毁
      */
     public void deinit() {
-    	DownloadInfoMgr.getNormalInstance().removeChangeListener(mChangeListener);
+    	DownloadManager.getNormalInstance().removeChangeListener(mChangeListener);
     	mAdapter = null;
     	mView = null;
     	mActivity = null;

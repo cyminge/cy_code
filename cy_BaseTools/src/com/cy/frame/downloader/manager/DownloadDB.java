@@ -1,4 +1,4 @@
-package com.cy.frame.downloader.downloadmanager;
+package com.cy.frame.downloader.manager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import android.os.HandlerThread;
 import android.util.Log;
 
 import com.cy.constant.Constant;
-import com.cy.frame.downloader.core.DownloadStatusMgr;
+import com.cy.frame.downloader.core.DownloadStatusConstant;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.global.BaseApplication;
 import com.cy.threadpool.NormalThreadPool;
@@ -300,7 +300,7 @@ public class DownloadDB extends SQLiteOpenHelper {
                 try {
                     database = getWritableDatabase();
                     for (DownloadInfo info : mInfos) {
-                        if (info.mStatus == DownloadStatusMgr.TASK_STATUS_DOWNLOADING || info.mNeedUpdateDB) {
+                        if (info.mStatus == DownloadStatusConstant.TASK_STATUS_DOWNLOADING || info.mNeedUpdateDB) {
                             ContentValues values = new ContentValues();
                             values.put(COLUMN_STATUS, info.mStatus);
                             values.put(COLUMN_REASON, info.mReason);

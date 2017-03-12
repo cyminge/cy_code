@@ -13,8 +13,8 @@ import com.cy.frame.downloader.controller.ButtonStatusManager;
 import com.cy.frame.downloader.controller.DownloadClickHelper;
 import com.cy.frame.downloader.controller.DownloadClickHelper.DownloadClickCallback;
 import com.cy.frame.downloader.controller.SingleDownloadManager.SingleDownloadListener;
-import com.cy.frame.downloader.core.DownloadInfoMgr;
-import com.cy.frame.downloader.core.DownloadInfoMgr.DownloadChangeListener;
+import com.cy.frame.downloader.core.DownloadManager;
+import com.cy.frame.downloader.core.DownloadManager.DownloadChangeListener;
 import com.cy.frame.downloader.download.DownloadArgsFactory;
 import com.cy.frame.downloader.download.DownloadArgsFactory.DownloadArgsListener;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
@@ -38,7 +38,7 @@ import com.cy.utils.Utils;
     private DownloadArgsFactory mDownloadArgsFactory;
     protected Activity mActivity;
 
-    private DownloadInfoMgr mDownloadInfoMgr;
+    private DownloadManager mDownloadManager;
     private DownloadClickHelper mClickHelper;
 
     protected boolean mIsExit = false;
@@ -111,7 +111,7 @@ import com.cy.utils.Utils;
     public DownloadHelper(Activity activity, String gameId, String gamePkgName, View view) {
         this.mActivity = activity;
         this.mDownloadView = view;
-        this.mDownloadInfoMgr = DownloadInfoMgr.getNormalInstance();
+        mDownloadManager = DownloadManager.getNormalInstance();
 
         initView(view);
         mDownloadArgsFactory = createDownloadArgsFoctory(activity, gameId, gamePkgName);
@@ -147,7 +147,7 @@ import com.cy.utils.Utils;
         if (mDownloadArgsFactory != null) {
             mDownloadArgsFactory.onDestroy();
         }
-        mDownloadInfoMgr.removeChangeListener(mDownloadListener);
+        mDownloadManager.removeChangeListener(mDownloadListener);
         GameListenerManager.removeListener(mUpgradeInfoListener);
     }
 
@@ -170,7 +170,7 @@ import com.cy.utils.Utils;
             public void run() {
                 if (apkHasDeleted(status, fileMatch)) {
                     ButtonStatusManager.removeDownloaded(mDownloadArgs.packageName);
-                    mDownloadInfoMgr.removeDownloadInfo(mDownloadArgs.packageName);
+                    mDownloadManager.removeDownloadInfo(mDownloadArgs.packageName);
                     onStatusChange(status);
                 }
 
@@ -221,7 +221,7 @@ import com.cy.utils.Utils;
                 setDownloadView(mDownloadView, mDownloadArgs);
                 onResume();
                 onStatusChange(getCurrentStatus());
-                mDownloadInfoMgr.addChangeListener(mDownloadListener);
+                mDownloadManager.addChangeListener(mDownloadListener);
                 onDownloadShowed();
             }
         });
@@ -307,7 +307,7 @@ import com.cy.utils.Utils;
                     setBtnText(ButtonStatusManager.BUTTON_STATUS_INSTALL, R.string.install);
                 } else {
                     ButtonStatusManager.removeDownloaded(mDownloadArgs.packageName);
-                    mDownloadInfoMgr.removeDownloadInfo(mDownloadArgs.packageName);
+                    mDownloadManager.removeDownloadInfo(mDownloadArgs.packageName);
                     Utils.deleteFile(mFileName);
                     setBtnText(status, R.string.download, getAppendSize());
                 }
@@ -429,7 +429,7 @@ import com.cy.utils.Utils;
     }
 
     private void handleDownloadChange(int resId, int downloadStatus) {
-        DownloadInfo info = mDownloadInfoMgr.getDownloadInfo(mDownloadArgs.packageName);
+        DownloadInfo info = mDownloadManager.getDownloadInfo(mDownloadArgs.packageName);
         if (info == null) {
             return;
         }

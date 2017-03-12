@@ -1,4 +1,4 @@
-package com.cy.frame.downloader.downloadmanager;
+package com.cy.frame.downloader.manager;
 
 import java.util.HashMap;
 
@@ -11,7 +11,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 
-import com.cy.frame.downloader.core.DownloadInfoMgr;
+import com.cy.frame.downloader.core.DownloadManager;
 import com.cy.frame.downloader.core.DownloadRunnable;
 import com.cy.frame.downloader.download.DownloadUtils;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
@@ -44,8 +44,8 @@ public class DownloadService extends Service {
                 
                 DownloadUtils.printLastFailLog();
                 
-                DownloadInfoMgr.getNormalInstance().initDownloadTask();
-                DownloadInfoMgr.getSilentInstance().initDownloadTask();
+                DownloadManager.getNormalInstance().initDownloadTask();
+                DownloadManager.getSilentInstance().initDownloadTask();
                 break;
 
             default:

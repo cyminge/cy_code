@@ -13,8 +13,8 @@ import android.os.Looper;
 import android.os.Message;
 
 import com.cy.frame.downloader.config.DownloadConfiguration;
-import com.cy.frame.downloader.core.DownloadStatusMgr;
-import com.cy.frame.downloader.downloadmanager.DownloadService;
+import com.cy.frame.downloader.core.DownloadManager;
+import com.cy.frame.downloader.manager.DownloadService;
 import com.cy.imageloader.ImageLoader;
 import com.cy.threadpool.AbstractThreadPool;
 import com.cy.tracer.Tracer;
@@ -116,7 +116,7 @@ public enum WatchDog {
         DownloadConfiguration.Builder builder = new DownloadConfiguration.Builder();
         builder.appFilePath(GNStorageUtils.getHomeDirAbsolute()+File.separator);
         builder.isAllowByMobileNet(true); // SettingUtils.getAllowByMobileNet();
-        DownloadStatusMgr.init(builder.build()); 
+        DownloadManager.init(builder.build()); 
         
 //        DownloadInfoMgr.initDownloadService(); // 下载服务
 //        registerReceiver();

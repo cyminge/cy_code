@@ -1,7 +1,8 @@
 package com.cy.frame.downloader.controller;
 
 import com.cy.frame.downloader.controller.SingleDownloadManager.SingleDownloadListener;
-import com.cy.frame.downloader.core.DownloadStatusMgr;
+import com.cy.frame.downloader.core.DownloadManager;
+import com.cy.frame.downloader.core.DownloadStatusConstant;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.ui.IProgressButton;
 import com.cy.frame.downloader.util.GameInstaller;
@@ -16,7 +17,7 @@ import com.cy.utils.Utils;
 public class DownloadClickHelper {
 
     private DownloadClickCallback mDownloadClickCallback;
-    private DownloadStatusMgr mDownloadStatusMgr;
+    private DownloadManager mDownloadManager;
 
     public DownloadClickHelper() {
         this(null);
@@ -24,7 +25,7 @@ public class DownloadClickHelper {
     
     public DownloadClickHelper(DownloadClickCallback downloadClickCallback) {
         mDownloadClickCallback = downloadClickCallback;
-        mDownloadStatusMgr = DownloadStatusMgr.getNormalInstance();
+        mDownloadManager = DownloadManager.getNormalInstance();
     }
 
     /**
@@ -150,14 +151,8 @@ public class DownloadClickHelper {
 //        });
     }
 
-    /**
-     * 这个是什么功能??
-     * @param args
-     */
     private void showGiftToast(DownloadArgs args) {
-//    	if(args.reward != null && !TextUtils.isEmpty(args.reward.remindDes)) {
-//		Toast.makeText(WatchDog.getContext(), "显示礼物提示", Toast.LENGTH_SHORT).show();
-//    	}
+    	// 当下载应用为有奖下载时，弹出土司，提示用户去获取礼包
     }
 
     /**
@@ -165,7 +160,7 @@ public class DownloadClickHelper {
      * @param args
      */
     private void pauseDownloadTask(DownloadArgs args) {
-        mDownloadStatusMgr.pauseDownloadTask(args, DownloadStatusMgr.TASK_PAUSE_BY_USER);
+        mDownloadManager.pauseDownloadTask(args, DownloadStatusConstant.TASK_PAUSE_BY_USER);
     }
 
     /**
@@ -173,7 +168,7 @@ public class DownloadClickHelper {
      * @param args
      */
     private void resumeDownloadTask(DownloadArgs args) {
-        mDownloadStatusMgr.resumeDownloadTask(args, DownloadStatusMgr.TASK_RESUME_BY_USER);
+        mDownloadManager.resumeDownloadTask(args, DownloadStatusConstant.TASK_RESUME_BY_USER);
     }
 
 }

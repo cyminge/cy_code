@@ -11,9 +11,10 @@ import android.widget.Toast;
 
 import com.cy.R;
 import com.cy.constant.Constant;
+import com.cy.frame.downloader.download.DownloadUtils;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
-import com.cy.frame.downloader.downloadmanager.DownloadDB;
 import com.cy.frame.downloader.install.InstallManager;
+import com.cy.frame.downloader.manager.DownloadDB;
 import com.cy.frame.downloader.ui.GameDialog;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager.UpgradeAppInfo;
@@ -53,7 +54,7 @@ public class SingleDownloadManager extends StartDownloadManager {
         super(delayTime);
     }
 
-    private class SignCheckTask extends AsyncTask<Object, Object, Integer> {
+    private class LocalApkSignCheckTask extends AsyncTask<Object, Object, Integer> {
 
         @Override
         protected Integer doInBackground(Object... params) {
@@ -62,7 +63,7 @@ public class SingleDownloadManager extends StartDownloadManager {
                 InstallManager.addInstallingGame(gamePackage);
             }
 
-            if (checkSignature(gamePackage)) {
+            if (DownloadUtils.checkLocalApkSignature(gamePackage)) {
                 return LOCALAPK_CHECK_OK;
             } else {
                 return LOCALAPK_CHECK_SIGNFAIL;
@@ -83,7 +84,6 @@ public class SingleDownloadManager extends StartDownloadManager {
                 default:
                     break;
             }
-
         }
     }
 
@@ -91,7 +91,7 @@ public class SingleDownloadManager extends StartDownloadManager {
         mDownloadArgs = downloadArgs;
         mListener = listener;
         mContext = WatchDog.INSTANCE.getTopActivity();
-        if (isApplyFail) { // 提示错误
+        if (isApplyFail) { // 增量升级失败，提示错误
             applyFail(mDownloadArgs);
             return;
         }
@@ -100,8 +100,8 @@ public class SingleDownloadManager extends StartDownloadManager {
             return;
         }
 
-        if (shouldCheckSign()) { 
-            new SignCheckTask().execute();
+        if (shouldCheckLocalApkSign()) { 
+            new LocalApkSignCheckTask().execute();
             return;
         }
 
@@ -159,35 +159,9 @@ public class SingleDownloadManager extends StartDownloadManager {
      * 检查是否有新版本
      * @return
      */
-    private boolean shouldCheckSign() {
+    private boolean shouldCheckLocalApkSign() {
         UpgradeAppInfo upgradeAppInfo = GamesUpgradeManager.getOneAppInfo(mDownloadArgs.packageName);
-        return GamesUpgradeManager.hasNewVersion(mDownloadArgs.packageName) && hasLocalUpgradeApk(upgradeAppInfo);
-    }
-
-    /**
-     * 检查本地是否有已经下载好的apk
-     * @param info
-     * @return
-     */
-    private boolean hasLocalUpgradeApk(UpgradeAppInfo info) {
-        String path = GNStorageUtils.getHomeDirAbsolute() + File.separator + info.packageName + Constant.APK;
-        PackageInfo p = Utils.getPackageInfoByPath(path);
-        if (p != null && p.packageName.equals(info.packageName)) {
-            if (p.versionCode >= info.mNewVersionCode) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 检查签名
-     * @param packageName
-     * @return
-     */
-    private boolean checkSignature(String packageName) {
-        String localPath = GNStorageUtils.getHomeDirAbsolute() + File.separator + packageName + Constant.APK;
-        return GamesUpgradeManager.isSameSignature(packageName, localPath);
+        return GamesUpgradeManager.hasNewVersion(mDownloadArgs.packageName) && DownloadUtils.hasLocalUpgradeApk(upgradeAppInfo); 
     }
 
     /**
@@ -195,7 +169,6 @@ public class SingleDownloadManager extends StartDownloadManager {
      */
     @Override
     protected boolean isDownloadable() {
-
         if (hasLocalApk(mDownloadArgs)) { // 本地是否有apk
             ButtonStatusManager.addDownloaded(mDownloadArgs.packageName);
             runInstall(mDownloadArgs, mListener);

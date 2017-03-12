@@ -1,10 +1,12 @@
 package com.cy.frame.downloader.download;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
 
+import android.content.pm.PackageInfo;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,8 +14,8 @@ import com.cy.R;
 import com.cy.constant.Constant;
 import com.cy.frame.downloader.controller.ButtonStatusManager;
 import com.cy.frame.downloader.controller.SingleDownloadManager;
-import com.cy.frame.downloader.core.DownloadInfoMgr;
-import com.cy.frame.downloader.core.DownloadStatusMgr;
+import com.cy.frame.downloader.core.DownloadManager;
+import com.cy.frame.downloader.core.DownloadStatusConstant;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.frame.downloader.statis.StatisValue;
@@ -61,49 +63,49 @@ public class DownloadUtils {
 
     public static String reasonToString(int reason) {
         switch (reason) {
-        case DownloadStatusMgr.TASK_FAIL_HTTP_DATA_ERROR:
+        case DownloadStatusConstant.TASK_FAIL_HTTP_DATA_ERROR:
             return StatisValue.ERR_HTTP;
-        case DownloadStatusMgr.TASK_FAIL_URL_ERROR:
+        case DownloadStatusConstant.TASK_FAIL_URL_ERROR:
             return StatisValue.ERR_URL_ERROR;
-        case DownloadStatusMgr.TASK_FAIL_URL_UNREACHABLE:
-        case DownloadStatusMgr.TASK_FAIL_CANNOT_RESUME:
+        case DownloadStatusConstant.TASK_FAIL_URL_UNREACHABLE:
+        case DownloadStatusConstant.TASK_FAIL_CANNOT_RESUME:
             return StatisValue.ERR_URL_UNREACHABLE;
-        case DownloadStatusMgr.TASK_FAIL_URL_UNRECOVERABLE:
+        case DownloadStatusConstant.TASK_FAIL_URL_UNRECOVERABLE:
             return StatisValue.ERR_URL_UNRECOVERABLE;
-        case DownloadStatusMgr.TASK_FAIL_APK_ERROR:
+        case DownloadStatusConstant.TASK_FAIL_APK_ERROR:
             return StatisValue.ERR_PACKAGE_NAME;
-        case DownloadStatusMgr.TASK_FAIL_CONTENT_TYPE_ERROR:
+        case DownloadStatusConstant.TASK_FAIL_CONTENT_TYPE_ERROR:
             return StatisValue.ERR_CONTENT_TYPE_ERROR;
-        case DownloadStatusMgr.TASK_FAIL_GAME_NOT_EXIST:
+        case DownloadStatusConstant.TASK_FAIL_GAME_NOT_EXIST:
             return StatisValue.ERR_GAME_NOT_EXIST;
 
-        case DownloadStatusMgr.TASK_PAUSE_NO_NETWORK:
+        case DownloadStatusConstant.TASK_PAUSE_NO_NETWORK:
             return StatisValue.NET;
-        case DownloadStatusMgr.TASK_PAUSE_WAIT_WIFI:
+        case DownloadStatusConstant.TASK_PAUSE_WAIT_WIFI:
             return StatisValue.DOWNLOAD_WAIT_WLAN;
-        case DownloadStatusMgr.TASK_PAUSE_DEVICE_NOT_FOUND:
+        case DownloadStatusConstant.TASK_PAUSE_DEVICE_NOT_FOUND:
             return StatisValue.ERR_NO_DEVICE;
-        case DownloadStatusMgr.TASK_PAUSE_FILE_ERROR:
+        case DownloadStatusConstant.TASK_PAUSE_FILE_ERROR:
             return StatisValue.ERR_FILE_ERROR;
-        case DownloadStatusMgr.TASK_PAUSE_INSUFFICIENT_SPACE:
+        case DownloadStatusConstant.TASK_PAUSE_INSUFFICIENT_SPACE:
             return StatisValue.ERR_NO_SPACE;
-        case DownloadStatusMgr.TASK_PAUSE_WIFI_INVALID:
+        case DownloadStatusConstant.TASK_PAUSE_WIFI_INVALID:
             return StatisValue.ERR_WIFI_INVALID;
 
-        case DownloadStatusMgr.TASK_RESUME_DEVICE_RECOVER:
+        case DownloadStatusConstant.TASK_RESUME_DEVICE_RECOVER:
             return StatisValue.DOWNLOAD_DEVICE_RECOVER;
-        case DownloadStatusMgr.TASK_RESUME_NETWORK_RECONNECT:
+        case DownloadStatusConstant.TASK_RESUME_NETWORK_RECONNECT:
             if (Utils.isMobileNet()) {
                 return StatisValue.DOWNLOAD_GPRS;
             } else {
                 return StatisValue.DOWNLOAD_WLAN;
             }
 
-        case DownloadStatusMgr.TASK_PAUSE_BY_USER:
-        case DownloadStatusMgr.TASK_RESUME_BY_USER:
+        case DownloadStatusConstant.TASK_PAUSE_BY_USER:
+        case DownloadStatusConstant.TASK_RESUME_BY_USER:
             return StatisValue.DOWNLOAD_UESER;
 
-        case DownloadStatusMgr.TASK_FAIL_UNKNOWN:
+        case DownloadStatusConstant.TASK_FAIL_UNKNOWN:
         default:
             return StatisValue.ERR_UNKNOWN;
         }
@@ -120,39 +122,39 @@ public class DownloadUtils {
 
         int failedResid = -1;
         switch (reason) {
-        case DownloadStatusMgr.TASK_PAUSE_FILE_ERROR:
+        case DownloadStatusConstant.TASK_PAUSE_FILE_ERROR:
             failedResid = R.string.file_write_error;
             break;
-        case DownloadStatusMgr.TASK_PAUSE_DEVICE_NOT_FOUND:
+        case DownloadStatusConstant.TASK_PAUSE_DEVICE_NOT_FOUND:
             failedResid = R.string.sdcard_error;
             break;
-        case DownloadStatusMgr.TASK_PAUSE_INSUFFICIENT_SPACE:
+        case DownloadStatusConstant.TASK_PAUSE_INSUFFICIENT_SPACE:
             failedResid = R.string.sdcard_low_space;
             break;
-        case DownloadStatusMgr.TASK_FAIL_URL_ERROR:
-        case DownloadStatusMgr.TASK_FAIL_URL_UNREACHABLE:
-        case DownloadStatusMgr.TASK_FAIL_URL_UNRECOVERABLE:
-        case DownloadStatusMgr.TASK_FAIL_HTTP_DATA_ERROR:
-        case DownloadStatusMgr.TASK_FAIL_CONTENT_TYPE_ERROR:
-        case DownloadStatusMgr.TASK_PAUSE_XUNLEI_WAITING_TO_RETRY:
+        case DownloadStatusConstant.TASK_FAIL_URL_ERROR:
+        case DownloadStatusConstant.TASK_FAIL_URL_UNREACHABLE:
+        case DownloadStatusConstant.TASK_FAIL_URL_UNRECOVERABLE:
+        case DownloadStatusConstant.TASK_FAIL_HTTP_DATA_ERROR:
+        case DownloadStatusConstant.TASK_FAIL_CONTENT_TYPE_ERROR:
+        case DownloadStatusConstant.TASK_PAUSE_XUNLEI_WAITING_TO_RETRY:
             failedResid = R.string.connect_server_fail;
             break;
-        case DownloadStatusMgr.USER_DELETED:
+        case DownloadStatusConstant.USER_DELETED:
             failedResid = R.string.download_deleted;
             break;
-        case DownloadStatusMgr.TASK_PAUSE_WIFI_INVALID:
+        case DownloadStatusConstant.TASK_PAUSE_WIFI_INVALID:
             failedResid = R.string.no_net_msg;
             break;
-        case DownloadStatusMgr.TASK_FAIL_APK_ERROR:
+        case DownloadStatusConstant.TASK_FAIL_APK_ERROR:
             failedResid = R.string.apk_error_retry;
             break;
-        case DownloadStatusMgr.TASK_FAIL_UNKNOWN:
+        case DownloadStatusConstant.TASK_FAIL_UNKNOWN:
             failedResid = R.string.unknown_fail;
             break;
-        case DownloadStatusMgr.TASK_FAIL_GAME_NOT_EXIST:
+        case DownloadStatusConstant.TASK_FAIL_GAME_NOT_EXIST:
             failedResid = R.string.game_not_exist;
             break;
-        case DownloadStatusMgr.TASK_FAIL_CANNOT_RESUME:
+        case DownloadStatusConstant.TASK_FAIL_CANNOT_RESUME:
             failedResid = R.string.cannot_resume;
             break;
         default:
@@ -177,14 +179,14 @@ public class DownloadUtils {
                 GamesUpgradeManager.updateAppInfoType(packageName, false);
             } else if (info.mFilePath != null && info.mFilePath.contains(".patch" + Constant.TMP_FILE_EXT)) {
                 ButtonStatusManager.removeDownloaded(packageName);
-                DownloadInfoMgr.getNormalInstance().removeDownloadInfo(packageName);
+                DownloadManager.getNormalInstance().removeDownloadInfo(packageName);
                 isError = false;
             }
         } else if (GamesUpgradeManager.isIncreaseType(packageName)) {
             if (GameInstaller.APPLY_PATCH_SUCCESS != GameInstaller.applyPatch(homeDir, packageName)) {
                 GamesUpgradeManager.updateAppInfoType(packageName, false);
                 ButtonStatusManager.removeDownloaded(packageName);
-                DownloadInfoMgr.getNormalInstance().removeDownloadInfo(packageName);
+                DownloadManager.getNormalInstance().removeDownloadInfo(packageName);
                 downloadAPK(true, packageName);
                 isError = true;
             }
@@ -192,7 +194,7 @@ public class DownloadUtils {
             isError = true;
         }
         if (isError) {
-            Utils.delAllfiles(packageName);
+            delAllfiles(packageName);
             recoveryDownloadUrl(info);
         } else {
             FileUtils.notifyApkAdd(fileName);
@@ -251,7 +253,7 @@ public class DownloadUtils {
     }
 
     public static String getPkgNameAppendStartTime(String pkgName) {
-        DownloadInfo info = DownloadInfoMgr.getDownloadInfoInAll(pkgName);
+        DownloadInfo info = DownloadManager.getDownloadInfoInAll(pkgName);
         if (info == null || info.mStartTime == 0) {
             return pkgName;
         } else {
@@ -261,14 +263,14 @@ public class DownloadUtils {
 
     public static String statusToString(int status) {
         switch (status) {
-        case DownloadStatusMgr.TASK_STATUS_DOWNLOADING:
-        case DownloadStatusMgr.TASK_STATUS_PENDING:
+        case DownloadStatusConstant.TASK_STATUS_DOWNLOADING:
+        case DownloadStatusConstant.TASK_STATUS_PENDING:
             return StatisValue.DOWNLOAD_RESUME;
-        case DownloadStatusMgr.TASK_STATUS_FAILED:
+        case DownloadStatusConstant.TASK_STATUS_FAILED:
             return StatisValue.DOWNLOAD_FAIL;
-        case DownloadStatusMgr.TASK_STATUS_PAUSED:
+        case DownloadStatusConstant.TASK_STATUS_PAUSED:
             return StatisValue.DOWNLOAD_PAUSE;
-        case DownloadStatusMgr.TASK_STATUS_SUCCESSFUL:
+        case DownloadStatusConstant.TASK_STATUS_SUCCESSFUL:
             return StatisValue.DOWNLOAD_SUCCESS;
         default:
             return StatisValue.START_DOWNLOAD;
@@ -322,11 +324,44 @@ public class DownloadUtils {
     private static boolean checkSpaceForRetry(DownloadArgs args) {
 		int status = ButtonStatusManager.getButtonStatus(args);
 		if (status == ButtonStatusManager.BUTTON_STATUS_FAILED) {
-			DownloadInfo info = DownloadInfoMgr.getNormalInstance().getDownloadInfo(args.packageName);
+			DownloadInfo info = DownloadManager.getNormalInstance().getDownloadInfo(args.packageName);
 			if (info != null && Utils.checkSDCard(info.mTotalSize) == Constant.SD_LOW_SPACE) {
 				return false;
 			}
 		}
 		return true;
+	}
+    
+    /**
+     * 检查本地是否有已经下载好的apk
+     * @param info
+     * @return
+     */
+    public static boolean hasLocalUpgradeApk(UpgradeAppInfo info) {
+        String path = GNStorageUtils.getHomeDirAbsolute() + File.separator + info.packageName + Constant.APK;
+        PackageInfo p = Utils.getPackageInfoByPath(path);
+        if (p != null && p.packageName.equals(info.packageName)) {
+            if (p.versionCode >= info.mNewVersionCode) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * 检查签名
+     * @param packageName
+     * @return
+     */
+    public static boolean checkLocalApkSignature(String packageName) {
+        String localPath = GNStorageUtils.getHomeDirAbsolute() + File.separator + packageName + Constant.APK;
+        return GamesUpgradeManager.isSameSignature(packageName, localPath);
+    }
+    
+	public static void delAllfiles(String gamePackage) {
+		Utils.deleteFile(gamePackage + Constant.APK);
+		Utils.deleteFile(gamePackage + ".apk.gntmp");
+		Utils.deleteFile(gamePackage + ".patch");
+		Utils.deleteFile(gamePackage + ".patch.gntmp");
 	}
 }

@@ -9,17 +9,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
 import com.cy.constant.Constant;
-import com.cy.frame.downloader.core.DownloadInfoMgr;
-import com.cy.frame.downloader.download.DownloadArgsFactory;
+import com.cy.frame.downloader.core.DownloadManager;
 import com.cy.frame.downloader.entity.GameBean;
-import com.cy.frame.downloader.statis.StatisValue;
-import com.cy.frame.downloader.util.JsonConstant;
 import com.cy.frame.downloader.util.JsonUtils;
 import com.cy.frame.downloader.util.UrlConstant;
 import com.cy.global.BaseApplication;
@@ -237,7 +233,7 @@ public class GamesUpgradeManager {
 		if (!info.mCurVersionName.equals(versionName)) {
 			info.mCurVersionName = versionName;
 			String pkgName = info.packageName;
-			if (info.mIsIncreaseType && !DownloadInfoMgr.getNormalInstance().hasDownloadInfo(pkgName)) {
+			if (info.mIsIncreaseType && !DownloadManager.getNormalInstance().hasDownloadInfo(pkgName)) {
 				updateAppInfoType(pkgName, false);
 			}
 		}

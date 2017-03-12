@@ -8,7 +8,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.cy.constant.Constant;
-import com.cy.frame.downloader.core.DownloadStatusMgr;
+import com.cy.frame.downloader.core.DownloadStatusConstant;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 
 /**
@@ -22,8 +22,8 @@ public final class DownloadInfo extends DownloadRequest implements Cloneable {
 	private static final int MIN_APK_SIZE = 10 * 1024;
 
 	public long mDownId = -1; // 下载ID
-	public int mStatus = DownloadStatusMgr.TASK_STATUS_PENDING; // 下载状态
-	public int mReason = DownloadStatusMgr.TASK_FAIL_REASON_NONE;
+	public int mStatus = DownloadStatusConstant.TASK_STATUS_PENDING; // 下载状态
+	public int mReason = DownloadStatusConstant.TASK_FAIL_REASON_NONE;
 	private long mCompleteTime = 0;
 	private String mCompleteByMinute = Constant.EMPTY;
 	private String mCompleteByDay = Constant.EMPTY;
@@ -32,7 +32,7 @@ public final class DownloadInfo extends DownloadRequest implements Cloneable {
 	public boolean mNeedUpdateDB = false;
 	public long mStartTime = 0;
 	public String mRawDownloadUrl = Constant.EMPTY;
-	public int mLastStatus = DownloadStatusMgr.TASK_STATUS_DOWNLOADING;
+	public int mLastStatus = DownloadStatusConstant.TASK_STATUS_DOWNLOADING;
 	public long mInitTime = 0;
 
 	public DownloadInfo() {
@@ -46,9 +46,9 @@ public final class DownloadInfo extends DownloadRequest implements Cloneable {
 		mReason = reason;
 		packageName = pkgName;
 
-		if (mStatus == DownloadStatusMgr.TASK_STATUS_SUCCESSFUL && total < MIN_APK_SIZE) {
-			mStatus = DownloadStatusMgr.TASK_STATUS_PAUSED;
-			mReason = DownloadStatusMgr.TASK_PAUSE_WIFI_INVALID;
+		if (mStatus == DownloadStatusConstant.TASK_STATUS_SUCCESSFUL && total < MIN_APK_SIZE) {
+			mStatus = DownloadStatusConstant.TASK_STATUS_PAUSED;
+			mReason = DownloadStatusConstant.TASK_PAUSE_WIFI_INVALID;
 		}
 		mLastStatus = mStatus;
 	}
@@ -84,24 +84,24 @@ public final class DownloadInfo extends DownloadRequest implements Cloneable {
 	}
 
 	public boolean isCompleted() {
-		return mStatus == DownloadStatusMgr.TASK_STATUS_SUCCESSFUL;
+		return mStatus == DownloadStatusConstant.TASK_STATUS_SUCCESSFUL;
 	}
 
 	public boolean isRunning() {
-		return mStatus == DownloadStatusMgr.TASK_STATUS_DOWNLOADING
-				|| mStatus == DownloadStatusMgr.TASK_STATUS_PENDING;
+		return mStatus == DownloadStatusConstant.TASK_STATUS_DOWNLOADING
+				|| mStatus == DownloadStatusConstant.TASK_STATUS_PENDING;
 	}
 
 	public boolean isDownloading() {
-		return mStatus == DownloadStatusMgr.TASK_STATUS_DOWNLOADING;
+		return mStatus == DownloadStatusConstant.TASK_STATUS_DOWNLOADING;
 	}
 
 	public boolean isPause() {
-		return mStatus == DownloadStatusMgr.TASK_STATUS_PAUSED;
+		return mStatus == DownloadStatusConstant.TASK_STATUS_PAUSED;
 	}
 
 	public boolean isFailed() {
-		return mStatus == DownloadStatusMgr.TASK_STATUS_FAILED;
+		return mStatus == DownloadStatusConstant.TASK_STATUS_FAILED;
 	}
 
 	@Override

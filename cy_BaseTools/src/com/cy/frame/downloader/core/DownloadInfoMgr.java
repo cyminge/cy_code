@@ -8,9 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.cy.frame.downloader.config.DownloadConfiguration;
 import com.cy.frame.downloader.controller.DownloadOrderMgr;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
-import com.cy.frame.downloader.downloadmanager.DownloadDB;
-import com.cy.frame.downloader.downloadmanager.DownloadService;
-import com.cy.global.WatchDog;
+import com.cy.frame.downloader.manager.DownloadDB;
+import com.cy.frame.downloader.manager.DownloadService;
 import com.cy.listener.GameListenerManager;
 import com.cy.utils.Utils;
 import com.cy.utils.storage.GNStorageUtils;
@@ -22,78 +21,27 @@ import com.cy.utils.storage.GNStorageUtils;
  */
 public class DownloadInfoMgr {
 
-    public interface DownloadChangeListener {
-        public void onDownloadChange();
-    }
-
-    public interface StatusChangeListener {
-        public void onStatusChange();
-    }
-
-    private static volatile DownloadInfoMgr sNormalInstance;
-    private static volatile DownloadInfoMgr sSilentInstance;
-
-    private ArrayList<DownloadChangeListener> mDownloadListeners = new ArrayList<DownloadChangeListener>();
-    private ArrayList<StatusChangeListener> mStatusListeners = new ArrayList<StatusChangeListener>();
     private ConcurrentHashMap<String, DownloadInfo> mDownloadInfoMap = new ConcurrentHashMap<String, DownloadInfo>(); // 文件下载信息集合
     private static DownloadService sDownloadService;
+    private DownloadManager mDownloadManager;
 
-    public static final int NOTIFY_PROGRESS_DELAY_TIME = 1500;
-    private long mLastNotifyTime = 0;
     private boolean mIsSilent;
     private static boolean sSynDB = false;
-    private Runnable mOnProgressChangeRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-            notifyChange(false);
-            syncToDB();
-        }
-    };
-
-    public static DownloadInfoMgr getNormalInstance() {
-        if (sNormalInstance == null) {
-            synchronized (DownloadInfoMgr.class) {
-                if (sNormalInstance == null) {
-                    sNormalInstance = new DownloadInfoMgr(false);
-                }
-            }
-        }
-        return sNormalInstance;
-    }
-
-    public static DownloadInfoMgr getSilentInstance() {
-        if (sSilentInstance == null) {
-            synchronized (DownloadInfoMgr.class) {
-                if (sSilentInstance == null) {
-                    sSilentInstance = new DownloadInfoMgr(true);
-                }
-            }
-        }
-        return sSilentInstance;
-    }
-
-    public static DownloadInfoMgr getInstance(DownloadInfo info) {
-        if (info.mIsSilentDownload) {
-            return getSilentInstance();
-        } else {
-            return getNormalInstance();
-        }
-    }
 
     public static boolean isSynDB() {
         return sSynDB;
     }
 
-    private DownloadInfoMgr(boolean isSilent) {
-        this.mIsSilent = isSilent;
+    public DownloadInfoMgr(DownloadManager dlMgr, boolean isSilent) {
+        mIsSilent = isSilent;
+        mDownloadManager = dlMgr;
     }
 
-    public synchronized void initDownloadTask() {
+    public void initDownloadInfo() {
         ArrayList<DownloadInfo> downloadList = DownloadDB.getInstance().queryAll(mIsSilent);
         initDownloadItems(downloadList);
         onOrderChange();
-        notifyChange();
+        mDownloadManager.notifyChange();
         sSynDB = true;
     }
 
@@ -113,8 +61,8 @@ public class DownloadInfoMgr {
     private int initRunningTask(int downloadingCount, boolean hasNetwork, boolean sdCardMounted,
             DownloadInfo info) {
         if (!sdCardMounted || !hasNetwork) {
-            info.mStatus = DownloadStatusMgr.TASK_STATUS_PAUSED;
-            info.mReason = sdCardMounted ? getPauseReason() : DownloadStatusMgr.TASK_PAUSE_DEVICE_NOT_FOUND;
+            info.mStatus = DownloadStatusConstant.TASK_STATUS_PAUSED;
+            info.mReason = sdCardMounted ? getPauseReason() : DownloadStatusConstant.TASK_PAUSE_DEVICE_NOT_FOUND;
             DownloadDB.getInstance().update(info);
         } else if (info.isDownloading() && downloadingCount < DownloadConfiguration.MAX_DOWNLOADING_TASK) {
 //            DownloadRunnable task = mIsSilent ? new SilentDownloadRunnable(info) : new DownloadRunnable(info); // cyminge modify
@@ -122,7 +70,7 @@ public class DownloadInfoMgr {
             postTask(info.packageName, task);
             downloadingCount++;
         } else {
-            info.mStatus = DownloadStatusMgr.TASK_STATUS_PENDING;
+            info.mStatus = DownloadStatusConstant.TASK_STATUS_PENDING;
             DownloadDB.getInstance().update(info);
         }
 
@@ -132,54 +80,9 @@ public class DownloadInfoMgr {
     private int getPauseReason() {
 //        if (Utils.isMobileNet() && !SettingUtils.getAllowByMobileNet()) {// cyminge modify
         if (Utils.isMobileNet()) {
-            return DownloadStatusMgr.TASK_PAUSE_WAIT_WIFI;
+            return DownloadStatusConstant.TASK_PAUSE_WAIT_WIFI;
         } else {
-            return DownloadStatusMgr.TASK_PAUSE_NO_NETWORK;
-        }
-    }
-
-    public synchronized void clearListener() {
-        mDownloadListeners.clear();
-        mStatusListeners.clear();
-    }
-
-    public synchronized void addChangeListener(DownloadChangeListener listener) {
-        if (listener == null || mDownloadListeners.contains(listener)) {
-            return;
-        }
-        mDownloadListeners.add(listener);
-    }
-
-    public synchronized void removeChangeListener(DownloadChangeListener listener) {
-        mDownloadListeners.remove(listener);
-    }
-
-    public synchronized void addChangeListener(StatusChangeListener listener) {
-        if (listener == null || mStatusListeners.contains(listener)) {
-            return;
-        }
-        mStatusListeners.add(listener);
-    }
-
-    public synchronized void removeChangeListener(StatusChangeListener listener) {
-        mStatusListeners.remove(listener);
-    }
-
-    public void notifyChange() {
-        notifyChange(true);
-    }
-
-    private void notifyChange(boolean statusChange) {
-        mLastNotifyTime = System.currentTimeMillis();
-        synchronized (DownloadInfoMgr.this) {
-            for (DownloadChangeListener listener : mDownloadListeners) {
-                listener.onDownloadChange();
-            }
-            if (statusChange) {
-                for (StatusChangeListener listener : mStatusListeners) {
-                    listener.onStatusChange();
-                }
-            }
+            return DownloadStatusConstant.TASK_PAUSE_NO_NETWORK;
         }
     }
 
@@ -198,14 +101,6 @@ public class DownloadInfoMgr {
 
     public DownloadInfo getDownloadInfo(String pkgName) {
         return mDownloadInfoMap.get(pkgName);
-    }
-
-    public static DownloadInfo getDownloadInfoInAll(String pkgName) {
-        DownloadInfo info = getNormalInstance().getDownloadInfo(pkgName);
-        if (null == info) {
-            info = getSilentInstance().getDownloadInfo(pkgName);
-        }
-        return info;
     }
 
     public Set<Entry<String, DownloadInfo>> getDownloadSet() {
@@ -230,7 +125,7 @@ public class DownloadInfoMgr {
         removeTask(info);
         mDownloadInfoMap.remove(pkgName);
         onOrderChange();
-        notifyChange();
+        mDownloadManager.notifyChange();
         deleteDB(pkgName, info);
     }
 
@@ -256,7 +151,7 @@ public class DownloadInfoMgr {
 
     public void orderChange() {
         onOrderChange();
-        notifyChange();
+        mDownloadManager.notifyChange();
     }
 
     public void updateDownloadInfo(DownloadInfo info) {
@@ -271,34 +166,10 @@ public class DownloadInfoMgr {
         if (info.isCompleted()) {
             onOrderChange();
         }
-        notifyChange();
+        mDownloadManager.notifyChange();
         if (updateDb) {
             DownloadDB.getInstance().update(info);
         }
-    }
-
-    public void updateProgress(DownloadInfo info) {
-        if (!hasDownloadInfo(info.packageName)) {
-            return;
-        }
-        putToMap(info);
-
-        long delay = (NOTIFY_PROGRESS_DELAY_TIME - (System.currentTimeMillis() - mLastNotifyTime));
-        delay = Math.max(0, delay);
-        delay = Math.min(NOTIFY_PROGRESS_DELAY_TIME, delay);
-        
-        WatchDog.getLoopHandler().removeCallbacks(mOnProgressChangeRunnable);
-        WatchDog.getLoopHandler().postDelayed(mOnProgressChangeRunnable, delay);
-    }
-
-    public void updateProgressNoDelay(DownloadInfo info) {
-        if (!hasDownloadInfo(info.packageName)) {
-            return;
-        }
-        putToMap(info);
-
-        notifyChange(false);
-        syncToDB();
     }
 
     public void putToMap(DownloadInfo info) {

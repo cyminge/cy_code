@@ -15,9 +15,8 @@ import android.widget.Toast;
 import com.cy.R;
 import com.cy.constant.Constant;
 import com.cy.frame.downloader.controller.ButtonStatusManager;
-import com.cy.frame.downloader.core.DownloadInfoMgr;
-import com.cy.frame.downloader.core.DownloadStatusMgr;
-import com.cy.frame.downloader.download.entity.DownloadArgs;
+import com.cy.frame.downloader.core.DownloadManager;
+import com.cy.frame.downloader.download.DownloadUtils;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.install.InstallManager;
 import com.cy.global.BaseApplication;
@@ -190,7 +189,7 @@ import com.cy.utils.storage.GNStorageUtils;
             return true;
         } else {
             ButtonStatusManager.removeDownloaded(downloadArgs.packageName);
-            DownloadInfoMgr.getNormalInstance().removeDownloadInfo(downloadArgs.packageName);
+            DownloadManager.getNormalInstance().removeDownloadInfo(downloadArgs.packageName);
             Utils.deleteFile(fileName);
             Toast.makeText(context, R.string.file_error, Toast.LENGTH_SHORT).show();
             return false;
@@ -227,14 +226,14 @@ import com.cy.utils.storage.GNStorageUtils;
     private static void silentInstallFail(final Context context, final String homeDir,
             final DownloadArgs downloadArgs, String pkgName, String apkAbsolutePath) {
         if (downloadArgs.mIsSilentDownload) {
-            DownloadStatusMgr.getSilentInstance().onSilentInstallingError(pkgName);
+        	DownloadManager.getSilentInstance().onSilentInstallingError(pkgName);
         } else if (hasSignature(apkAbsolutePath)) {
             popupInstall(context, homeDir, pkgName);
         } else {
             InstallManager.removeInstallingGame(pkgName);
             ButtonStatusManager.removeDownloaded(pkgName);
-            Utils.delAllfiles(pkgName);
-            DownloadStatusMgr.getNormalInstance().onSilentInstallingError(pkgName);
+            DownloadUtils.delAllfiles(pkgName);
+            DownloadManager.getNormalInstance().onSilentInstallingError(pkgName);
         }
     };
 

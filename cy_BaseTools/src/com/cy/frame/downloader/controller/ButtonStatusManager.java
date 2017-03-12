@@ -2,8 +2,8 @@ package com.cy.frame.downloader.controller;
 
 import java.util.ArrayList;
 
-import com.cy.frame.downloader.core.DownloadInfoMgr;
-import com.cy.frame.downloader.core.DownloadStatusMgr;
+import com.cy.frame.downloader.core.DownloadManager;
+import com.cy.frame.downloader.core.DownloadStatusConstant;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.frame.downloader.install.InstallManager;
@@ -70,7 +70,7 @@ public class ButtonStatusManager {
      * @return
      */
     public static synchronized int getButtonStatus(String pkgName) {
-        DownloadInfo info = getDownloadInfoMgr().getDownloadInfo(pkgName);
+        DownloadInfo info = getDownloadManager().getDownloadInfo(pkgName);
         if (info != null) {
             if (info.isRunning()) {
                 return BUTTON_STATUS_RUNNING;
@@ -135,16 +135,16 @@ public class ButtonStatusManager {
         return false;
     }
 
-    private static DownloadInfoMgr getDownloadInfoMgr() {
-        return DownloadInfoMgr.getNormalInstance();
+    private static DownloadManager getDownloadManager() {
+        return DownloadManager.getNormalInstance();
     }
 
     private static boolean isPause(int status) {
-        return status == DownloadStatusMgr.TASK_STATUS_PAUSED;
+        return status == DownloadStatusConstant.TASK_STATUS_PAUSED;
     }
 
     private static boolean isFailed(int status) {
-        return status == DownloadStatusMgr.TASK_STATUS_FAILED;
+        return status == DownloadStatusConstant.TASK_STATUS_FAILED;
     }
 
     private static synchronized void initDownloadedAPK() {
@@ -161,7 +161,7 @@ public class ButtonStatusManager {
 
     public static synchronized void removeAllDownloaded() {
         for (String pkgName : sDownloadedAPK) {
-            getDownloadInfoMgr().removeDownloadInfo(pkgName);
+            getDownloadManager().removeDownloadInfo(pkgName);
         }
         sDownloadedAPK.clear();
     }
@@ -197,7 +197,7 @@ public class ButtonStatusManager {
         if (size <= 0) {
             return;
         }
-        getDownloadInfoMgr().notifyChange();
+        getDownloadManager().notifyChange();
     }
 
     private static synchronized void addPackage(String pkgName) {
@@ -226,7 +226,7 @@ public class ButtonStatusManager {
             case BUTTON_STATUS_RUNNING:
             case BUTTON_STATUS_PAUSE:
             case BUTTON_STATUS_FAILED:
-                DownloadInfo info = DownloadInfoMgr.getNormalInstance().getDownloadInfo(args.packageName);
+                DownloadInfo info = getDownloadManager().getDownloadInfo(args.packageName);
                 if (info == null) {
                     return 0;
                 }

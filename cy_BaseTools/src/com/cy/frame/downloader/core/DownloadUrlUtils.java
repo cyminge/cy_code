@@ -14,7 +14,7 @@ import android.text.TextUtils;
 
 import com.cy.constant.Constant;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
-import com.cy.frame.downloader.downloadmanager.DownloadDB;
+import com.cy.frame.downloader.manager.DownloadDB;
 import com.cy.frame.downloader.statis.StatisValue;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.util.JsonConstant;
@@ -31,9 +31,9 @@ public class DownloadUrlUtils {
      * @return
      */
     public static int getDownloadUrl(DownloadInfo info) {
-//        if (null != info.mRawDownloadUrl && !info.mRawDownloadUrl.contains(HostsProperties.getOfficialDownloadUrlMark())) { // 如果地址非官方的时候，直接就返回，不然还需要经过转换
+//        if (null != info.mRawDownloadUrl && !info.mRawDownloadUrl.contains(HostsProperties.getOfficialDownloadUrlMark())) { 
         if (null != info.mRawDownloadUrl && !info.mRawDownloadUrl.contains("gionee.com")) { // 如果地址非官方的时候，直接就返回，不然还需要经过转换
-            return DownloadStatusMgr.TASK_FAIL_REASON_NONE;
+            return DownloadStatusConstant.TASK_FAIL_REASON_NONE;
         }
 
         Map<String, String> map = new HashMap<String, String>();
@@ -47,7 +47,7 @@ public class DownloadUrlUtils {
         if (JsonUtils.hasGioneeSign(data)) {
             parseDownloadUrl(info, data);
         }
-        return DownloadStatusMgr.TASK_FAIL_REASON_NONE;
+        return DownloadStatusConstant.TASK_FAIL_REASON_NONE;
     }
 
     private static void parseDownloadUrl(final DownloadInfo info, final String data) {

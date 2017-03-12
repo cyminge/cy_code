@@ -34,7 +34,7 @@ import android.widget.RemoteViews;
 import com.cy.R;
 import com.cy.constant.Constant;
 import com.cy.frame.downloader.controller.ButtonStatusManager;
-import com.cy.frame.downloader.core.DownloadInfoMgr;
+import com.cy.frame.downloader.core.DownloadManager;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
 import com.cy.frame.downloader.statis.StatisValue;
@@ -223,7 +223,7 @@ public class Utils {
 	private static boolean checkSpaceForRetry(DownloadArgs args) {
 		int status = ButtonStatusManager.getButtonStatus(args);
 		if (status == ButtonStatusManager.BUTTON_STATUS_FAILED) {
-			DownloadInfo info = DownloadInfoMgr.getNormalInstance().getDownloadInfo(args.packageName);
+			DownloadInfo info = DownloadManager.getNormalInstance().getDownloadInfo(args.packageName);
 			if (info != null && checkSDCard(info.mTotalSize) == Constant.SD_LOW_SPACE) {
 				return false;
 			}
@@ -269,13 +269,6 @@ public class Utils {
 	public static boolean needShowMobileHint() {
 		// return !SettingUtils.getAllowByMobileNet() && Utils.isMobileNet();
 		return false;
-	}
-
-	public static void delAllfiles(String gamePackage) {
-		deleteFile(gamePackage + Constant.APK);
-		deleteFile(gamePackage + ".apk.gntmp");
-		deleteFile(gamePackage + ".patch");
-		deleteFile(gamePackage + ".patch.gntmp");
 	}
 
 	public static boolean permitSilentInstall(String pkgName) {

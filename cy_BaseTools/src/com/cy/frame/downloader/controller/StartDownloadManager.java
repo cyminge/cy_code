@@ -9,11 +9,13 @@ import android.widget.Toast;
 import com.cy.R;
 import com.cy.constant.Constant;
 import com.cy.frame.downloader.core.DownloadInfoMgr;
-import com.cy.frame.downloader.core.DownloadStatusMgr;
+import com.cy.frame.downloader.core.DownloadManager;
+import com.cy.frame.downloader.core.DownloadStatusConstant;
+import com.cy.frame.downloader.download.DownloadUtils;
 import com.cy.frame.downloader.download.entity.DownloadArgs;
 import com.cy.frame.downloader.download.entity.DownloadInfo;
-import com.cy.frame.downloader.downloadmanager.DownloadDB;
 import com.cy.frame.downloader.install.InstallManager;
+import com.cy.frame.downloader.manager.DownloadDB;
 import com.cy.frame.downloader.statis.StatisValue;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager;
 import com.cy.frame.downloader.upgrade.GamesUpgradeManager.UpgradeAppInfo;
@@ -36,6 +38,9 @@ public abstract class StartDownloadManager {
      */
     protected abstract boolean isDownloadable();
     protected abstract boolean confirmDownload();
+    /**
+     * 重置下载状态
+     */
     protected abstract void onResetDownload();
     protected abstract void startDownload();
 
@@ -75,7 +80,7 @@ public abstract class StartDownloadManager {
      */
     protected DownloadInfo handlerExistInfo(DownloadInfo info) {
         if (null != info && info.mIsSilentDownload) {
-            DownloadStatusMgr.getSilentInstance().onDeleteTask(info);
+        	DownloadManager.getSilentInstance().onDeleteTask(info);
             return null;
         }
         return info;
@@ -96,27 +101,27 @@ public abstract class StartDownloadManager {
             return DownloadDB.NO_DOWN_ID;
         }
         
-        if (DownloadOrderMgr.getDownloadCount() >= DownloadStatusMgr.MAX_DOWNLOAD_TASK) { // 下载任务数已经最大 ??
+        if (DownloadOrderMgr.getDownloadCount() >= DownloadStatusConstant.MAX_DOWNLOAD_TASK) { // 下载任务数已经最大 ??
             showLimitedToast(R.string.max_download_task);
             return DownloadDB.NO_DOWN_ID;
         }
         
         String packageName = downloadArgs.packageName;
 
-        DownloadInfo info = getDownloadInfo(packageName);
+        DownloadInfo info = getDownloadManager().getDownloadInfo(packageName);
         if(null != info) {
         	return info.mDownId;
         }
         
-        info = DownloadInfoMgr.getDownloadInfoInAll(packageName);
+        info = DownloadManager.getDownloadInfoInAll(packageName);
         info = handlerExistInfo(info);
         if (null != info) {
         	return info.mDownId;
         }
         
-        Utils.delAllfiles(packageName);
+        DownloadUtils.delAllfiles(packageName);
         downloadArgs.mSource = resetDownloadSource(downloadArgs);
-        return getDownloadStatusMgr().download(downloadArgs, mDelayTime);
+        return getDownloadManager().download(downloadArgs, mDelayTime);
     }
 
     private String resetDownloadSource(DownloadArgs downloadArgs) {
@@ -136,18 +141,10 @@ public abstract class StartDownloadManager {
         return Utils.combineGameUpgradeSource(downloadArgs.packageName, downloadArgs.mSource);
     }
 
-    protected DownloadStatusMgr getDownloadStatusMgr() {
-        return DownloadStatusMgr.getNormalInstance();
+    protected DownloadManager getDownloadManager() {
+        return DownloadManager.getNormalInstance();
     }
     
-    protected DownloadInfoMgr getDownloadInfoMgr() {
-        return getDownloadStatusMgr().getDownloadInfoMgr();
-    }
-
-    protected final DownloadInfo getDownloadInfo(String mPackageName) {
-        return getDownloadInfoMgr().getDownloadInfo(mPackageName);
-    }
-
     protected void showLimitedToast(int msgId) {
         Toast.makeText(mContext, msgId, Toast.LENGTH_SHORT).show();
     }
@@ -169,6 +166,11 @@ public abstract class StartDownloadManager {
         GameInstaller.popupInstall(mContext, args.packageName);
     }
 
+    /**
+     * 是否有本地已经下载好apk
+     * @param downloadArgs
+     * @return
+     */
     protected boolean hasLocalApk(DownloadArgs downloadArgs) {
         String gamePackage = downloadArgs.packageName;
         String fileName = gamePackage + Constant.APK;
@@ -180,7 +182,7 @@ public abstract class StartDownloadManager {
                 PackageInfo p = Utils.getPackageInfoByPath(filePath);
                 if (p != null && p.versionCode < upInfo.mNewVersionCode) {
                     removeDownload(gamePackage);
-                    Utils.delAllfiles(gamePackage);
+                    DownloadUtils.delAllfiles(gamePackage);
                     return false;
                 }
             }
@@ -190,7 +192,7 @@ public abstract class StartDownloadManager {
 
     protected void removeDownload(String gamePackage) {
         ButtonStatusManager.removeDownloaded(gamePackage);
-        getDownloadInfoMgr().removeDownloadInfo(gamePackage);
+        getDownloadManager().removeDownloadInfo(gamePackage);
     }
 
 }

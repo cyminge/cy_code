@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.widget.ListView;
 
 import com.cy.downloadtest.GameListAdapter.GameViewHolder;
-import com.cy.frame.downloader.core.DownloadInfoMgr;
-import com.cy.frame.downloader.core.DownloadInfoMgr.DownloadChangeListener;
+import com.cy.frame.downloader.core.DownloadManager;
+import com.cy.frame.downloader.core.DownloadManager.DownloadChangeListener;
 import com.cy.frame.downloader.entity.GameBean;
 
 /**
@@ -52,7 +52,7 @@ public class ButtonStatusHandler {
                 }
             };
         }
-        DownloadInfoMgr.getNormalInstance().addChangeListener(mChangeListener);
+        DownloadManager.getNormalInstance().addChangeListener(mChangeListener);
     }
 
     private void updateDownloadStatus() {
