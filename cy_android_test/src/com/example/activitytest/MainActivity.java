@@ -180,6 +180,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        Log.e("aaa", "--onCreate--");
+//        String s = null;
+//        s.length();
+        
 //        Log.e("cyTest", "--> MainActivity.onCreate cyminge :"+getIntent().getStringExtra("cyminge"));
         if(null != getIntent()) {
         	Log.e("cyTest", "--> MainActivity.onCreate from :"+getIntent().getStringExtra("from"));
@@ -290,7 +295,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         
         mHandler.sendEmptyMessageDelayed(22, 4000);
         
-        getCPUCounts();
+//        getCPUCounts();
         
     }
 
@@ -448,15 +453,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
                 break;
             case 22 :
-//            	Intent intent = new Intent();
-//            	intent.setClass(mainActivity, Activity_A.class);
-//            	if(null != mainActivity.getIntent()) {
-////                	intent.putExtra("cyminge", mainActivity.getIntent().getStringExtra("cyminge"));
-//                }
-//            	mainActivity.startActivity(intent);
+            	Intent intent = new Intent();
+            	intent.setClass(mainActivity, Activity_A.class);
+            	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            	if(null != mainActivity.getIntent()) {
+//                	intent.putExtra("cyminge", mainActivity.getIntent().getStringExtra("cyminge"));
+                }
+            	mainActivity.startActivity(intent);
 //            	mainActivity.finish();
-            	mainActivity.isAppForeground(mainActivity);
-            	mainActivity.mHandler.sendEmptyMessageDelayed(22, 2000);
+//            	mainActivity.isAppForeground(mainActivity);
+//            	mainActivity.mHandler.sendEmptyMessageDelayed(22, 2000);
             	break;
             }
         }
@@ -546,7 +552,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         Log.e("cyTest", "onDestroy time --> onDestroy");
-        BaseApplication.getInstance().exit();
+//        BaseApplication.getInstance().exit();
     }
 
     private boolean isBack = false;

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +20,8 @@ import android.util.Log;
 
 import com.example.HookHelper;
 
-@SuppressLint("NewApi") public class BaseApplication extends Application {
+@SuppressLint("NewApi")
+public class BaseApplication extends Application implements UncaughtExceptionHandler {
 
     private static BaseApplication mBaseApplication = null;
     private static Context mBaseAppContext = null;
@@ -34,26 +36,26 @@ import com.example.HookHelper;
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-    	super.onConfigurationChanged(newConfig);
+        super.onConfigurationChanged(newConfig);
     }
-    
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         mBaseApplication = this;
         mBaseAppContext = mBaseApplication.getApplicationContext();
-        
+
         HookHelper.init(getApplicationContext());
 
         Log.e("cyTest", "启动应用进程 !!! start");
-        
+
 //        try {
 //            Thread.sleep(3000);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-        
+
 //        try {
 //            String proName = getCurProcessName(this);
 //            if (null != proName) {
@@ -80,75 +82,77 @@ import com.example.HookHelper;
         // mBaseAppContext = mBaseApplication.getApplicationContext();
 
 //        Log.e("cyTest", "启动应用进程 !!! end");
-        
+
 //        flag = true;
 //		mThread.start();
+
+        Thread.setDefaultUncaughtExceptionHandler(this);
     }
-    
+
     boolean flag = false;
-	
-	Thread mThread = new Thread() {
-		public void run() {
-			while (flag) {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-				try {
+
+    Thread mThread = new Thread() {
+        public void run() {
+            while (flag) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                try {
 //					getCPUUsageRate();
 //					Log.e("cyTest", "-->"+getCPUUsageRate());
-					Log.e("cyTest", "-->isCPUBusy:"+isCPUBusy());
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			
-		};
-	};
-	
-	public boolean isCPUBusy() {
-		String cpuUsageRate = getCPUUsageRate();
-		Log.e("cyTest", "-->cpuUsageRate:"+cpuUsageRate);
-		if(cpuUsageRate.isEmpty()) {
-			return false;
-		}
-		
-		int rate;
-		try {
-			rate = Integer.parseInt(cpuUsageRate);
-			if(rate >= 50) {
-				return true;
-			}
-		} catch (Exception e) {
-			return false;
-		}
-		
-		return false;
-	}
-    
+                    Log.e("cyTest", "-->isCPUBusy:" + isCPUBusy());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        };
+    };
+
+    public boolean isCPUBusy() {
+        String cpuUsageRate = getCPUUsageRate();
+        Log.e("cyTest", "-->cpuUsageRate:" + cpuUsageRate);
+        if (cpuUsageRate.isEmpty()) {
+            return false;
+        }
+
+        int rate;
+        try {
+            rate = Integer.parseInt(cpuUsageRate);
+            if (rate >= 50) {
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        return false;
+    }
+
     private String getCPUUsageRate() {
         String result = "";
         try {
-			Process p = Runtime.getRuntime().exec("top -n 1");
-			BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			while ((result = br.readLine()) != null) {
-			    if (result.trim().length() < 1) {
-			        continue;
-			    } else {
-			        String[] cpuusr = result.split(",");
-			        String user = ((cpuusr[0].trim().split("\\s"))[1].toString());
-			        result = user.substring(0, user.length()-1);
-			        return result;
-			    }
-			}
-		} catch (Exception e) {
-			Log.w("cyTest", "get cpu usage rate error");
-		}
+            Process p = Runtime.getRuntime().exec("top -n 1");
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((result = br.readLine()) != null) {
+                if (result.trim().length() < 1) {
+                    continue;
+                } else {
+                    String[] cpuusr = result.split(",");
+                    String user = ((cpuusr[0].trim().split("\\s"))[1].toString());
+                    result = user.substring(0, user.length() - 1);
+                    return result;
+                }
+            }
+        } catch (Exception e) {
+            Log.w("cyTest", "get cpu usage rate error");
+        }
         return result;
     }
-	
+
 //	/**
 //     * 获取cpu使用率
 //     */
@@ -176,7 +180,7 @@ import com.example.HookHelper;
 //        }
 ////        return "NO CPU Message !!";
 //    }
-	
+
 //	/**
 //     * 获取cpu使用率
 //     */
@@ -202,7 +206,7 @@ import com.example.HookHelper;
 //        }
 //        return "NO CPU Message !!";
 //    }
-    
+
     /**
      * 获取cpu信息
      * 
@@ -211,7 +215,7 @@ import com.example.HookHelper;
     public static String fetchCPUInfo() {
         String result = null;
         try {
-            String[] args = { "/system/bin/cat", "/proc/cpuinfo" };
+            String[] args = {"/system/bin/cat", "/proc/cpuinfo"};
             result = run(args, "/system/bin/");
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -303,5 +307,32 @@ import com.example.HookHelper;
             }
         } catch (Exception e) {
         }
+    }
+
+    @Override
+    public void uncaughtException(Thread thread, Throwable ex) {
+        try {
+            if (ex == null) {
+                Thread.getDefaultUncaughtExceptionHandler().uncaughtException(thread, ex);
+                return;
+            }
+            
+            Throwable throwable = getThrowableCause(ex);
+            if(throwable.getMessage().contains("com.google.android.webview")) {
+                // do our logic
+                
+            } else {
+                Thread.getDefaultUncaughtExceptionHandler().uncaughtException(thread, ex);
+            }
+        } catch (Throwable exception) {
+            
+        }
+        
+
+    }
+
+    Throwable getThrowableCause(Throwable ex) {
+        Throwable t = ex.getCause();
+        return t == null ? ex : getThrowableCause(t);
     }
 }

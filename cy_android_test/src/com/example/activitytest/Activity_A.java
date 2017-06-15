@@ -67,6 +67,7 @@ public class Activity_A extends BaseActivity implements OnClickListener {
         setContentView(R.layout.activity_a);
 //        Log.e("cyTest", "Activity_A.onCreate");
 
+        
         if (null != savedInstanceState) {
 //            Log.e("cyTest", "onCreate.savedInstanceState is not null");
 //            Log.e("cyTest", "aa:" + savedInstanceState.get("aa"));

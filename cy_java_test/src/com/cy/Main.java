@@ -18,6 +18,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import com.google.gson.Gson;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -791,16 +793,16 @@ public class Main {
 //	    String retGson = gson.toJson(info);
 //	    System.out.println(retGson);
 	    
-	    ArrayList<User> list = new ArrayList<User>();
-	    User user1 = new User();
-	    user1.uin = 11;
-	    User user2 = new User();
-        user2.uin = 22;
-        User user3 = new User();
-        user3.uin = 33;
-        User user4 = new User();
-        user4.uin = 44;
-        list.add(user1);
+//	    ArrayList<User> list = new ArrayList<User>();
+//	    User user1 = new User();
+//	    user1.uin = 11;
+//	    User user2 = new User();
+//        user2.uin = 22;
+//        User user3 = new User();
+//        user3.uin = 33;
+//        User user4 = new User();
+//        user4.uin = 44;
+//        list.add(user1);
 //        list.add(user2);
 //        list.add(user3);
 //        list.add(user4);
@@ -821,9 +823,33 @@ public class Main {
 ////            }
 //        }
 	    
-	    String id = null;
-        String gainType = null;
-        System.out.println(combine(id, gainType));
+//	    String id = null;
+//        String gainType = null;
+//        System.out.println(combine(id, gainType));
+	    
+	    GameData gameData = new GameData();
+	    gameData.gameId = "359";
+	    gameData.packageName = "com.cy.test";
+	    Gson son = new Gson();
+	    String gStr = son.toJson(gameData);
+	    System.out.println("gStr : " + gStr);
+//	    gStr = gStr +"_tttt";
+	    son.fromJson(gStr, GameData.class);
+	    
+	    
+	    /*String gStr = "{\"gameId\":359,\"packageName\"}";
+	    Gson son = new Gson();
+	    son.fromJson(gStr, classOfT)*/
+	}
+	
+	public static class GameData {
+	    public String gameId;
+	    public String packageName;
+	    
+	    @Override
+	    public String toString() {
+	        return "gameId:"+gameId+", packageName:"+packageName;
+	    }
 	}
 	
 	public static String combine(String... source) {
