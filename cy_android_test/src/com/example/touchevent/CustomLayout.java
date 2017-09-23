@@ -21,7 +21,8 @@ import android.widget.LinearLayout;
 
 		case MotionEvent.ACTION_DOWN:
 			Log.i(TAG, "CustomLayout-onTouchEvent-ACTION_DOWN");
-			break;
+			getParent().requestDisallowInterceptTouchEvent(false);
+			return true;
 		case MotionEvent.ACTION_UP:
 			Log.i(TAG, "CustomLayout-onTouchEvent-ACTION_UP");
 			break;
@@ -48,8 +49,7 @@ import android.widget.LinearLayout;
 			break;
 
 		}
-		return true;
-//		return super.dispatchTouchEvent(ev);
+		return super.dispatchTouchEvent(ev);
 	}
 
 	@Override

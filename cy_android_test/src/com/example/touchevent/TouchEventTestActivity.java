@@ -8,7 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import com.cy.R;
 
-@SuppressLint("ClickableViewAccessibility") public class TouchEventTestActivity extends Activity {
+@SuppressLint("ClickableViewAccessibility") 
+public class TouchEventTestActivity extends Activity {
 
 	private static final String TAG = "MotionEventDispatch";
 	private CustomButton button;

@@ -24,18 +24,18 @@ public class TestThreadPool {
     public static void main(String[] args) {
 
 //        testGetActiveCount();
-//        testMultiTask();
+        testMultiTask();
 //        testMultiTaskInvokeAll();
 
 //        testSingleTask();
         
-        new Thread(new Runnable() {
-            
-            @Override
-            public void run() {
-                testNormalMultiThread();
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            
+//            @Override
+//            public void run() {
+//                testNormalMultiThread();
+//            }
+//        }).start();
         
 
     }
@@ -170,7 +170,7 @@ public class TestThreadPool {
 //        } catch (InterruptedException e) {
 //        }
 
-        int waitTime = 3000;
+        int waitTime = 2000;
         long deltaTime = 0;
         long startTime = 0;
         

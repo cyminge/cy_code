@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databases>
+	<database name="gionee_sqlite">
+		<schema version="1" package="com.gionee.database" entity="entity" dao="dao" />
+		
+		<!-- 群组信息 -->
+		<table name="GroupInfo">
+			<column name="gid" type="Long" primary="true" notnull="true" />
+			<column name="groupSeq" type="Int" notnull="true" /> <!-- 当前存储的群组信息的序列号 -->
+			<column name="groupName" type="String" />
+			<column name="groupAvatar" type="String" />
+			<column name="createTime" type="Int" notnull="true" />
+			<column name="creator" type="Int" notnull="true" /><!-- 群创建者 -->
+			<column name="groupMemNum" type="Int" notnull="true" />
+			<column name="groupDescribe" type="String" /><!-- 群描述 -->
+		    <column name="flag" type="Int" notnull="true" /> <!-- 删除等标志  0：未删除  1：删除-->
+		    <column name="adminer" type="Int" notnull="true" /><!-- 群管理员 -->
+		</table>
+		
+		<!-- 群组成员列表 -->
+		<table name="GroupMembers">
+			<column name="gid" type="Long" primary="true" notnull="true" />
+			<column name="seq" type="Int" notnull="true" />
+			<column name="userList" type="String" /> <!-- 成员列表 -->
+			<column name="total" type="Int" notnull="true" /> <!-- 成员总数 -->
+			<column name="index" type="Int" /> <!-- 分页拉取的当前数目 -->
+		    <column name="type" type="Int" notnull="true" /><!-- 群类型：临时群、持久群 -->
+		</table>
+		
+		<!-- 成员个人信息 -->
+		<table name="MemberInfo">
+			<column name="uid" type="Long" primary="true" notnull="true" />
+			<column name="userName" type="String" />
+			<column name="alias" type="String" /> <!-- 别名 -->
+			<column name="userAvatar" type="String" />
+			<column name="area" type="String" /> <!-- city -->
+			<column name="phoneNum" type="String" />
+			<column name="sex" type="Int" />
+			<column name="sign" type="String" />
+			<column name="hobby" type="String" /> <!-- 兴趣爱好 -->
+			<column name="vip" type="Int" />
+			<column name="sortLetters" type="String" />
+			<column name="status" type="Int" notnull="true" ></column><!-- 状态，删除，初始化等 -->
+		</table>
+		
+		<!-- 聊天信息 -->
+		<table name="ChatTable">
+		    <column name="_id" type="Id" />
+		    <column name="msgId" type="Long" notnull="true" />  <!-- 消息ID -->
+		    <column name="chatType" type="Int" notnull="true" />  <!-- 0：个人 1：群组 -->
+		    <column name="friendId" type="Long" notnull="true" />
+		    <column name="groupId" type="Long" notnull="true" /> 
+		    <column name="direction" type="Int" notnull="true" />  <!-- 0：发送 1：收取 -->
+		    <column name="content_type" type="String" notnull="true" />  
+		    <column name="content" type="String" notnull="true" /> 
+		    <column name="time" type="Long" notnull="true" /> 
+		    <column name="status" type="Int" notnull="true" />  <!-- 信息的当前状态 -->
+		    <column name="unreaded" type="Boolean" />  
+		</table>
+		
+		<!-- 聊天图片 -->
+		<table name="ChatImage">
+		    <column name="_id" type="Id" />
+		    <column name="localPath" type="String" />
+		    <column name="localResz" type="String" />  
+		    <column name="url" type="String" />  
+		    <column name="urlResz" type="String" />  
+		</table>
+		
+		<!-- 聊天位置 -->
+		<table name="ChatLocale">
+		    <column name="_id" type="Id" />
+		    <column name="desc" type="String" />
+		    <column name="lontitute" type="String" />  
+		    <column name="latitute" type="String" />  
+		</table>
+		
+		<!-- 聊天语音 -->
+		<table name="ChatVoice">
+		    <column name="_id" type="Id" />
+		    <column name="localPath" type="String" />
+		    <column name="url" type="String" />  
+		    <column name="type" type="String" />  
+		    <column name="duration" type="Long" />  
+		</table>
+		
+		<!-- 消息带有Url连接的 ，点击要跳转 -->
+		<table name="ChatUrl">
+		    <column name="_id" type="Id" />
+		    <column name="urlTitle" type="String" />
+		    <column name="url" type="String" />    
+		    <column name="content" type="String" />    
+		</table>
+		
+		
+	</database>
+</databases>

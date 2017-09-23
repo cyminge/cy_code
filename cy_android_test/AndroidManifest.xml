@@ -93,6 +93,11 @@
             android:label="@string/app_name"
             android:launchMode="singleTask" >
         </activity>
+        <activity
+            android:name="com.example.activitytest.Activity_TestOnmeasure"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
+        </activity>
 
         <!--
         <receiver

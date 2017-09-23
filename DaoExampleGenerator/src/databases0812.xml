@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databases>
+	<database name="vkl_conference">
+		<schema version="1" package="com.veclink.database" entity="entity" dao="dao" />
+
+		<!-- 群组信息 -->
+		<table name="ChatGroup">
+			<column name="gid" type="Long" primary="true" notnull="true" />
+			<column name="groupName" type="String" notnull="true" />
+			<column name="groupAvatar" type="String" />
+			<column name="groupMemNum" type="Int" />
+			<column name="groupSeq" type="Int" />
+		</table>
+
+		<!-- 群组成员信息 -->
+		<!-- <column name="status" type="Int" /> 这个不需要存数据库 -->
+		<table name="CompanyMembers">
+			<column name="uid" type="Long" primary="true" notnull="true" />
+			<column name="userName" type="String" />
+			<column name="userAvatar" type="String" />
+			<column name="phone" type="String" />
+		</table>
+
+		<!-- 群组和群成员的关联关系 -->
+		<table name="ChatGroupMembersRel">
+			<column name="gid" type="Long" primary="true" notnull="true" />
+			<column name="users" type="String" />
+			<column name="index" type="Int" />
+			<column name="total" type="Int" />
+		</table>
+
+		<!-- 存放员工所属的群组的信息 -->
+		<table name="MemberChatGroupsRel">
+			<column name="uid" type="Long" primary="true" notnull="true" />
+			<column name="groups" type="String" />
+		</table>
+
+
+	</database>
+</databases>

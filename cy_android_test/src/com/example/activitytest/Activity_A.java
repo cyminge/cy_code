@@ -1,5 +1,6 @@
 package com.example.activitytest;
 
+import java.io.File;
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -16,7 +18,6 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 import com.cy.R;
-import com.example.ProxyInstrumentation;
 import com.example.global.BaseActivity;
 import com.example.util.BitmapCompress;
 
@@ -121,21 +122,6 @@ public class Activity_A extends BaseActivity implements OnClickListener {
         big(bitmap, img_new);
 
         // 测试图片的压缩 end
-
-//        Log.e("cyTest", "-->getFilesDir = " + this.getFilesDir());
-//        Log.e("cyTest", "-->getCacheDir = " + this.getCacheDir());
-//        Log.e("cyTest", "-->getExternalCacheDir = " + this.getExternalCacheDir());
-//        Log.e("cyTest", "-->getExternalFilesDir = " + this.getExternalFilesDir("cy"));
-//        Log.e("cyTest", "-->Environment.getExternalStorageState = " + Environment.getExternalStorageState());
-//        Log.e("cyTest", "-->Environment.getDataDirectory = " + Environment.getDataDirectory());
-//        Log.e("cyTest",
-//                "-->Environment.getDownloadCacheDirectory = " + Environment.getDownloadCacheDirectory());
-//        Log.e("cyTest",
-//                "-->Environment.getExternalStorageDirectory = " + Environment.getExternalStorageDirectory());
-//        Log.e("cyTest", "-->Environment.getRootDirectory = " + Environment.getRootDirectory());
-//        for (File file : this.getExternalCacheDirs()) {
-//            Log.e("cyTest", "-->getExternalCacheDirs = " + file.getPath());
-//        }
 
     }
 

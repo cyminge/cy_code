@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databases>
+	<database name="ptt_oldman">
+		<schema version="1" package="com.veclink.chat.database" entity="entity" dao="dao" />
+		
+		<!-- 聊天信息 -->
+		<table name="ChatTable">
+		    <column name="_id" type="Id" />
+		    <column name="friendId" type="Long" notnull="true" />
+		    <column name="direction" type="Int" notnull="true" />  <!-- 0：发送 1：收取 -->
+		    <column name="chatType" type="Int" notnull="true" />  <!-- 0：个人 1：群组 -->
+		    <column name="content_type" type="String" notnull="true" />  
+		    <column name="content" type="String" notnull="true" /> 
+		    <column name="crowdId" type="Long" notnull="true" /> 
+		    <column name="time" type="Long" notnull="true" /> 
+		    <column name="status" type="Int" notnull="true" />  <!-- 信息的当前状态 -->
+		    <column name="unreaded" type="Boolean" />  
+		</table>
+		
+		<!-- 聊天图片 -->
+		<table name="ChatImage">
+		    <column name="_id" type="Id" />
+		    <column name="localPath" type="String" />
+		    <column name="localResz" type="String" />  
+		    <column name="url" type="String" />  
+		    <column name="urlResz" type="String" />  
+		</table>
+		
+		<!-- 聊天位置 -->
+		<table name="ChatLocale">
+		    <column name="_id" type="Id" />
+		    <column name="desc" type="String" />
+		    <column name="lontitute" type="String" />  
+		    <column name="latitute" type="String" />  
+		</table>
+		
+		<!-- 聊天语音 -->
+		<table name="ChatVoice">
+		    <column name="_id" type="Id" />
+		    <column name="localPath" type="String" />
+		    <column name="url" type="String" />  
+		    <column name="type" type="String" />  
+		    <column name="duration" type="Long" />  
+		</table>
+		
+	</database>
+</databases>

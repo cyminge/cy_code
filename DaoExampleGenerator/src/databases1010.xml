@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databases>
+	<database name="vkl_chat">
+		<schema version="1" package="com.veclink.database" entity="entity"
+			dao="dao" />
+		<table name="Accounts">
+			<column name="UserId" type="Int" primary="true" notnull="true" />
+			<column name="DefGroup" type="Int" />
+			<column name="DefGrpName" type="String" />
+		</table>
+		<table name="ChatTable">
+			<column name="_id" type="Id"></column>
+			<column name="fromId" type="Int" notnull="true" />
+			<column name="toId" type="Int" notnull="true" />
+			<column name="chatType" type="Int" notnull="true" />
+			<column name="content_type" type="Int" />
+			<column name="content" type="String" />
+		</table>
+		<table name="ChatImage">
+			<column name="_id" type="Id"></column>
+			<column name="localPath" type="String" />
+			<column name="localResz" type="String" />
+			<column name="url" type="String" />
+			<column name="urlResz" type="String" />
+		</table>
+		<table name="ChatVoice">
+			<column name="_id" type="Id"></column>
+			<column name="localPath" type="String" />
+			<column name="url" type="String" />
+			<column name="type" type="String" />
+		</table>
+		<table name="Usr">
+			<column name="_id" type="Id"></column>
+			<column name="UsrId" type="Int" notnull="true" />
+			<column name="Account" type="String" notnull="true" />
+			<column name="Passwd" type="String" notnull="true" />
+			<column name="Remember" type="Int" />
+			<column name="DefaultFlag" type="Int" />
+		</table>
+
+		<table name="UsrInfo">
+			<column name="_id" type="Id" />
+			<column name="Account" type="String" />
+			<column name="Remark" type="String" />
+			<column name="ShortId" type="Int" />
+			<column name="Name" type="String" />
+			<column name="City" type="Int" />
+			<column name="UsrSign" type="String" />
+			<column name="Province" type="Int" />
+			<column name="Version" type="Int" />
+			<column name="Mobile" type="String" />
+			<column name="Email" type="String" />
+			<column name="QQ" type="String" />
+			<column name="Sex" type="Int" />
+			<column name="Head" type="String" />
+		</table>
+
+		<table name="FriendGroup">
+			<column name="_id" type="Id" />
+			<column name="Version" type="Int" />
+			<column name="Remark" type="String" />
+			<column name="GroupAtti" type="Int" notnull="true" />
+			<column name="Total" type="Int" notnull="true" />
+			<column name="Name" type="String" notnull="true" />
+			<column name="Describe" type="String" />
+			<column name="Time" type="Int" />
+		</table>
+
+		<table name="FriendGroupMember">
+			<column name="_id" type="Id"></column>
+			<column name="GroupId" type="Int" notnull="true" />
+			<column name="MemberName" type="String" />
+			<column name="Type" type="Int" />
+
+		</table>
+
+		<table name="FriendComment">
+			<column name="_id" type="Id"></column>
+			<column name="UsrId" type="Int" notnull="true" />
+			<column name="ShareId" type="Int" notnull="true" />
+			<column name="Content" type="String" />
+			<column name="CrtTime" type="Int" notnull="true" />
+			<column name="Flag" type="Int" />
+			<column name="SzType" type="Int" />
+			<column name="ChgTime" type="Int" notnull="true" />
+		</table>
+
+		<table name="FriendsMood">
+			<column name="_id" type="Id"></column>
+			<column name="UsrId" type="Int" notnull="true" />
+			<column name="Content" type="String" />
+			<column name="Url" type="String" />
+			<column name="CrtTime" type="Int" notnull="true" />
+			<column name="Flag" type="Int" />
+			<column name="SzType" type="Int" />
+			<column name="ChgTime" type="Int" notnull="true" />
+			<column name="SourceId" type="Int" notnull="true" />
+			<column name="UpNum" type="Int" />
+			<column name="CommentNum" type="Int" />
+			<column name="RelayNum" type="Int" />
+		</table>
+
+		<table name="CityInfo">
+			<column name="CityId" type="Int" primary="true" />
+			<column name="ProvId" type="Int" />
+			<column name="CityName" type="String" />
+		</table>
+
+		<table name="CrowdMember">
+			<column name="_id" type="Id"></column>
+			<column name="CrowdId" type="Int" notnull="true" />
+			<column name="MemberId" type="Int" notnull="true" />
+			<column name="MemberRemark" type="String" />
+			<column name="Flag" type="Int" />
+			<column name="version" type="Int" />
+			<column name="CrtTime" type="Int" />
+			<column name="MemberAtti" type="Int" />
+			<column name="ChgTime" type="Int" />
+			<column name="isAdmin" type="Int" />
+		</table>
+
+		<table name="CrowdInfo">
+			<column name="_id" type="Id"></column>
+			<column name="UserId" type="Int" notnull="true" />
+			<column name="CrowdName" type="String" />
+			<column name="CrowdAd" type="String" />
+			<column name="CrowdRemark" type="String" />
+			<column name="Flag" type="Int" />
+			<column name="PicUrl" type="String" />
+			<column name="FileName" type="String" />
+			<column name="CrowdCnt" type="Int" notnull="true" />
+			<column name="Version" type="Int" />
+			<column name="CrtTime" type="Int" />
+			<column name="ChgTime" type="Int" />
+			<column name="Auth" type="Int" />
+			<column name="CityId" type="Int" />
+			<column name="ProvId" type="Int" />
+		</table>
+
+		<table name="ProvInfo">
+			<column name="ProvId" type="Int" primary="true" />
+			<column name="ProvName" type="String" />
+		</table>
+
+		<table name="RecvServiceMsg">
+			<column name="_id" type="Id"></column>
+			<column name="Content" type="String" />
+			<column name="CrowdId" type="Int" />
+			<column name="CrtTime" type="Int" />
+			<column name="flag" type="Int" />
+			<column name="MsgType" type="Int" />
+			<column name="MsgUrl" type="String" />
+			<column name="HandlerContent" type="String" />
+			<column name="OwerId" type="Int" />
+			<column name="ServerFlag" type="Int" />
+			<column name="UserId" type="Int" />
+			<column name="FriendId" type="Int" />
+		</table>
+
+	</database>
+</databases>

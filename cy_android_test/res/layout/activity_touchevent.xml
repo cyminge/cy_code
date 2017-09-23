@@ -6,8 +6,8 @@
 
     <com.example.touchevent.CustomLayout
         android:id="@+id/linearlayout_test"
-        android:layout_width="200dip"
-        android:layout_height="200dip" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
         <com.example.touchevent.CustomButton
             android:id="@+id/button1"

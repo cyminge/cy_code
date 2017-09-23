@@ -16,6 +16,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
@@ -177,7 +178,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 //    	return super.getCallingPackage();
 //    }
     
-    @Override
+    @SuppressLint("NewApi") @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
@@ -293,9 +294,24 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         // Log.e("cyTest", "主线程名"+getMainLooper().getThread().getName());
 
         
-        mHandler.sendEmptyMessageDelayed(22, 4000);
+        mHandler.sendEmptyMessageDelayed(22, 50);
         
 //        getCPUCounts();
+        
+        Log.e("cyTest", "-->getFilesDir = " + this.getFilesDir());
+        Log.e("cyTest", "-->getCacheDir = " + this.getCacheDir());
+        Log.e("cyTest", "-->getExternalCacheDir = " + this.getExternalCacheDir());
+        Log.e("cyTest", "-->getExternalFilesDir = " + this.getExternalFilesDir("cy"));
+        Log.e("cyTest", "-->Environment.getExternalStorageState = " + Environment.getExternalStorageState());
+        Log.e("cyTest", "-->Environment.getDataDirectory = " + Environment.getDataDirectory());
+        Log.e("cyTest",
+                "-->Environment.getDownloadCacheDirectory = " + Environment.getDownloadCacheDirectory());
+        Log.e("cyTest",
+                "-->Environment.getExternalStorageDirectory = " + Environment.getExternalStorageDirectory());
+        Log.e("cyTest", "-->Environment.getRootDirectory = " + Environment.getRootDirectory());
+        for (File file : this.getExternalCacheDirs()) {
+            Log.e("cyTest", "-->getExternalCacheDirs = " + file.getPath());
+        }
         
     }
 
@@ -476,7 +492,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 //             startActivity(intent);
         	
         	Intent intent = new Intent();
-			intent.setClass(this, TouchEventTestActivity.class);
+			intent.setClass(this, Activity_TestOnmeasure.class);
 			startActivity(intent);
 
 //            Intent intent = new Intent();

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databases>
+	<database name="vkl_conference">
+		<schema version="9" package="com.veclink.database" entity="entity" dao="dao" />
+
+		<!-- 群组信息 -->
+		<table name="ChatGroup">
+			<column name="gid" type="Long" primary="true" notnull="true" />
+			<column name="groupName" type="String" />
+			<column name="groupAvatar" type="String" />
+			<column name="groupMemNum" type="Int" notnull="true" />
+			<column name="groupSeq" type="Int" notnull="true" />
+			<column name="createTime" type="Int" notnull="true" />
+			<column name="userList" type="String" />
+			<column name="flag" type="Int" notnull="true" /><!-- 删除等标志 -->
+			<column name="admin" type="Int" notnull="true" /><!-- 群管理员 -->
+		</table>
+
+		<!-- 群组和群成员的关联关系更新过程缓存 -->
+		<table name="ChatGroupMembersCache">
+			<column name="gid" type="Long" primary="true" notnull="true" />
+			<column name="seq" type="Int" notnull="true" />
+			<column name="userList" type="String" />
+			<column name="total" type="Int" notnull="true" />
+			<column name="index" type="Int" />
+		</table>
+
+		<!-- 群组成员信息 -->
+		<table name="CompanyMember">
+			<column name="uid" type="Long" primary="true" notnull="true" />
+			<column name="userName" type="String" />
+			<column name="userAvatar" type="String" />
+			<column name="phone" type="String" />
+			<column name="status" type="Int" notnull="true" ></column><!-- 状态，删除，初始化等 -->
+		</table>
+
+		<!-- 通话历史记录 -->
+		<table name="ChatHistory">
+			<column name="key" type="String" primary="true" notnull="true" />
+			<column name="gid" type="Long" notnull="true" />
+			<column name="uid" type="Long" notnull="true" />
+			<column name="chatType" type="Int" notnull="true" />
+			<column name="callType" type="Int" notnull="true" />
+			<column name="startTime" type="Long" notnull="true" />
+			<column name="talkTime" type="Long" notnull="true" />
+			<column name="isNew" type="Int" notnull="true" />
+			<column name="count" type="Int" notnull="true" />
+		</table>
+
+		<!-- 群通话历史详细 -->
+		<table name="ConfHistoryDetail">
+			<column name="_id" type="Id" />
+			<column name="key" type="String" notnull="true" />
+			<column name="gid" type="Long" notnull="true" />
+			<column name="uid" type="Long" notnull="true" />
+			<column name="ssrc" type="Int" notnull="true" />
+			<column name="talkTime" type="Long" notnull="true" />
+			<column name="length" type="Long" notnull="true" />
+		</table>
+
+		<!-- 点对点通话历史详细 -->
+		<table name="ConvHistoryDetail">
+			<column name="_id" type="Id" />
+			<column name="key" type="String" notnull="true" />
+			<column name="uid" type="Long" notnull="true" />
+			<column name="chatType" type="Int" notnull="true" />
+			<column name="callType" type="Int" notnull="true" />
+			<column name="startTime" type="Long" notnull="true" />
+			<column name="talkTime" type="Long" notnull="true" />
+			<column name="isNew" type="Int" notnull="true" />
+		</table>
+		
+		<!-- 
+			timestamps 有多个值，required uint32 trigger_time_begin = 1; required uint32 trigger_time_end = 2;  
+			分割方式：trigger_time_begin,trigger_time_end;trigger_time_begin,trigger_time_end;...
+		-->
+		<table name="UserFences">
+		    <column name="fid" type="Long" primary="true" notnull="true" />
+		    <column name="gps_lat" type="Int" notnull="true" />
+		    <column name="gps_lon" type="Int" notnull="true" />
+		    <column name="gps_raduis" type="Int" notnull="true" />
+		    <column name="trigger_type" type="Int" notnull="true" />
+		    <column name="timestamps" type="String" notnull="true" />
+		    <column name="effect_start" type="Int" notnull="true" />
+		    <column name="effect_end" type="Int" notnull="true" />
+		    <column name="effect_weekflag" type="Int" notnull="true" />
+		    <column name="gps_flag" type="Int" notnull="true" />
+		</table>
+
+	</database>
+</databases>

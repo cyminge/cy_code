@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databases>
+	<database name="vkl_healthy">
+		<schema version="1" package="com.veclink.healthy.database" entity="entity" dao="dao" />
+		<!-- ExerciseAmount 运动量 
+			StepNumber 步数   、设备传过来的步数包括跑步的步数和走路的步数
+			Mileage 里程   、用一定算法把步数转化为里程
+			CalorieConsume 卡路里消耗、用一定算法把步数转化为卡路里消耗 
+			date 日期 
+			ateHour 小时 -->
+		<!-- primary="true" -->
+		<table name="ExerciseAmount">
+			<column name="_id" type="Id" /> 
+			<column name="StepNumber" type="Int" notnull="true" />
+			<column name="Mileage" type="Int" notnull="true" />
+			<column name="CalorieConsume" type="Int" notnull="true" />
+			<column name="DateTime" type="String" notnull="true" />
+		</table>
+		
+		<!-- SleepQuality 睡眠质量
+			DeepSleep 深睡
+			shallowSleep 浅睡 -->
+		<!-- primary="true" -->
+		<table name="SleepQuality">
+			<column name="_id" type="Id" /> 
+			<column name="SleepAmount" type="String" notnull="true" />
+			<column name="DeepSleep" type="String" notnull="true" />
+			<column name="shallowSleep" type="String" notnull="true" />
+			<column name="DateTime" type="String" notnull="true" />
+		</table>
+
+		<!-- UptakeCalorie 摄取卡路里 
+			FoodName 食物名称 
+			CalorieContent 卡路里含量 
+			counts 份数 
+			date 日期 -->
+		<table name="UptakeCalorie">
+			<column name="_id" type="Id" />
+			<column name="FoodName" type="String" notnull="true" />
+			<column name="CalorieContent" type="Int" notnull="true" />
+			<column name="Counts" type="Int" notnull="true" />
+			<column name="DateTime" type="String" notnull="true" />
+		</table>
+
+	</database>
+</databases>

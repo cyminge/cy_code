@@ -10,7 +10,7 @@ public class TestReflectSpeed {
     public static void main(String[] args) throws Exception {
         Fooo f = null;
 //        int count = 10000000;
-        int count = 10000000;
+        int count = 100000;
         long newBegin = System.nanoTime();
         for (int i = 0; i < count; i++) {
             f = new Fooo("aa");
