@@ -44,7 +44,7 @@ public class LoadingLayout extends LinearLayout {
         reset();
     }
     
-    public static RotateAnimation createRotateAnim() {
+    public RotateAnimation createRotateAnim() {
         RotateAnimation anim = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, Constant.ANIM_CENTER,
                 Animation.RELATIVE_TO_SELF, Constant.ANIM_CENTER);
         anim.setInterpolator(new LinearInterpolator());

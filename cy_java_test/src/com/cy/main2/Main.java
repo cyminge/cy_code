@@ -316,9 +316,31 @@ public class Main {
         
 //        UserRecallTest.getJsonStr(10);
         
-        User user = null;
-        
-        System.out.println("wo" == user.name);
+//        User user = null;
+//        
+//        System.out.println("wo" == user.name);
+        System.out.println(testTryFinally());
+    }
+
+    @SuppressWarnings("finally")
+    public static int testTryFinally() {
+        int count =0 ;
+        try {
+            count =2;
+            System.out.println("aaaa");
+            return testttt(); 
+        } catch(Exception e) {
+            
+        } finally {
+            System.out.println("dddd");
+            count =3;
+            return count;
+        }
+    }
+    
+    public static int testttt() {
+        System.out.println("bbbbbb");
+        return 4;
     }
     
     private static class User {

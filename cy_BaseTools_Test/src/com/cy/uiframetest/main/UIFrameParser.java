@@ -45,13 +45,13 @@ public class UIFrameParser extends Parser<ChunkData> {
 	}
 	
 	static {
-		mChunkDataArray = new SparseArray<Class<?>>();
-		mChunkDataArray.put(CHUNK_LIST_TYPE.SimpleBanner.getListType(), ChunkSimpleBannerData.class);
-		mChunkDataArray.put(CHUNK_LIST_TYPE.Dissertation.getListType(), ChunkDissertationData.class);
-		
 		mChunkListItemTypeArray = new HashMap<String, Integer>();
 		mChunkListItemTypeArray.put(ITEM_TYPE_BANNER, CHUNK_LIST_TYPE.SimpleBanner.getListType());
 		mChunkListItemTypeArray.put(ITEM_TYPE_HOME_DISSERTATION_GAMES, CHUNK_LIST_TYPE.Dissertation.getListType());
+		
+		mChunkDataArray = new SparseArray<Class<?>>();
+        mChunkDataArray.put(CHUNK_LIST_TYPE.SimpleBanner.getListType(), ChunkSimpleBannerData.class);
+        mChunkDataArray.put(CHUNK_LIST_TYPE.Dissertation.getListType(), ChunkDissertationData.class);
 		
 		mChunkItemLayoutArray = new SparseIntArray();
 		mChunkItemLayoutArray.put(CHUNK_LIST_TYPE.SimpleBanner.getListType(), R.layout.uiframe_chunk_banner_layout);
